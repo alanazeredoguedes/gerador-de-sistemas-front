@@ -10,7 +10,7 @@ const routes = [
                 component: () => import('@/pages/PaginaInicial.vue')
             },
             {
-                path: '/sobresss',
+                path: '/sobre',
                 name: 'sobre',
                 component: () => import('@/pages/Sobre.vue')
             },
