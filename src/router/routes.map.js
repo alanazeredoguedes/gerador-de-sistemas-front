@@ -1,18 +1,26 @@
 const routes = [
+    /** Diagrams Routes */
+    {
+        path: '/',
+        component: () => import('@/layouts/DiagramTemplate.vue'),
+        children: [
+            {
+                path: '/',
+                name: 'diagram',
+                component: () => import('@/pages/diagram/Diagram.vue')
+            },
+        ]
+
+    },
     /** Dashboard Routes */
     {
         path: '/',
         component: () => import('@/layouts/DashboardTemplate.vue'),
         children: [
             {
-                path: '/',
+                path: '/board',
                 name: 'homePage',
-                component: () => import('@/pages/PaginaInicial.vue')
-            },
-            {
-                path: '/sobre',
-                name: 'sobre',
-                component: () => import('@/pages/Sobre.vue')
+                component: () => import('@/pages/dashboard/home/Dashboard.vue')
             },
         ]
 
@@ -25,12 +33,22 @@ const routes = [
             {
                 path: '/login',
                 name: 'login',
-                component: () => import('@/pages/Auth/LoginPage.vue')
+                component: () => import('@/pages/auth/LoginPage.vue')
             },
             {
                 path: '/register',
                 name: 'register',
-                component: () => import('@/pages/Auth/RegisterPage.vue')
+                component: () => import('@/pages/auth/RegisterPage.vue')
+            },
+            {
+                path: '/reset-password',
+                name: 'resetPassword',
+                component: () => import('@/pages/auth/ResetPassword.vue')
+            },
+            {
+                path: '/new-password',
+                name: 'newPassword',
+                component: () => import('@/pages/auth/NewPassword.vue')
             },
         ]
 
@@ -43,7 +61,12 @@ const routes = [
             {
                 path: '/:pathMatch(.*)*',
                 name: 'error404',
-                component: () => import('@/pages/Error/404.vue')
+                component: () => import('@/pages/error/404.vue')
+            },
+            {
+                path: '/terms',
+                name: 'terms',
+                component: () => import('@/pages/terms/Terms.vue')
             },
         ]
     },
