@@ -1,12 +1,10 @@
 <template>
 
-  <div>
-    <a>Criar Classe </a>
-  </div>
+  <div id="canvas" class="CanvasComponent cavasDiagram"></div>
 
-  <div id="canvas" class="CanvasComponent cavasDiagram">
+  <ModalAdicionarClasse :diagrama="diagrama" v-if="diagrama" />
+  <ModalAdicionarRelacionamento :diagrama="diagrama" v-if="diagrama" />
 
-  </div>
 </template>
 
 <script>
@@ -17,20 +15,24 @@ import '@/assets/plugins/goJs/extensions/Arrowheads'
 import '@/assets/plugins/goJs/extensions/LightBoxContextMenu'
 
 import Diagrama from "@/models/Diagrama";
-
 import Atributo from "@/models/Atributo";
 import Classe from "@/models/Classe";
-
 import Metodo from "@/models/Metodo";
 import Relacionamento from "@/models/Relacionamento";
 
 
+
+import ModalAdicionarClasse from "./modal/ModalAdicionarClasse.vue";
+import ModalAdicionarRelacionamento from "./modal/ModalAdicionarRelacionamento.vue";
+
+
 export default {
   name: 'Canvas',
+  components: {ModalAdicionarRelacionamento, ModalAdicionarClasse },
   props: {  },
   data(){
     return {
-      diagram: null,
+      diagrama: null,
     }
   },
   methods: {
@@ -48,7 +50,7 @@ export default {
     },
     eventRightClick(){
       return (e, obj) => {
-        //console.log('Right Click')
+        console.log('Right Click Class')
       }
     },
     eventMouseEnter(){
@@ -59,6 +61,11 @@ export default {
     eventMouseLeave(){
       return (e, obj) => {
         //console.log('Mouse Leave')
+      }
+    },
+    eventRightClickDiagram(){
+      return (e, obj) => {
+        console.log('Right Click Diagram')
       }
     },
     eventChangeLocation(){
@@ -74,26 +81,26 @@ export default {
   },
   mounted() {
 
-    let attributeId = new Atributo('id', 'integer', 'pk')
-    let attribute1 = new Atributo('nome', 'string', '')
+   /* let attributeId = new Atributo('id', 'integer', 'pk')
     attributeId.pk = true;
 
-    let model1 = new Classe('Autor', 'Cursos', 'curso', "-891.238576250846 -255.95561447143552", [attributeId, attribute1], [], []);
+    let model1 = new Classe('Autor', 'Cursos', 'curso', "-891.238576250846 -255.95561447143552", [attributeId], [], []);
     model1.key = 1
-    model1.addTimeStamp();
+    model1.addTimeStamp();*/
 
-    this.diagram = new Diagrama()
-    this.diagram.addClasse(model1)
+    this.diagrama = new Diagrama()
+    //this.diagrama.addClasse(model1)
 
     /** Redefinição dos Eventos do Diagrama */
-    this.diagram.eventClick = this.eventClick();
-    this.diagram.eventDoubleClick = this.eventDoubleClick();
-    this.diagram.eventRightClick = this.eventRightClick();
-    this.diagram.eventMouseEnter = this.eventMouseEnter();
-    this.diagram.eventMouseLeave = this.eventMouseLeave();
-    this.diagram.eventChangeLocation = this.eventChangeLocation();
+    this.diagrama.eventClick = this.eventClick();
+    this.diagrama.eventDoubleClick = this.eventDoubleClick();
+    this.diagrama.eventRightClick = this.eventRightClick();
+    this.diagrama.eventMouseEnter = this.eventMouseEnter();
+    this.diagrama.eventMouseLeave = this.eventMouseLeave();
+    this.diagrama.eventChangeLocation = this.eventChangeLocation();
+    this.diagrama.eventRightClickDiagram = this.eventRightClickDiagram();
 
-    this.diagram.initEvents()
+    this.diagrama.initEvents()
   },
 
 }
@@ -104,9 +111,12 @@ export default {
 
 
 .cavasDiagram {
-  width: 99vw;
-  height: 90vh;
-  /*margin-top: 1vh;*/
+  width: 100vw;
+  height: 92vh;
+  /*margin-top: -0.2vh;*/
+/*  width: 200vw;
+  height: 200vh;*/
+  /*;*/
   /*background-color: black;*/
   background-image: url('@/assets/images/canvas/background/background-1.png');
 }
