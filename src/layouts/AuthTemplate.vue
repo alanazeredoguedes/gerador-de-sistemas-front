@@ -47,7 +47,16 @@ import { RouterLink, RouterView } from 'vue-router'
 //import "@/assets/plugins/global/plugins.bundle.js";
 import "@/assets/js/auth";
 
+export default {
 
+  components: {  },
+  mounted() {
+    let body = $('body')
+    body.removeClass('page-bg');
+    body.css('background-image', 'none');
+  },
+
+}
 </script>
 
 

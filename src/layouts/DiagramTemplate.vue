@@ -40,13 +40,15 @@ import TopMenu from "../components/canvas/top-menu/TopMenu.vue";
 // import "../assets/js/scripts.bundle.js";
 
 
-
 export default {
 
   components: {
     TopMenu
-
-  }
+  },
+  mounted() {
+    $('body').removeClass('page-bg');
+    $('body').css('background-image', 'none');
+  },
 
 }
 

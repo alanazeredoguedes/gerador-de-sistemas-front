@@ -14,6 +14,11 @@ import { mapActions } from 'vuex'
 import Canvas from "../../components/canvas/Canvas.vue";
 
 
+/*
+document.body.style.backgroundImage = '';
+document.body.style.backgroundColor = '#ffffff';
+*/
+
 
 
 
@@ -23,11 +28,6 @@ export default {
     return {
       data: null
     }
-  },
-
-  mounted() {
-    //this.$store.dispatch('getCursos')
-    //this.getCursos()
   },
   methods: {
     /*...mapActions([

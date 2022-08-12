@@ -1,26 +1,36 @@
 const routes = [
-    /** Diagrams Routes */
-    {
-        path: '/',
-        component: () => import('@/layouts/DiagramTemplate.vue'),
-        children: [
-            {
-                path: '/',
-                name: 'diagram',
-                component: () => import('@/pages/diagram/Diagram.vue')
-            },
-        ]
-
-    },
     /** Dashboard Routes */
     {
         path: '/',
         component: () => import('@/layouts/DashboardTemplate.vue'),
         children: [
             {
-                path: '/board',
+                path: '/',
                 name: 'homePage',
                 component: () => import('@/pages/dashboard/home/Dashboard.vue')
+            },
+            {
+                path: '/projetos',
+                name: 'projetos_list',
+                component: () => import('@/pages/dashboard/projetos/Projetos.vue')
+            },
+            {
+                path: '/diagramas',
+                name: 'diagramas_list',
+                component: () => import('@/pages/dashboard/diagramas/Diagramas.vue')
+            },
+        ]
+
+    },
+    /** Diagrams Routes */
+    {
+        path: '/',
+        component: () => import('@/layouts/DiagramTemplate.vue'),
+        children: [
+            {
+                path: '/diagrama',
+                name: 'diagrama',
+                component: () => import('@/pages/diagram/Diagram.vue')
             },
         ]
 

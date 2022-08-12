@@ -6,10 +6,11 @@
 
         <!-- mobile dont show: d-none -->
 
-        <div class="header-brand me-5">
-          <a href="javascript:void(0)">
+        <div class="header-brand me-5" >
+          <router-link :to="{ name: 'homePage' }" style="font-size: 20px; text-decoration: none; color: white">
             <img alt="Logo" src="@/assets/logo.svg" class="h-25px h-lg-30px" />
-          </a>
+            Gerador de Sistemas
+          </router-link>
         </div>
 
 
@@ -91,19 +92,16 @@
 
 
 
-
-
-
           <div class="d-flex align-items-center">
-            <a href="javascript:void(0)" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
-                    <span class="svg-icon svg-icon-2x">
+            <router-link :to="{ name: 'homePage' }" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
+               <span class="svg-icon svg-icon-2x">
 											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
 												<rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor" />
 												<rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor" />
 											</svg>
 										</span>
-            </a>
+            </router-link>
           </div>
 
 
