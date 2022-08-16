@@ -7,7 +7,6 @@
 
         <div class="d-flex flex-column flex-root">
 
-          <LogoTitle/>
 
           <router-view></router-view>
 
@@ -20,6 +19,9 @@
       </div>
     </div>
 
+<!--    <ModaisGeral/>-->
+
+    <ModalCriarDiagrama/>
 
   </div>
 </template>
@@ -45,15 +47,16 @@ import { RouterLink, RouterView } from 'vue-router';
 import MenuDireita from "../components/dashboard/MenuDireita.vue";
 import Footer from "../components/dashboard/Footer.vue";
 import LogoTitle from "../components/dashboard/LogoTitle.vue";
-
-
-
+import ModaisGeral from "../components/dashboard/ModaisGeral.vue";
+import ModalCriarDiagrama from "../components/dashboard/modal/ModalCriarDiagrama.vue";
 
 
 
 export default {
 
   components: {
+    ModalCriarDiagrama,
+    ModaisGeral,
     LogoTitle,
     Footer,
     MenuDireita

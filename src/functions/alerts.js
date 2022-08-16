@@ -1,8 +1,9 @@
 import Swal from "sweetalert2";
 
 export const alerts = {
-    notification: (status, message, timer = 2000) => {
-        Swal.mixin({
+
+    notification: (ico, title, message = '', timer = 2000) => {
+        return Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
@@ -13,9 +14,12 @@ export const alerts = {
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         }).fire({
-            icon: ( (status) ? 'success': 'error' ),
-            title: message
+            icon: ( (ico) ? ico: 'success' ),
+            title: title,
+            text: message,
         })
     }
+
+
 
 }

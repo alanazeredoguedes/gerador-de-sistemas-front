@@ -1,5 +1,4 @@
-
-
-export const URI_BASE_API   = 'https://provas.alanguedes.com.br/api'
-export const API_VERSION    = ''
+export const URI_BASE_API   = 'http://127.0.0.1:9005/'
+export const API_VERSION    = 'api'
 export const TOKEN_NAME     = 'token_name'
+

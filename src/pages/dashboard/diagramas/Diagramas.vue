@@ -54,9 +54,9 @@
 
 
 
-
-            <div class="col-md-6 col-lg-6 col-xl-4" v-for="index in 3">
-              <a href="javascript:void(0)" class="card border-hover-primary">
+            <!-- v-for="index in 0" -->
+            <div class="col-md-6 col-lg-6 col-xl-4" v-for="(diagrama, index) in diagramas['hydra:member']" :key="index">
+              <router-link :to="{ name: 'diagrama' }" class="card border-hover-primary">
                 <div class="card-header border-0 pt-9">
                   <div class="card-title m-0">
                     <div class="symbol symbol-50px w-50px bg-light">
@@ -68,8 +68,8 @@
                   </div>
                 </div>
                 <div class="card-body p-9">
-                  <div class="fs-3 fw-bold text-dark">Fitnes App</div>
-                  <p class="text-gray-400 fw-semibold fs-5 mt-1 mb-7">CRM App application to HR efficiency</p>
+                  <div class="fs-3 fw-bold text-dark">{{ diagrama.nome }}</div>
+                  <p class="text-gray-400 fw-semibold fs-5 mt-1 mb-7">{{ diagrama.descricao }}</p>
                   <div class="d-flex flex-wrap mb-5">
                     <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
                       <div class="fs-6 text-gray-800 fw-bold">May 05, 2022</div>
@@ -95,7 +95,7 @@
                     </div>
                   </div>
                 </div>
-              </a>
+              </router-link>
             </div>
 
 
@@ -108,7 +108,7 @@
 
 
 
-          <div class="d-flex flex-stack flex-wrap pt-10">
+          <div class="d-flex flex-stack flex-wrap pt-10" v-if="diagramas.length !== 0">
             <div class="fs-6 fw-semibold text-gray-300">Exibindo de 1 a 10 de 50 projetos</div>
             <ul class="pagination">
               <li class="page-item previous">
@@ -144,8 +144,6 @@
 
 
 
-
-
         </div>
       </div>
     </div>
@@ -154,7 +152,7 @@
 
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
 
@@ -165,14 +163,22 @@ export default {
   },
 
   mounted() {
-    //this.$store.dispatch('getCursos')
-    //this.getCursos()
+    //this.$store.dispatch('getDiagramas')
+    //this.createDiagrama({nome: 'nome', descricao: 'descricao'})
+
+    this.getDiagramas()
+        .catch( response => this.$functions.alerts.notification(false, "Erro", 'Falha ao carregar Diagramas') )
+  },
+  computed:{
+    ...mapState({
+      diagramas: state => state.diagramaStore.items.diagramas
+    })
   },
   methods: {
-    /*...mapActions([
-        'getCursos',
-    ])*/
-
+    ...mapActions([
+        'getDiagramas',
+        'createDiagrama'
+    ])
   }
 
 }

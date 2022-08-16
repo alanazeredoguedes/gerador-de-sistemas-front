@@ -44,8 +44,8 @@
 
 
 <script>
-import Classe from "@/models/Classe";
-import Atributo from "@/models/Atributo";
+import Classe from "../../../models/Classe";
+import Atributo from "../../../models/Atributo";
 
 import Modal from "../../global/Modal.vue";
 
@@ -96,13 +96,9 @@ export default {
         this.$functions.alerts.notification(false, 'Preencha os campos corretamente antes de continuar!')
         return
       }
+      let atributoId = new Atributo('id', 'id','integer', true)
 
-      let attributeId = new Atributo('id', 'integer', 'pk')
-      attributeId.pk = true;
-
-      let novaClasse = new Classe(this.nome, this.nome, this.tabela, "-891.238576250846 -255.95561447143552", [attributeId], [], []);
-      novaClasse.key = 1
-      novaClasse.addTimeStamp();
+      let novaClasse = new Classe(this.nome, this.tabela, this.descricao, [atributoId], []);
 
       //this.diagrama.models.push(novaClasse)
       this.diagrama.addClasse(novaClasse)

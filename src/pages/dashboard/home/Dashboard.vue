@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex flex-column flex-row-fluid align-items-center">
 
+    <LogoTitle/>
 
     <div class="d-flex flex-column flex-column-fluid mb-5 mb-lg-10">
 
@@ -67,7 +68,7 @@
                 </a>
               </div>
               <div class="col-sm-6">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_create_account" class="card border-0 shadow-none min-h-200px mb-7" style="background-color: #35D29A">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_criar_diagrama" class="card border-0 shadow-none min-h-200px mb-7" style="background-color: #35D29A">
                   <div class="card-body d-flex flex-column flex-center text-center">
                     <img class="mw-100 h-100px mb-7 mx-auto" src="@/assets/themes/10/media/illustrations/sigma-1/5.png" />
                     <h4 class="text-white fw-bold text-uppercase">Criar Diagrama</h4>
@@ -101,9 +102,10 @@
 
 <script>
 import { mapActions } from 'vuex'
+import LogoTitle from "../../../components/dashboard/LogoTitle.vue";
 
 export default {
-
+  components: {LogoTitle},
   data() {
     return {
       data: null

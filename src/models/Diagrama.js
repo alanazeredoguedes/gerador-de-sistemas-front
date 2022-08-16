@@ -4,6 +4,9 @@ const goStruct = go.GraphObject.make;  // for conciseness in defining templates
 class Diagrama
 {
     constructor() {
+        this.nome = ""
+        this.descricao = ""
+
         this.models = [];
         this.linksModels = [];
 
@@ -80,14 +83,12 @@ class Diagrama
             });
     }
 
-    convertIco(v) {
-        switch (v) {
+    convertIco(ico) {
+        switch (ico) {
             //url('/img/background-1.png')
             case "pk": return "/img/pk.svg";
             case "fk": return "/img/fk.svg";
-            case "private": return "-";
-            case "protected": return "#";
-            case "package": return "~";
+            case "nulo": return "N";
             default: return '';
         }
     }
@@ -175,7 +176,7 @@ class Diagrama
                 })*/
 
             },
-            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+            new go.Binding("location", "posicao", go.Point.parse).makeTwoWay(go.Point.stringify),
 
 
             goStruct(go.Shape, 'RoundedRectangle',
@@ -241,7 +242,7 @@ class Diagrama
                         editable: false,
                         stroke: "white",
                     },
-                    new go.Binding("text", "name").makeTwoWay(),
+                    new go.Binding("text", "nome").makeTwoWay(),
                 ),
 
 
@@ -404,7 +405,7 @@ class Diagrama
                     height: 12,
 
                 },
-                new go.Binding("source", "ico", this.convertIco)
+                new go.Binding("source", "ico", this.convertIco, )
             ),
 
             goStruct(go.TextBlock,
@@ -421,7 +422,7 @@ class Diagrama
                     font: " 11pt system-ui",
                     stroke: '#212529'
                 },
-                new go.Binding("text", "name").makeTwoWay(),
+                new go.Binding("text", "nome").makeTwoWay(),
                 new go.Binding("isUnderline", "scope", function (s) { return s[0] === 'c' })
             ),
 
@@ -439,7 +440,7 @@ class Diagrama
                     font: " 11pt system-ui",
                     stroke: '#212529'
                 },
-                new go.Binding("text", "type").makeTwoWay()
+                new go.Binding("text", "tipo").makeTwoWay()
             ),
 
         );
