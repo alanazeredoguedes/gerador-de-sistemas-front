@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="scroll h-400px px-5">
-      ...
-    </div>
+<!--    <div class="scroll h-400px px-5">
+    </div>-->
     <div id="kt_sidebar" class="sidebar px-5 py-5 py-lg-8 px-lg-11" data-kt-drawer="true" data-kt-drawer-name="sidebar"
       data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="375px"
       data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_sidebar_toggle">
@@ -37,7 +36,7 @@
           <div class="timeline">
 
 
-            <!-- DIAGRAMAS MENU -->
+            <!-- DASHBOARD HOME -->
             <router-link :to="{ name: 'homePage' }">
               <div class="timeline-item">
 
@@ -72,7 +71,7 @@
 
 
 
-            <!-- DIAGRAMAS MENU -->
+            <!-- DIAGRAMAS LIST -->
             <router-link :to="{ name: 'diagramas_list' }">
             <div class="timeline-item">
 
@@ -103,8 +102,8 @@
             </router-link>
 
 
-            <!-- PROJETOS MENU -->
-            <router-link :to="{ name: 'projetos_list' }">
+            <!-- APP LIST -->
+            <router-link :to="{ name: 'app_list' }">
               <div class="timeline-item">
 
                   <div class="timeline-line w-40px"></div>
@@ -112,7 +111,7 @@
                   <div class="timeline-icon symbol symbol-circle symbol-40px">
                     <div class="symbol-label">
                       <span class="svg-icon svg-icon-2 svg-icon-white">
-                        <i class="fa-brands fa-buffer"></i>
+                        <i class="fa-solid fa-server"></i>
                       </span>
                     </div>
                   </div>
@@ -120,11 +119,11 @@
                   <div class="timeline-content mt-n1" style="margin-bottom: 3rem">
                     <div class="pe-3">
 
-                      <div class="fs-5 text-white fw-semibold mb-2">Projetos</div>
+                      <div class="fs-5 text-white fw-semibold mb-2">App</div>
 
                       <div class="d-flex align-items-center mt-1 fs-6" style="display: none">
-                        <div class="text-white opacity-50 me-2 fs-7">Acesse os seus</div>
-                        <a href="#" class="text-success fs-7 fw-bold">Projetos</a>
+                        <div class="text-white opacity-50 me-2 fs-7">Acesse as suas</div>
+                        <a href="#" class="text-success fs-7 fw-bold">Aplicações</a>
                       </div>
 
                     </div>
@@ -133,37 +132,6 @@
               </div>
             </router-link>
 
-
-
-            <!-- APLICAÇOES MENU -->
-            <div class="timeline-item">
-              <a href="javascript:void(0)">
-
-                <div class="timeline-line w-40px"></div>
-
-                <div class="timeline-icon symbol symbol-circle symbol-40px">
-                  <div class="symbol-label">
-                    <span class="svg-icon svg-icon-2 svg-icon-white">
-                      <i class="fa-solid fa-server"></i>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="timeline-content mb-20 mt-n1" style="margin-bottom: 3rem">
-                  <div class="pe-3">
-
-                    <div class="fs-5 text-white fw-semibold mb-2">App</div>
-
-                    <div class="d-flex align-items-center mt-1 fs-6" style="display: none">
-                      <div class="text-white opacity-50 me-2 fs-7">Acesse as suas</div>
-                      <a href="#" class="text-success fs-7 fw-bold">Aplicações</a>
-                    </div>
-
-                  </div>
-                </div>
-
-              </a>
-            </div>
 
             <!-- GUIA RAPIDO MENU -->
             <div class="timeline-item">

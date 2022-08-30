@@ -4,7 +4,7 @@ class Metodo {
 
     constructor(nome = "", descricao = "", assinatura = []) {
         /** Atributes Canvas */
-        this.key = uuidv4();
+        this.key = uuidv4()
 
         /** Atributes Model */
         this.nome = nome

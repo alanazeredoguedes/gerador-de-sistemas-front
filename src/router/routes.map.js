@@ -10,9 +10,9 @@ const routes = [
                 component: () => import('@/pages/dashboard/home/Dashboard.vue')
             },
             {
-                path: '/projetos',
-                name: 'projetos_list',
-                component: () => import('@/pages/dashboard/projetos/Projetos.vue')
+                path: '/app',
+                name: 'app_list',
+                component: () => import('@/pages/dashboard/app/App.vue')
             },
             {
                 path: '/diagramas',
@@ -28,7 +28,7 @@ const routes = [
         component: () => import('@/layouts/DiagramTemplate.vue'),
         children: [
             {
-                path: '/diagrama',
+                path: '/diagrama/:id',
                 name: 'diagrama',
                 component: () => import('@/pages/diagram/Diagram.vue')
             },

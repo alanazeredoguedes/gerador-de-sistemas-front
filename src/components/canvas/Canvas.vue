@@ -1,46 +1,107 @@
 <template>
 
+  <div class="d-flex flex-column flex-root">
+    <div class="page d-flex flex-row flex-column-fluid">
+      <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+
+        <TopMenu :diagrama="diagrama" />
+
+      </div>
+    </div>
+  </div>
+
   <div id="canvas" class="CanvasComponent cavasDiagram"></div>
 
-  <ModalAdicionarClasse :diagrama="diagrama" v-if="diagrama" />
-  <ModalAdicionarRelacionamento :diagrama="diagrama" v-if="diagrama" />
+  <ModalEditClass ref="ModalEditClass" :class-edit="classEdit" :diagrama="diagrama" />
 
 </template>
 
 <script>
 
-import '@/assets/plugins/goJs/go'
+/** ************************************************************ */
+/** Dependencias CANVAS GO JS */
+
+import '../../assets/plugins/goJs/go.js'
+//import '../../assets/plugins/goJs/go-debug'
+
 import '@/assets/plugins/goJs/extensions/Figures'
 import '@/assets/plugins/goJs/extensions/Arrowheads'
 import '@/assets/plugins/goJs/extensions/LightBoxContextMenu'
 
-import Diagrama from "@/models/Diagrama";
-import Atributo from "@/models/Atributo";
-import Classe from "@/models/Classe";
-import Metodo from "@/models/Metodo";
-import Relacionamento from "@/models/Relacionamento";
 
-
+/** ************************************************************ */
+/** Componetes VUE  */
 
 import ModalAdicionarClasse from "./modal/ModalAdicionarClasse.vue";
 import ModalAdicionarRelacionamento from "./modal/ModalAdicionarRelacionamento.vue";
+import TopMenu from "./top-menu/TopMenu.vue";
+import ModalEditClass from "./rigth-menu/EditClass.vue";
 
 
+/** ************************************************************ */
+/** Imports Geral  */
+
+import { mapActions, mapState } from 'vuex'
+import Diagrama from "../../models/schema/Diagrama";
+import Relationship from "../../models/schema/Relationship";
+import Method from "../../models/schema/Method";
+import Attribute from "../../models/schema/Attribute";
+import Class from "../../models/schema/Class";
+
+
+
+/** Vue Script */
 export default {
   name: 'Canvas',
-  components: {ModalAdicionarRelacionamento, ModalAdicionarClasse },
+  components: { ModalEditClass, TopMenu, ModalAdicionarRelacionamento, ModalAdicionarClasse },
   props: {  },
   data(){
     return {
       diagrama: null,
+      classEdit: null,
     }
   },
-  methods: {
+  computed:{
+    ...mapState({
+      diagramaData: state => state.diagramaStore.items.diagrama
+    })
 
+  },
+  methods: {
+    ...mapActions([
+      'getDiagrama',
+    ]),
     /** INICIO Criação de novos eventos para o diagrama. */
     eventClick(){
       return (e, obj) => {
-        //console.log('Click')
+
+        let menuRight = this.$refs.ModalEditClass
+
+        if(!menuRight)
+          return
+
+        if(!menuRight.isOpen()){
+
+          menuRight.show();
+          this.classEdit = obj.part.data
+
+        }else if( menuRight.isOpen() && this.classEdit.key !== obj.part.data.key){
+
+          menuRight.close();
+
+          setTimeout(()=>{
+            this.classEdit = obj.part.data
+            menuRight.show();
+
+          }, 500)
+
+        }else if( menuRight.isOpen() && this.classEdit.key === obj.part.data.key){
+          menuRight.close();
+
+        }
+
+        //this.classEdit = null
+
       }
     },
     eventDoubleClick(){
@@ -60,48 +121,134 @@ export default {
     },
     eventMouseLeave(){
       return (e, obj) => {
-        //console.log('Mouse Leave')
+          //console.log('Mouse Leave')
       }
     },
-    eventRightClickDiagram(){
+    eventClickDiagram(e, obj){
+      return (e, obj) => {
+
+        let menuRight = this.$refs.ModalEditClass
+
+        if(menuRight.isOpen()){
+          menuRight.close();
+        }
+
+        //console.log('Click Diagram')
+        //let menuRight = this.$refs.ModalEditClass
+        //menuRight.close()
+      }
+    },
+    eventRightClickDiagram(e, obj){
       return (e, obj) => {
         console.log('Right Click Diagram')
+
       }
     },
     eventChangeLocation(){
       return (e, obj) => {
+        //console.log(e)
+
         if (e.af === 'location'){
           //console.log(e.object.location)
           //console.log(e.object)
         }
+        //console.log(this.diagrama.models)
       }
     },
     /** FIM Criação de novos eventos para o diagrama. */
 
+    initDiagramData(){
+
+      /**
+       * @type {Method}
+       */
+      let validarCpf = new Method('validarCpf','metodo responsavel por validar cpf')
+
+      /**
+       * @type {Attribute}
+       */
+      let id1 = new Attribute('id','id','integer', true);
+      let nome = new Attribute('nome','nome','string', false);
+      let autor = new Class('Autor', 'autor', '...',[ id1, nome ], [],'-526 -94' )
+
+      let id2 = new Attribute('id','id','integer', true);
+      let titulo = new Attribute('titulo','titulo','string', false);
+      let autorFk = new Attribute('autor ','autor_id','string', false, true);
+      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk], [],'-735 223' )
+
+      let id3 = new Attribute('id','id','integer', true);
+      let rua = new Attribute('rua ','rua','string', false);
+      autorFk = new Attribute('autor ','autor_id','string', false, true);
+      let endereco = new Class('Endereco', 'endereco', '...',[ id3, rua, autorFk ], [ validarCpf ],'-758 -362' )
+
+
+      //let id4 = new Attribute('id','id','integer', true);
+      // autorFk = new Attribute('autor ','autor_id','string', false, true);
+      // let enderecoFk = new Attribute('endereco ','endereco_id','string', false, true);
+      // let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk, enderecoFk ], [  ],'' )
+      // autorEndereco.associativeModel = true
+
+
+      /**
+       * @type {Relationship}
+       */
+      let oneToOne = new Relationship(autor.key, endereco.key, 'one-to-one')
+      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many')
+      //let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many')
+      //let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-many')
+
+      const diagrama = new Diagrama()
+      this.diagrama = Object.freeze([diagrama])
+
+
+      //console.log(this.diagrama[0])
+
+      /** ADICIONANDO CLASSES */
+      this.diagrama[0].addClasse(autor)
+      this.diagrama[0].addClasse(documento)
+      this.diagrama[0].addClasse(endereco)
+      //this.diagrama[0].addClasse(autorEndereco)
+
+
+
+      /** ADICIONANDO RELACIONAMENTOS */
+      this.diagrama[0].addRelacionamento(oneToOne)
+      this.diagrama[0].addRelacionamento(oneToMany)
+      //this.diagrama[0].addRelacionamento(ManyToMany1)
+      //this.diagrama[0].addRelacionamento(ManyToMany2)
+
+
+    }
+
   },
   mounted() {
 
-   /* let attributeId = new Atributo('id', 'integer', 'pk')
-    attributeId.pk = true;
+    /** ‘ID’ do diagrama Atual */
+    //let diagramaId = this.$route.params.id
 
-    let model1 = new Classe('Autor', 'Cursos', 'curso', "-891.238576250846 -255.95561447143552", [attributeId], [], []);
-    model1.key = 1
-    model1.addTimeStamp();*/
+   /* this.getDiagrama(diagramaId)
+        .then( response => this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Diagrama') )
+        .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+   */
 
-    this.diagrama = new Diagrama()
-    //this.diagrama.addClasse(model1)
+    //this.initDiagramData()
+    this.initDiagramData()
+
+
 
     /** Redefinição dos Eventos do Diagrama */
-    this.diagrama.eventClick = this.eventClick();
-    this.diagrama.eventDoubleClick = this.eventDoubleClick();
-    this.diagrama.eventRightClick = this.eventRightClick();
-    this.diagrama.eventMouseEnter = this.eventMouseEnter();
-    this.diagrama.eventMouseLeave = this.eventMouseLeave();
-    this.diagrama.eventChangeLocation = this.eventChangeLocation();
-    this.diagrama.eventRightClickDiagram = this.eventRightClickDiagram();
+    this.diagrama[0].eventClick = this.eventClick();
+    this.diagrama[0].eventDoubleClick = this.eventDoubleClick();
+    this.diagrama[0].eventRightClick = this.eventRightClick();
+    this.diagrama[0].eventMouseEnter = this.eventMouseEnter();
+    this.diagrama[0].eventMouseLeave = this.eventMouseLeave();
+    this.diagrama[0].eventChangeLocation = this.eventChangeLocation();
+    this.diagrama[0].eventClickDiagram = this.eventClickDiagram();
+    this.diagrama[0].eventRightClickDiagram = this.eventRightClickDiagram();
 
-    this.diagrama.initEvents()
+    this.diagrama[0].initEvents()
   },
+
 
 }
 </script>

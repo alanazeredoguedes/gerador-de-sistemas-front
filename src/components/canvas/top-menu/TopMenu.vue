@@ -7,9 +7,9 @@
         <!-- mobile dont show: d-none -->
 
         <div class="header-brand me-5" >
-          <router-link :to="{ name: 'homePage' }" style="font-size: 20px; text-decoration: none; color: white">
+          <router-link :to="{ name: 'diagramas_list' }" style="font-size: 20px; text-decoration: none; color: white">
             <img alt="Logo" src="@/assets/logo.svg" class="h-25px h-lg-30px" />
-            Gerador de Sistemas
+            Gerador de Sistemas - {{ diagramaData.nome }}
           </router-link>
         </div>
 
@@ -25,19 +25,28 @@
 
           <!-- Adicionar Classe -->
           <div class="d-flex align-items-center me-2 me-lg-4">
-            <a data-bs-toggle="modal" data-bs-target="#modalAdicionarClasse" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
+
+            <a @click="$refs.ModalAdicionarClasse.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
               <i class="fa-solid fa-plus"></i>
               <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
             </a>
+
+<!--            <a data-bs-toggle="modal" data-bs-target="#modalAdicionarClasse" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
+              <i class="fa-solid fa-plus"></i>
+              <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
+            </a>-->
           </div>
 
           <!-- Adicionar Relacionamento -->
           <div class="d-flex align-items-center me-2 me-lg-4">
-            <a data-bs-toggle="modal" data-bs-target="#modalAdicionarRelacionamento" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
+
+            <a @click="$refs.ModalAdicionarRelacionamento.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
               <i class="fa-solid fa-link"></i>
               <span class="bullet bullet-dot bg-warning h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
             </a>
+
           </div>
+
 
 
 
@@ -93,7 +102,7 @@
 
 
           <div class="d-flex align-items-center">
-            <router-link :to="{ name: 'homePage' }" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
+            <router-link :to="{ name: 'diagramas_list' }" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
                <span class="svg-icon svg-icon-2x">
 											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
@@ -110,17 +119,36 @@
 
 
 
-
-
-
       </div>
     </div>
   </div>
+
+  <ModalAdicionarClasse ref="ModalAdicionarClasse" :diagrama="diagrama" v-if="diagrama"/>
+  <ModalAdicionarRelacionamento  ref="ModalAdicionarRelacionamento" :diagrama="diagrama" v-if="diagrama" />
+
 </template>
 
 
 <script>
+import {mapState} from "vuex";
+import ModalAdicionarClasse from "../modal/ModalAdicionarClasse.vue";
+import ModalAdicionarRelacionamento from "../modal/ModalAdicionarRelacionamento.vue";
+
+import $ from 'jquery'
+
 export default {
   name: 'TopMenu',
+  components: {ModalAdicionarRelacionamento, ModalAdicionarClasse},
+  props: [ 'diagrama', ],
+  data: function() {
+    return {
+    }
+  },
+  computed:{
+    ...mapState({
+      diagramaData: state => state.diagramaStore.items.diagrama,
+    })
+  },
+  methods:{  }
 }
 </script>

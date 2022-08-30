@@ -21,7 +21,7 @@
 
 <!--    <ModaisGeral/>-->
 
-    <ModalCriarDiagrama/>
+<!--    <ModalCriarDiagrama/>-->
 
   </div>
 </template>

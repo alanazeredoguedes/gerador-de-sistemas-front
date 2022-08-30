@@ -6,7 +6,7 @@
       <div class="toolbar d-flex flex-stack mb-3 mb-lg-5" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack flex-wrap">
           <div class="page-title d-flex flex-column me-5 py-2">
-            <h1 class="d-flex flex-column text-white fw-bold fs-2 mb-0">Meus Projetos</h1>
+            <h1 class="d-flex flex-column text-white fw-bold fs-2 mb-0">Minhas Aplicações</h1>
           </div>
           <div class="d-flex align-items-center py-2">
             <div class="me-4">

@@ -16,7 +16,26 @@ export const alerts = {
         }).fire({
             icon: ( (ico) ? ico: 'success' ),
             title: title,
-            text: message,
+            html: message,
+        })
+    },
+    modalConfirm: (title, text, callbackConfirm = ()=>{}, callbackCancel = ()=>{} )=>{
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                callbackConfirm()
+            }else{
+                callbackCancel()
+            }
         })
     }
 

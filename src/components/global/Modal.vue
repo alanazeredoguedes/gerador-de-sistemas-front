@@ -11,7 +11,7 @@
             </slot>
           </h3>
 
-          <div class="btn btn-icon btn-sm btn-active-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <div class="btn btn-icon btn-sm btn-active-danger ms-2" @click="close" data-bs-dismiss="modal" aria-label="Close">
             <span class="svg-icon svg-icon-1" style="color: white; font-size: 15px"><b>x</b></span>
           </div>
 

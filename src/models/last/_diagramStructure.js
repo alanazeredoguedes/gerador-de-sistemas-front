@@ -1,80 +1,48 @@
 /** @var goStruct Responsável por armazenar o modelo da estrutura que será utilizado na biblioteca. */
 const goStruct = go.GraphObject.make;  // for conciseness in defining templates
 
-class Diagrama
+
+class DiagramDefinition
 {
-    constructor() {
-        this.nome = ""
-        this.descricao = ""
-
-        this.models = [];
-        this.linksModels = [];
-
+    constructor( models = [], linksModels = []) {
+        this.models = models;
+        this.linksModels = linksModels;
         this.diagram = this.getStructure();
-
         this.diagram.nodeTemplate = this.getNodeTemplate();
         this.diagram.linkTemplate = this.getLinkTemplate();
-
-        this.diagram.model = this.setData(this.models,this.linksModels)
-
-        this.eventClick = (e, obj)=>{}
-        this.eventDoubleClick = (e, obj)=>{}
-        this.eventRightClick = (e, obj)=>{}
-        this.eventMouseEnter = (e, obj)=>{}
-        this.eventMouseLeave = (e, obj)=>{}
-        this.eventChangeLocation = (e, obj)=>{}
-
-        this.eventRightClickDiagram = (e, obj)=>{}
-
-
+        this.diagram.model = this.setData(this.models, this.linksModels)
+        //this.diagram.addModelChangedListener(this.onchangeModel)
+        this.diagram.model.addChangedListener(this.onchangeModel)
+        this.action = (e, obj)=>{}
+        this.transAttributes = 'Atributos'
     }
 
-    /** Inicializa Eventos Manualmente */
-    initEvents = ()=> {
-        this.diagram.model.addChangedListener(this.eventChangeLocation)
-    }
 
-    callBackClick = (e, obj)=>{
-        this.eventClick(e,obj);
+    onchangeModel = (e)=>{
+
+        if (e.af === 'location'){
+            //console.log(e.object.location)
+            //console.log(e.object)
+        }
+
     }
 
     callBackDoubleClick = (e, obj)=>{
-        this.eventDoubleClick(e,obj);
-    }
-
-    callBackRightClick = (e, obj)=>{
-        this.eventRightClick(e,obj);
-    }
-
-    callBackMouseEnter = (e, obj)=>{
-        this.eventMouseEnter(e,obj);
-    }
-
-    callBackMouseLeave = (e, obj)=>{
-    this.eventMouseLeave(e,obj);
-    }
-
-    callBackRightClickDiagram = (e, obj)=>{
-        this.eventRightClickDiagram(e,obj);
+        this.action(e,obj);
     }
 
 
-    addClasse = (classe)=>{
-        this.diagram.model.addNodeData(classe)
+    addTable = (table)=>{
+        this.diagram.model.addNodeData(table)
     }
 
-    removeClasse = (classe)=>{
-        this.diagram.model.removeNodeData(classe)
-        this.updateDiagram()
-    }
-
-    updateDiagram = ()=>{
-        this.diagram.updateAllTargetBindings();
+    removeTable = (table)=>{
+        this.diagram.model.removeNodeData(table)
     }
 
 
     setData(models, linksModels){
-        return goStruct(go.GraphLinksModel,
+         return goStruct(go.GraphLinksModel,
             {
                 copiesArrays: false,
                 copiesArrayObjects: false,
@@ -83,12 +51,14 @@ class Diagrama
             });
     }
 
-    convertIco(ico) {
-        switch (ico) {
+    convertIco(v) {
+        switch (v) {
             //url('/img/background-1.png')
             case "pk": return "/img/pk.svg";
             case "fk": return "/img/fk.svg";
-            case "nulo": return "N";
+            case "private": return "-";
+            case "protected": return "#";
+            case "package": return "~";
             default: return '';
         }
     }
@@ -153,8 +123,21 @@ class Diagrama
             allowCopy: false,
             "undoManager.isEnabled": true,
             initialScale: 1.0,
-            minScale: 0.2,
-            contextClick: this.callBackRightClickDiagram,
+            minScale: 0.5,
+
+            /** Dimensiona o diagrama para caber uniformemente na viewport */
+            /*autoScale: go.Diagram.Uniform,*/
+
+            //layout: goStruct(go.ForceDirectedLayout),
+            /*layout: goStruct(go.TreeLayout,
+                { // this only lays out in trees nodes connected by "generalization" links
+                    angle: 90,
+                    path: go.TreeLayout.PathSource,  // links go from child to parent
+                    setsPortSpot: false,  // keep Spot.AllSides for link connection spot
+                    setsChildPortSpot: false,  // keep Spot.AllSides
+                    // nodes not connected by "generalization" links are laid out horizontally
+                    arrangement: go.TreeLayout.ArrangementHorizontal,
+                })*/
         })
     }
 
@@ -168,46 +151,39 @@ class Diagrama
                 shadowColor: "rgba(0,0,0,.15)",
                 isShadowed: true,
 
-                selectionAdorned: false,
-                /* Borda ao clicar na classe
-                selectionAdornmentTemplate: new go.Adornment("Auto", {
+                selectionAdorned: true,
+                /*selectionAdornmentTemplate: new go.Adornment("Auto", {
                     margin: 10,
                     background: "red"
                 })*/
 
             },
-            new go.Binding("location", "posicao", go.Point.parse).makeTwoWay(go.Point.stringify),
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
 
 
             goStruct(go.Shape, 'RoundedRectangle',
                 {
-                    fill: "rgb(3,83,171)",
-                    stroke: "rgb(3,83,171)",
+                    fill: "rgb(51, 86, 119)",
+                    stroke: "rgb(51, 86, 119)",
                     strokeWidth: 1,
-                    doubleClick: this.callBackDoubleClick,
-                    click: this.callBackClick,
-                    contextClick: this.callBackRightClick,
-                    // mouseEnter: this.callBackMouseEnter,
-                    // mouseLeave: this.callBackMouseLeave,
-                    //background: "rgb(3,83,171)",
+                    //doubleClick: this.callBackDoubleClick,
+                    click: this.callBackDoubleClick,
+                    //background: "rgb(51, 86, 119)",
                 }
             ),
             goStruct(go.Panel, "Table",
 
                 {
                     stretch: go.GraphObject.Fill,
-                    defaultRowSeparatorStroke: "rgb(3,83,171)",
-                    doubleClick: this.callBackDoubleClick,
-                    click: this.callBackClick,
-                    contextClick: this.callBackRightClick,
-                    mouseEnter: this.callBackMouseEnter,
-                    mouseLeave: this.callBackMouseLeave,
-                    background: "rgb(3,83,171)",
+                    defaultRowSeparatorStroke: "rgb(51, 86, 119)",
+                    //doubleClick: this.callBackDoubleClick,
+                    click: this.callBackDoubleClick,
+                    background: "rgb(51, 86, 119)",
                 },
 
                 goStruct(go.RowColumnDefinition, {
                     row: 0,
-                    background: 'rgb(3,83,171)',
+                    background: 'rgb(51, 86, 119)',
                     separatorStrokeWidth: 0,
                 }),
 
@@ -242,14 +218,14 @@ class Diagrama
                         editable: false,
                         stroke: "white",
                     },
-                    new go.Binding("text", "nome").makeTwoWay(),
+                    new go.Binding("text", "name").makeTwoWay(),
                 ),
 
 
                 /***********************************
                  * Atributos
                  **********************************/
-                goStruct(go.TextBlock, "Atributos",
+                goStruct(go.TextBlock, "Attributes",
                     {
                         row: 1,
                         //  alignment: go.Spot.LeftCenter,
@@ -274,21 +250,21 @@ class Diagrama
                         itemTemplate: this.getAtrributeTemplate(),
                     }
                 ),
-                goStruct("PanelExpanderButton", "ATTRIBUTES",
-                    {
-                        row: 1,
-                        column: 1,
-                        alignment: go.Spot.TopRight,
-                        visible: false,
-                    },
-                    new go.Binding("visible", "attributes", function (arr) { return arr.length > 0; })
-                ),
+                  goStruct("PanelExpanderButton", "ATTRIBUTES",
+                      {
+                          row: 1,
+                          column: 1,
+                          alignment: go.Spot.TopRight,
+                          visible: false,
+                      },
+                      new go.Binding("visible", "attributes", function (arr) { return arr.length > 0; })
+                  ),
 
 
                 /***********************************
                  * Methods
                  **********************************/
-                goStruct(go.TextBlock, "Métodos",
+                goStruct(go.TextBlock, "Methods",
                     {
                         row: 2,
                         //alignment: go.Spot.Center,
@@ -332,7 +308,7 @@ class Diagrama
                 /***********************************
                  * Relationship
                  **********************************/
-                goStruct(go.TextBlock, "Relacionamentos",
+                goStruct(go.TextBlock, "Relationship",
                     {
                         row: 3,
                         //alignment: go.Spot.Center,
@@ -375,12 +351,16 @@ class Diagrama
 
 
 
+
+
+
             ));
 
 
     }
 
-    /** Template Canvas Atributos */
+
+    /** the template for each attribute in a node's array of item data */
     getAtrributeTemplate(){
         return goStruct(go.Panel, "Table",
             // property ico/access
@@ -405,7 +385,7 @@ class Diagrama
                     height: 12,
 
                 },
-                new go.Binding("source", "ico", this.convertIco, )
+                new go.Binding("source", "ico", this.convertIco)
             ),
 
             goStruct(go.TextBlock,
@@ -422,7 +402,7 @@ class Diagrama
                     font: " 11pt system-ui",
                     stroke: '#212529'
                 },
-                new go.Binding("text", "nome").makeTwoWay(),
+                new go.Binding("text", "name").makeTwoWay(),
                 new go.Binding("isUnderline", "scope", function (s) { return s[0] === 'c' })
             ),
 
@@ -440,13 +420,12 @@ class Diagrama
                     font: " 11pt system-ui",
                     stroke: '#212529'
                 },
-                new go.Binding("text", "tipo").makeTwoWay()
+                new go.Binding("text", "type").makeTwoWay()
             ),
 
         );
     }
 
-    /** Template Canvas Metodos */
     getMethodTemplate(){
         return goStruct(go.Panel, "Table",
             goStruct(go.RowColumnDefinition, {
@@ -466,7 +445,7 @@ class Diagrama
                     editable: false,
                     //textAlign: 'leftCenter',
                     font: "bold 11pt system-ui",
-                    stroke: 'rgb(3,83,171)'
+                    stroke: 'rgb(51, 86, 119)'
                 },
                 new go.Binding("text", "name", function (item) { return item + '()'; }).makeTwoWay(),
             ),
@@ -474,7 +453,7 @@ class Diagrama
         );
     }
 
-    /** Template Canvas Relacionamentos */
+
     getRelationshipTemplate(){
         return goStruct(go.Panel, "Table",
             goStruct(go.RowColumnDefinition, {
@@ -498,7 +477,7 @@ class Diagrama
                     editable: false,
                     //textAlign: 'leftCenter',
                     font: "bold 11pt system-ui",
-                    stroke: 'rgb(3,83,171)'
+                    stroke: 'rgb(51, 86, 119)'
                 },
                 new go.Binding("text", "name").makeTwoWay(),
             ),
@@ -514,7 +493,7 @@ class Diagrama
                     width: 120,
                     //textAlign: 'right',
                     font: "bold 11pt system-ui",
-                    stroke: 'rgb(3,83,171)'
+                    stroke: 'rgb(51, 86, 119)'
                 },
                 new go.Binding("text", "name").makeTwoWay(),
             ),
@@ -522,6 +501,52 @@ class Diagrama
 
         );
     }
+
+/*    getRelationshipTemplate(){
+        return goStruct(go.Panel, "Table",
+            goStruct(go.RowColumnDefinition, {
+                row: 0,
+            }),
+            goStruct(go.RowColumnDefinition, {
+                column: 0,
+            }),
+            goStruct(go.RowColumnDefinition, {
+                column: 1,
+            }),
+            goStruct(go.TextBlock,
+                {
+                    column: 0,
+                    wrap: go.TextBlock.None,
+                    /!** TOP - RIGHT - BOTTON - LEFT   *!/
+                    isMultiline: false,
+                    editable: false,
+                    textAlign: 'leftCenter',
+                    font: "bold 11pt system-ui",
+                    stroke: 'rgb(51, 86, 119)'
+                },
+                new go.Binding("text", "from", function (item) { return item + ' '; }).makeTwoWay(),
+            ),
+            goStruct(go.TextBlock,
+                {
+                    column: 1,
+                    wrap: go.TextBlock.None,
+                    /!** TOP - RIGHT - BOTTON - LEFT   *!/
+                    //margin: new go.Margin(0, 20, 5, 0),
+                    isMultiline: false,
+                    editable: false,
+                    textAlign: 'leftCenter',
+                    font: "bold 11pt system-ui",
+                    stroke: 'rgb(51, 86, 119)'
+                },
+                new go.Binding("text", "to", function (item) { return item + ''; }).makeTwoWay(),
+            ),
+
+
+
+
+        );
+    }*/
+
 
     getLinkTemplate(){
         return goStruct(go.Link,
@@ -541,7 +566,7 @@ class Diagrama
             //new go.Shape.defineArrowheadGeometry("xx", "m 0,4 l 8,0 m -8,0 l 8,-4 m -8,4 l 8,4"),
 
             goStruct(go.Shape,{
-                stroke: "rgb(3,83,171)",
+                stroke: "rgb(51, 86, 119)",
                 strokeWidth: 2.5,
             }),
 
@@ -549,7 +574,7 @@ class Diagrama
                 {
                     scale: 2.0,
                     fill: "white",
-                    stroke: "rgb(3,83,171)",
+                    stroke: "rgb(51, 86, 119)",
                     segmentOffset: new go.Point(-2, 0),
 
                 },
@@ -561,7 +586,7 @@ class Diagrama
                 {
                     //textAlign: "centter",
                     font: "bold 14px sans-serif",
-                    stroke: "rgb(3,83,171)",
+                    stroke: "rgb(51, 86, 119)",
                     segmentIndex: 0,
                     segmentOffset: new go.Point(30, -30),
                     segmentOrientation: go.Link.OrientUpright45,
@@ -575,7 +600,7 @@ class Diagrama
                 {
                     scale: 2.0,
                     fill: "white",
-                    stroke: "rgb(3,83,171)",
+                    stroke: "rgb(51, 86, 119)",
                     segmentOffset: new go.Point(2, 0),
                 },
                 new go.Binding("toArrow", "relationship", this.convertToArrow),
@@ -586,7 +611,7 @@ class Diagrama
                 {
                     //textAlign: "center",
                     font: "bold 14px sans-serif",
-                    stroke: "rgb(3,83,171)",
+                    stroke: "rgb(51, 86, 119)",
                     segmentIndex: -1,
                     segmentOffset: new go.Point(-30, -20),
                     segmentOrientation: go.Link.OrientUpright45,
@@ -599,6 +624,8 @@ class Diagrama
         );
     }
 
+
+
 }
 
-export default Diagrama
+export default DiagramDefinition

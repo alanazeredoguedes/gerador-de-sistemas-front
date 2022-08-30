@@ -40,4 +40,28 @@ export const string_validation = {
 
         return (result[0] === '_') ? result.substring(1) : result
     },
+
+
+
+
+
+
+    notEmptyValues: (values) => {
+        let existEmpty = false
+        values.forEach((value)=>{
+            if( !(['', null, undefined].indexOf(value) === -1) ){
+                existEmpty = true
+                stop();
+            }
+        })
+        return existEmpty;
+    },
+    resetEventsFront: () => {
+        $(function () {
+            $('.showinfo').popover({
+                container: 'body',
+                trigger: 'hover'
+            })
+        })
+    }
 }

@@ -15731,7 +15731,7 @@ export abstract class PanelLayout {
  * Setting an explicit size on a Panel may cause nested elements of that panel to size themselves differently,
  * especially in the cases of nested elements having a GraphObject#stretch value or TextBlock's having word wrap.
  *
- * Panels have no visual components of their own unless a GraphObject#background or GraphObject#areaBackground is specified
+ * Panels have no visual components-class of their own unless a GraphObject#background or GraphObject#areaBackground is specified
  * or separators are specified either as defaults for the whole Table Panel or on individual RowColumnDefinitions.
  * Panels can specify #padding, to make the Panel larger including its background. Setting a padding
  * when the Panel is constrained in size will reduce the total area that it has to arrange its elements. Setting a #margin

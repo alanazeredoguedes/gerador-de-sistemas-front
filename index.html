@@ -20,31 +20,16 @@
   </head>
 
   <body data-kt-name="metronic" id="kt_body" class="">
-<!-- data-kt-name="metronic" id="kt_body" class="page-bg" -->
-<!--    <script>
-        if ( document.documentElement ) {
-            const defaultThemeMode = "system";
-            const name = document.body.getAttribute("data-kt-name");
 
-            let themeMode = localStorage.getItem("kt_" + ( name !== null ? name + "_" : "" ) + "theme_mode_value");
-            if ( themeMode === null ) {
-                if ( defaultThemeMode === "system" ) {
-                    themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                } else {
-                    themeMode = defaultThemeMode; }
-            }
-            document.documentElement.setAttribute("data-theme", themeMode);
-        }
-    </script>-->
+    <div id="app"></div>
 
-  <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
 
-  <script type="module" src="/src/main.js"></script>
+    <script src="http://localhost:5173/src/assets/themes/10/plugins/global/plugins.bundle.js"></script>
+    <script src="http://localhost:5173/src/assets/themes/10/js/scripts.bundle.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-  <script src="src/assets/themes/10/plugins/global/plugins.bundle.js"></script>
-  <script src="src/assets/themes/10/js/scripts.bundle.js"></script>
+<!--  <script src="src/assets/themes/10/plugins/global/plugins.bundle.js"></script>
+  <script src="src/assets/themes/10/js/scripts.bundle.js"></script>-->
 
 
   </body>

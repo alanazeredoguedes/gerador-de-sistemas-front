@@ -22,7 +22,7 @@
 
         <div class="col-12">
           <label>Anotações</label>
-          <textarea class="form-control" placeholder="Anotações" v-model="anotacoes" style="height: 100px"></textarea>
+          <textarea class="form-control" placeholder="Descrição" v-model="descricao" style="height: 100px"></textarea>
         </div>
 
       </div>
@@ -44,10 +44,13 @@
 
 
 <script>
-import Classe from "../../../models/Classe";
-import Atributo from "../../../models/Atributo";
+
+import Class from "../../../models/schema/Class";
+import Attribute from "../../../models/schema/Attribute";
+
 
 import Modal from "../../global/Modal.vue";
+import diagrama from "../../../models/schema/Diagrama";
 
 
 export default {
@@ -59,7 +62,7 @@ export default {
       type: 'class',
       nome: '',
       tabela: '',
-      anotacoes: '',
+      descricao: '',
     }
   },
   watch: {
@@ -78,7 +81,7 @@ export default {
 
       this.tabela = val
     },
-    anotacoes(){
+    descricao(){
 
     },
   },
@@ -92,26 +95,25 @@ export default {
       //$(this.$el).modal('hide')
     },
     createModel(){
-      if(!this.nome || !this.tabela){
-        this.$functions.alerts.notification(false, 'Preencha os campos corretamente antes de continuar!')
-        return
-      }
-      let atributoId = new Atributo('id', 'id','integer', true)
+        if(!this.nome || !this.tabela){
+          this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
+          return
+        }
 
-      let novaClasse = new Classe(this.nome, this.tabela, this.descricao, [atributoId], []);
+      let fieldAttribute = new Attribute('id','id','integer', true);
 
-      //this.diagrama.models.push(novaClasse)
-      this.diagrama.addClasse(novaClasse)
+      let tableClass = new Class(this.nome, this.tabela, this.descricao,[fieldAttribute] )
 
-      this.diagrama.updateDiagram()
-      this.nome = this.tabela = this.anotacoes = ''
+      this.diagrama[0].addClasse(tableClass)
+
+      this.nome = this.tabela = this.descricao = ''
 
       this.close()
 
-      console.log(this.diagrama.models)
-      console.log(this.diagrama.model)
-
     },
+  },
+  mounted() {
+    //console.log(diagrama)
   }
 }
 </script>

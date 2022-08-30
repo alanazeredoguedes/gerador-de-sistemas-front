@@ -109,7 +109,7 @@ ExtendedBrush._parseLinearGradientCSS = function(cssstring, w, h) {
   //removes outer parentheses
   css = css.substring(1, css.length - 1);
 
-  //splits string into components at commas not within parentheses
+  //splits string into components-class at commas not within parentheses
   //css = css.split(/,+(?![^\(]*\))/g);
   css = css.split(/,(?![^\(]*\))/g);
   css[0] = css[0].trim();
@@ -294,7 +294,7 @@ ExtendedBrush._parseRadialGradientCSS = function(css, w, h) {
 
   css = css.substring(1, css.length - 1);
 
-  //splits string into components at commas not within parenthesesd and removes whitespace
+  //splits string into components-class at commas not within parenthesesd and removes whitespace
   css = css.split(/,(?![^\(]*\))/g);
   css[0] = css[0].trim();
 

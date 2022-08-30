@@ -1,6 +1,7 @@
 const state =  {
     items: {
-        diagramas: []
+        diagramas: [],
+        diagrama: [],
     }
 }
 

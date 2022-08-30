@@ -81,9 +81,9 @@
                 <img class="mw-100 h-200px me-4 mb-5 mb-lg-0" src="@/assets/themes/10/media/illustrations/sigma-1/11.png" />
                 <div class="d-flex flex-column align-items-center align-items-md-start flex-grow-1" data-theme="light">
                   <h3 class="text-gray-900 fw-bolder text-uppercase mb-5">Guia Rapido</h3>
-                  <div class="text-gray-800 mb-5 text-center text-md-start">Explore our powerful
-                    <br />documentation</div>
-                  <a href="#" class="btn btn-hover-rise text-gray-900 text-uppercase fs-7 fw-bold" style="background-color: #EBEE51">Aprenda Mais</a>
+                  <div class="text-gray-800 mb-5 text-center text-md-start">Explore nossa poderosa
+                    <br />Documentação</div>
+                  <a href="javascript:void(0)" class="btn btn-hover-rise text-gray-900 text-uppercase fs-7 fw-bold" style="background-color: #EBEE51">Aprenda Mais</a>
                 </div>
               </div>
             </div>
@@ -96,6 +96,8 @@
 
 
   </div>
+
+    <ModalCriarDiagrama/>
 </div>
 </template>
 
@@ -103,9 +105,10 @@
 <script>
 import { mapActions } from 'vuex'
 import LogoTitle from "../../../components/dashboard/LogoTitle.vue";
+import ModalCriarDiagrama from "../../../components/dashboard/modal/ModalCriarDiagrama.vue";
 
 export default {
-  components: {LogoTitle},
+  components: {ModalCriarDiagrama, LogoTitle},
   data() {
     return {
       data: null

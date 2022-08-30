@@ -175,12 +175,19 @@ export default {
           .then((response)=>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama criado com successo!')
             this.$router.push({ name: 'diagramas_list' })
+            this.getDiagramas().catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+            this.resetModal()
             this.close()
           })
           .catch((response)=>{
             this.$functions.alerts.notification('error', "Erro", 'Não foi possivel cadastrar o diagrama no momento!')
           })
 
+    },
+    resetModal(){
+      this.nome = ''
+      this.descricao = ''
+      this.changeTab(1)
     },
     changeTab(tab){
         $('.d-tab').removeClass('current')
