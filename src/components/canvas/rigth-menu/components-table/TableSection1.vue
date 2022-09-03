@@ -48,11 +48,11 @@ export default {
   methods: {
     removeClass(){
 
-      this.$functions.alerts.modalConfirm('Remover Classe', 'Deseja realmente remover a classe?',
+      this.$functions.alerts.modalConfirm('Remover Tabela Associativa?',
+          `Os <b>relacionamentos</b> e <b>chaves estrangeiras</b> vinculados serão removidos!`,
           ()=>{
+            this.diagrama[0].removeClass(this.classEdit)
             this.$functions.alerts.notification('success','Sucesso',`<b>Classe</b> removida com sucesso!`)
-            this.diagrama[0].removeClasse(this.classEdit)
-            //this.classEdit
             this.$parent.close()
           })
 

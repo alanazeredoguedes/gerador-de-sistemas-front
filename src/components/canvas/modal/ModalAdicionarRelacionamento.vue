@@ -311,12 +311,17 @@ export default {
 
       let foreignKey = new Attribute(this.class1ForeignKeyName, this.class1ForeignKeyName, 'integer',  false, true)
       foreignKey.setIco()
-      toClass.attributes.push(foreignKey)
 
-      let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', '', foreignKey.key)
+      this.diagrama[0].addAttribute(toClass, foreignKey)
 
-      this.diagrama[0].addRelacionamento(relation)
+      let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', foreignKey.key)
 
+      this.diagrama[0].addRelationship(relation)
+
+      console.log(this.diagrama[0].models)
+      console.log(this.diagrama[0].linksModels)
+      console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      console.log(this.diagrama[0].diagram.model.linkDataArray)
     },
     /**
      * ADICIONA RELACIONAMENTO UM PARA MUITOS
@@ -325,13 +330,13 @@ export default {
      */
     createOneToMany(fromClass, toClass){
 
-      let relation = new Relationship(fromClass.key, toClass.key,'one-to-many')
-
       let foreignKey = new Attribute(this.class1ForeignKeyName, this.class1ForeignKeyName, 'integer',  false, true)
       foreignKey.setIco()
       toClass.attributes.push(foreignKey)
 
-      this.diagrama[0].addRelacionamento(relation)
+      let relation = new Relationship(fromClass.key, toClass.key,'one-to-many', foreignKey.key)
+
+      this.diagrama[0].addRelationship(relation)
     },
     /**
      * ADICIONA RELACIONAMENTO MUITOS PARA MUITOS
@@ -365,12 +370,12 @@ export default {
 
 
       /** Adiciona a Classe/tabela associativa ao modelo */
-      this.diagrama[0].addClasse(associativeClass);
+      this.diagrama[0].addClass(associativeClass);
 
 
       /** Adiciona os relacionamentos ao modelo */
-      this.diagrama[0].addRelacionamento(relationClass1)
-      this.diagrama[0].addRelacionamento(relationClass2)
+      this.diagrama[0].addRelationship(relationClass1)
+      this.diagrama[0].addRelationship(relationClass2)
 
     },
 

@@ -22,7 +22,7 @@ export const alerts = {
     modalConfirm: (title, text, callbackConfirm = ()=>{}, callbackCancel = ()=>{} )=>{
         Swal.fire({
             title: title,
-            text: text,
+            html: text,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

@@ -187,7 +187,7 @@
                   type="checkbox"
                   v-model="atributo.foreingKey"
                   @change="changeForeingKey"
-                  :disabled="atributo.primaryKey === true"
+                  :disabled="true"
                   :id="'foreingKey' + atributo.key"
               />
               <label class="form-check-label" :for="'foreingKey' + atributo.key">
@@ -339,9 +339,19 @@ export default {
       this.diagrama[0].updateDiagram()
     },
     removerAtributo(){
-      this.$functions.alerts.notification('success','Sucesso',`<b>Atributo</b> removido com sucesso!`)
-      this.diagrama[0].diagram.model.removeArrayItem(this.classEdit.attributes, this.index);
-      this.diagrama[0].updateDiagram()
+
+      if(this.atributo.foreingKey){
+        this.$functions.alerts.modalConfirm('Remover Chave Estrangeira?',
+            `O <b>relacionamento</b> vinculado será removido!`,
+            ()=>{
+              this.diagrama[0].removeAttribute(this.classEdit, this.atributo)
+              this.$functions.alerts.notification('success','Sucesso',`<b>Atributo</b> removido com sucesso!`)
+            })
+      }else{
+        this.diagrama[0].removeAttribute(this.classEdit, this.atributo)
+        this.$functions.alerts.notification('success','Sucesso',`<b>Atributo</b> removido com sucesso!`)
+      }
+
     },
     changeFieldOption(){
 

@@ -43,9 +43,7 @@ export default {
   methods: {
     adicionarAtributo(){
         let atributo = new Attribute();
-        this.classEdit.attributes.push(atributo)
-        this.diagrama[0].updateDiagram();
-        //console.log(this.classEdit)
+        this.diagrama[0].addAttribute(this.classEdit, atributo)
     },
   }
 

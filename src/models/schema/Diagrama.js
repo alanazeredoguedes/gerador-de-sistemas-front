@@ -1,5 +1,6 @@
 /** @var goStruct Responsável por armazenar o modelo da estrutura que será utilizado na biblioteca. */
 import associativeModel from "../remove/AssociativeModel";
+import Attribute from "./Attribute";
 
 const goStruct = go.GraphObject.make;  // for conciseness in defining templates
 
@@ -17,7 +18,7 @@ class Diagrama
         this.diagram.nodeTemplate = this.getNodeTemplate();
         this.diagram.linkTemplate = this.getLinkTemplate();
 
-        this.diagram.model = this.setData(this.models,this.linksModels)
+        this.diagram.model = this.setData(this.models, this.linksModels)
 
         this.eventClick = (e, obj)=>{}
         this.eventDoubleClick = (e, obj)=>{}
@@ -64,29 +65,193 @@ class Diagrama
         this.eventRightClickDiagram(e,obj);
     }
 
-    addClasse = (classe)=>{
-        //this.models.push(classe)
-        this.diagram.model.addNodeData(classe)
+    /** Adiciona Classe */
+    addClass = (classs)=>{
+        this.diagram.model.addNodeData(classs)
         this.updateDiagram()
     }
 
-    removeClasse = (classe)=>{
-        //this.models = this.arrayRemove(this.models, classe)
-        this.diagram.model.removeNodeData(this.diagram.model.findNodeDataForKey(classe.key))
+    /** Remove Classe by Key */
+    removeClass = (classs)=>{
+        this.removeRelationshipByClass(classs)
+        this.diagram.model.removeNodeData(this.diagram.model.findNodeDataForKey(classs.key))
         this.updateDiagram()
     }
 
-    addRelacionamento= (relacionamento)=>{
-        this.diagram.model.addLinkData(relacionamento)
+    /** Adiciona novo atributo */
+    addAttribute = (classs, attribute)=>{
+        this.diagram.model.addArrayItem(classs.attributes, attribute)
+        this.updateDiagram();
+    }
+
+    /** Remove atributo */
+    removeAttribute = (classs, attribute)=>{
+        /** Se for Chave estrangeira remove o link do relationamento */
+        if(attribute.foreingKey)
+            this.removeRelationshipByForeingKey(attribute)
+
+        /** Remove Atributo */
+        this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
         this.updateDiagram()
     }
 
-    removeRelacionamento = (relacionamento)=>{
-        //this.models = this.arrayRemove(this.models, classe)
-        //this.diagram.model.removeNodeData(this.diagram.model.findNodeDataForKey(classe.key))
+    /** Adiciona Relacionamento */
+    addRelationship = (relationship)=>{
+        this.diagram.model.addLinkData(relationship)
         this.updateDiagram()
     }
 
+    /** Remove Relacionamento */
+    removeRelationship = (relacionamento)=>{
+        this.diagram.model.removeLinkData(relacionamento)
+        this.updateDiagram()
+    }
+
+    /** Remove Relacionamento pela chave estrangeira */
+    removeRelationshipByForeingKey(attribute){
+        this.diagram.model.linkDataArray.forEach((value, index)=>{
+            if(value.attributeTo === attribute.key)
+                this.removeRelationship(value)
+        })
+    };
+
+    /** Remove todos os atributos da classe */
+    removeRelationshipByClass = (classe)=>{
+
+        classe = this.diagram.model.findNodeDataForKey(classe.key)
+
+        let linksRemove = [];
+
+        this.diagram.model.linkDataArray.forEach((link, index)=>{
+            if(link.from === classe.key){
+                linksRemove.push(link)
+                this.diagram.model.nodeDataArray.forEach((model, index)=>{
+                    if(model.key === link.to){
+                        this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, this.findAttributeBy(link.attributeTo)))
+                    }
+                })
+            }
+        })
+
+        linksRemove.forEach((link)=>{
+            //console.log(link)
+            this.diagram.model.removeLinkData(link)
+        })
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /** Localiza indice do atributo */
+    findIndexAttribute = (classs, attribute)=>{
+        let indexAttribute = -1;
+
+        classs.attributes.forEach((value, index) => {
+            if(value.key === attribute.key)
+                indexAttribute = index
+        })
+
+        return indexAttribute
+    }
+
+    /** Localiza classe por key */
+    findClassByKey = (key)=>{
+        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
+            if(value.key === key)
+                return value
+        })
+        return classe[0];
+    }
+
+    /** Localiza atributo por key */
+    findAttributeBy = (key)=>{
+        let attribute = -1;
+        this.diagram.model.nodeDataArray.forEach((model, index) => {
+            model.attributes.forEach((attr, index) => {
+                if(attr.key === key)
+                    attribute = attr
+            })
+        })
+        return attribute
+    }
+
+    /*/!** Remove todos os atributos da classe *!/
+    removeRelationshipByClass = (classe)=>{
+
+        this.diagram.model.linkDataArray.forEach((link, index)=>{
+            if(link.from === classe.key){
+                let classeAtributo = this.findClassByKey(link.to)
+                let attribute = this.findAttributeBy(link.attributeTo)
+                console.log(attribute)
+                console.log(classeAtributo)
+                this.removeAttribute(classeAtributo, attribute)
+            }
+        })
+
+        classe.attributes.forEach((attribute, index)=>{
+            this.removeAttribute(classe, attribute)
+        })
+
+    }
+
+    removeRelationshipByForeingKey(attribute){
+        this.diagram.model.linkDataArray.forEach((value, index)=>{
+            if(value.attributeFrom === attribute.key || value.attributeTo === attribute.key)
+                this.removeRelacionamento(value)
+        })
+    };
+
+
+
+    /!** Localiza indice do atributo *!/
+    findIndexAttribute = (classs, attribute)=>{
+        let indexAttribute = -1;
+
+        classs.attributes.forEach((value, index) => {
+            if(value.key === attribute.key)
+                indexAttribute = index
+        })
+
+        return indexAttribute
+    }
+
+    /!** Localiza classe por key *!/
+    findClassByKey = (key)=>{
+
+        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
+            if(value.key === key)
+                return value
+        })
+        return classe[0];
+    }
+
+    /!** Localiza classe por key *!/
+    findAttributeBy = (key)=>{
+        let attribute = -1;
+        this.diagram.model.nodeDataArray.forEach((model, index) => {
+            model.attributes.forEach((attr, index) => {
+                if(attr.key === key)
+                    attribute = attr
+            })
+        })
+        return attribute
+    }*/
 
     updateDiagram = ()=>{
         this.diagram.updateAllTargetBindings();

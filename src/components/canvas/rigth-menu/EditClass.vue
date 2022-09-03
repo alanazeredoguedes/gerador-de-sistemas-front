@@ -26,7 +26,6 @@
         <!-- DIV CLASSE -->
         <div v-if="!classEdit.associativeModel">
 
-
           <Section1 :classEdit="classEdit" :diagrama="diagrama" />
 
           <Section2 :classEdit="classEdit" :diagrama="diagrama" />

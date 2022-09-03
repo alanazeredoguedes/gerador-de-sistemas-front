@@ -100,16 +100,15 @@ export default {
           return
         }
 
-      let fieldAttribute = new Attribute('id','id','integer', true);
+      let classs = new Class(this.nome, this.tabela, this.descricao)
+      this.diagrama[0].addClass(classs)
 
-      let tableClass = new Class(this.nome, this.tabela, this.descricao,[fieldAttribute] )
+      let attribute = new Attribute('id','id','integer', true);
+      this.diagrama[0].addAttribute(classs, attribute)
 
-      this.diagrama[0].addClasse(tableClass)
 
       this.nome = this.tabela = this.descricao = ''
-
       this.close()
-
     },
   },
   mounted() {

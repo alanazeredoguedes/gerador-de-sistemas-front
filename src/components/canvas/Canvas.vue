@@ -93,7 +93,7 @@ export default {
             this.classEdit = obj.part.data
             menuRight.show();
 
-          }, 500)
+          }, 400)
 
         }else if( menuRight.isOpen() && this.classEdit.key === obj.part.data.key){
           menuRight.close();
@@ -174,28 +174,28 @@ export default {
       let id2 = new Attribute('id','id','integer', true);
       let titulo = new Attribute('titulo','titulo','string', false);
       let autorFk = new Attribute('autor ','autor_id','string', false, true);
-      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk], [],'-735 223' )
+      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk, ], [],'-735 223' )
 
       let id3 = new Attribute('id','id','integer', true);
       let rua = new Attribute('rua ','rua','string', false);
-      autorFk = new Attribute('autor ','autor_id','string', false, true);
-      let endereco = new Class('Endereco', 'endereco', '...',[ id3, rua, autorFk ], [ validarCpf ],'-758 -362' )
+      //let autorFk = new Attribute('autor ','autor_id','string', false, true);
+      let endereco = new Class('Endereco', 'endereco', '...',[ id3, rua ], [ validarCpf ],'-758 -362' )
 
 
-      //let id4 = new Attribute('id','id','integer', true);
-      // autorFk = new Attribute('autor ','autor_id','string', false, true);
-      // let enderecoFk = new Attribute('endereco ','endereco_id','string', false, true);
-      // let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk, enderecoFk ], [  ],'' )
-      // autorEndereco.associativeModel = true
+      let id4 = new Attribute('id','id','integer', true);
+       autorFk = new Attribute('autor ','autor_id','string', false, true);
+       let enderecoFk = new Attribute('endereco ','endereco_id','string', false, true);
+       let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk, enderecoFk ], [  ],'' )
+       autorEndereco.associativeModel = true
 
 
       /**
        * @type {Relationship}
        */
-      let oneToOne = new Relationship(autor.key, endereco.key, 'one-to-one')
-      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many')
-      //let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many')
-      //let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-many')
+          //let oneToOne = new Relationship(autor.key, endereco.key, 'one-to-one', autorFk.key)
+      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many', autorFk.key)
+      let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many')
+      let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-many')
 
       const diagrama = new Diagrama()
       this.diagrama = Object.freeze([diagrama])
@@ -204,18 +204,24 @@ export default {
       //console.log(this.diagrama[0])
 
       /** ADICIONANDO CLASSES */
-      this.diagrama[0].addClasse(autor)
-      this.diagrama[0].addClasse(documento)
-      this.diagrama[0].addClasse(endereco)
-      //this.diagrama[0].addClasse(autorEndereco)
+      this.diagrama[0].addClass(autor)
+      this.diagrama[0].addClass(documento)
+      this.diagrama[0].addClass(endereco)
+      this.diagrama[0].addClass(autorEndereco)
 
 
 
       /** ADICIONANDO RELACIONAMENTOS */
-      this.diagrama[0].addRelacionamento(oneToOne)
-      this.diagrama[0].addRelacionamento(oneToMany)
-      //this.diagrama[0].addRelacionamento(ManyToMany1)
-      //this.diagrama[0].addRelacionamento(ManyToMany2)
+      //this.diagrama[0].addRelationship(oneToOne)
+      this.diagrama[0].addRelationship(oneToMany)
+      this.diagrama[0].addRelationship(ManyToMany1)
+      this.diagrama[0].addRelationship(ManyToMany2)
+
+
+      console.log(this.diagrama[0].models)
+      console.log(this.diagrama[0].linksModels)
+      console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      console.log(this.diagrama[0].diagram.model.linkDataArray)
 
 
     }
