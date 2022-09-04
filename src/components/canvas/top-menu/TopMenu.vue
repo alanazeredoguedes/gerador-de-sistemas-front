@@ -9,7 +9,7 @@
         <div class="header-brand me-5" >
           <router-link :to="{ name: 'diagramas_list' }" style="font-size: 20px; text-decoration: none; color: white">
             <img alt="Logo" src="@/assets/logo.svg" class="h-25px h-lg-30px" />
-            Gerador de Sistemas - {{ diagramaData.nome }}
+            Gerador de Sistemas<!-- - {{ diagramaData.nome }}-->
           </router-link>
         </div>
 
@@ -26,7 +26,7 @@
           <!-- Adicionar Classe -->
           <div class="d-flex align-items-center me-2 me-lg-4">
 
-            <a @click="$refs.ModalAdicionarClasse.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
+            <a @click="$refs.ModalAdicionarClasse.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white btnModalAdicionarClasse bg-opacity-10 position-relative">
               <i class="fa-solid fa-plus"></i>
               <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
             </a>
@@ -40,7 +40,7 @@
           <!-- Adicionar Relacionamento -->
           <div class="d-flex align-items-center me-2 me-lg-4">
 
-            <a @click="$refs.ModalAdicionarRelacionamento.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary bg-white bg-opacity-10 position-relative">
+            <a @click="$refs.ModalAdicionarRelacionamento.show()" href="javascript:void(0)" class="btn btn-icon btn-borderless btn-color-white btn-active-primary btnModalAdicionarRelacionamento bg-white bg-opacity-10 position-relative">
               <i class="fa-solid fa-link"></i>
               <span class="bullet bullet-dot bg-warning h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
             </a>
