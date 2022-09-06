@@ -32,6 +32,7 @@
       <input type="text" class="form-control input" v-model="attributeName" @change="changeAttributeName" placeholder="Nome do Atributo">
     </div>
 
+
     <div class="col-4">
       <v-select placeholder="Tipo" :clearable="false" :options="fieldsTypes" v-model="type" @option:selected="changeType" class="vue-select" />
     </div>
@@ -67,6 +68,17 @@
       </a>
     </div>
     <!-- ###################################################################### -->
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,11 +143,17 @@
         </div>
 
 
+        <div class="col-6 input-group-sm" style="margin-top: 10px">
+          <label class="form-check-label">Nome do Campo</label>
+          <input type="text" class="form-control input" v-model="fieldName" @change="" placeholder="Nome do Campo">
+        </div>
 
-        <div class="col-md-12 input-group-sm" style="margin-top: 10px">
+        <div class="col-md-6 input-group-sm" style="margin-top: 10px">
           <label class="form-check-label">Valor Padrão</label>
           <input type="text" class="form-control input" v-model="atributo.defaultValue" placeholder="Valor Padrão">
         </div>
+
+
 
         <div class="col-12 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
           <label class="form-check-label">Tamanho</label>

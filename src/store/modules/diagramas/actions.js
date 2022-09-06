@@ -22,7 +22,13 @@ const actions = {
     removeDiagrama({commit}, id){
         //console.log(data)
         return axios.delete(`${API_VERSION}${RESOURCE}/${id}`)
+    },
+    updateDiagrama({commit}, data){
+        //console.log(data)
+        return axios.post(`${API_VERSION}${RESOURCE}/${id}`, data)
+            .then( response => console.log(response.data) /*commit('SET_DIAGRAMA', response.data)*/ )
     }
+
 }
 
 export default actions

@@ -91,8 +91,23 @@
 
 
 <script>
+
+
+function exportToJsonFile(jsonData) {
+  let dataStr = JSON.stringify(jsonData);
+  let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+  let exportFileDefaultName = 'data.json';
+
+  let linkElement = document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.click();
+}
+
 export default {
   name: 'ModalActionsCanvas',
+  props: [ 'diagrama', 'diagramaData' ],
   components: {  },
   data(){
     return {
@@ -109,19 +124,29 @@ export default {
     adicionarClasse(){
       this.close()
       $('.btnModalAdicionarClasse')[0].click()
-
     },
     adicionarRelacionamento(){
       this.close()
       $('.btnModalAdicionarRelacionamento')[0].click()
-
     },
     salvarDiagrama(){
+
+      console.log(this.diagramaData)
 
       alert('Salvar Diagrama')
     },
     exportarDiagrama(){
-      alert('Exportar Diagrama')
+      //alert('Exportar Diagrama')
+
+      //console.log(this.diagrama[0].models)
+      //console.log(this.diagrama[0].linksModels)
+
+      let exportData = {
+        'class': this.diagrama[0].models,
+        'relationships': this.diagrama[0].linksModels,
+      }
+
+      exportToJsonFile(exportData)
 
     },
 

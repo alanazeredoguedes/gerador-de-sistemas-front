@@ -78,6 +78,13 @@ class Diagrama
         this.updateDiagram()
     }
 
+    /** Remove Classe by Key */
+    removeTable = (classs)=>{
+        this.removeRelationshipByTable(classs)
+        this.diagram.model.removeNodeData(this.diagram.model.findNodeDataForKey(classs.key))
+        this.updateDiagram()
+    }
+
     /** Adiciona novo atributo */
     addAttribute = (classs, attribute)=>{
         this.diagram.model.addArrayItem(classs.attributes, attribute)
@@ -86,6 +93,7 @@ class Diagrama
 
     /** Remove atributo */
     removeAttribute = (classs, attribute)=>{
+
         /** Se for Chave estrangeira remove o link do relationamento */
         if(attribute.foreingKey)
             this.removeRelationshipByForeingKey(attribute)
@@ -123,7 +131,44 @@ class Diagrama
         let linksRemove = [];
 
         this.diagram.model.linkDataArray.forEach((link, index)=>{
-            if(link.from === classe.key){
+            if(link.from === classe.key || link.to === classe.key){
+                linksRemove.push(link)
+                this.diagram.model.nodeDataArray.forEach((model, index)=>{
+                    if(model.key === link.to){
+                        this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, this.findAttributeBy(link.attributeTo)))
+                    }
+                })
+            }
+        })
+
+        linksRemove.forEach((link)=>{
+
+            let classFromRemove = this.diagram.model.findNodeDataForKey(link.from)
+            let classToRemove = this.diagram.model.findNodeDataForKey(link.to)
+
+            if(classFromRemove.associativeModel){
+                this.removeTable(classFromRemove)
+            }
+
+            if(classToRemove.associativeModel){
+                this.removeTable(classToRemove)
+            }
+
+            //console.log(link)
+            this.diagram.model.removeLinkData(link)
+        })
+
+    }
+
+    /** Remove todos os atributos da classe */
+    removeRelationshipByTable = (classe)=>{
+
+        classe = this.diagram.model.findNodeDataForKey(classe.key)
+
+        let linksRemove = [];
+
+        this.diagram.model.linkDataArray.forEach((link, index)=>{
+            if(link.from === classe.key || link.to === classe.key){
                 linksRemove.push(link)
                 this.diagram.model.nodeDataArray.forEach((model, index)=>{
                     if(model.key === link.to){

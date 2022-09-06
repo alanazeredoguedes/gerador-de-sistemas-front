@@ -38,36 +38,11 @@
 
       <div class="row">
 
-<!--        <div class="col-12">
+        <div class="col-12">
           <label class="form-label"  style="color: white">Descrição</label>
           <textarea class="form-control" v-model="description" placeholder="Descrição" style="height: 100px;">
           </textarea>
-        </div>-->
-
-        <div class="alert alert-dismissible bg-light-danger d-flex flex-center flex-column py-10 px-10 px-lg-20 mb-10">
-<!--          <button type="button" class="position-absolute top-0 end-0 m-2 btn btn-icon btn-icon-danger" data-bs-dismiss="alert">
-            <span class="svg-icon svg-icon-1">...</span>
-          </button>-->
-
-
-          <div class="text-center">
-            <h1 class="fw-bold mb-5">Converter Tabela</h1>
-
-            <div class="separator separator-dashed border-danger opacity-25 mb-5"></div>
-
-            <div class="mb-9 text-dark">
-              Realize a conversão da tabela associativa para uma <strong>Classe</strong>.<br/>
-              A coversão será realizada automaticamente, os <a href="javascript:void(0)" class="fw-bold me-1">Relacionamentos</a> serão mantidos.
-            </div>
-
-            <div class="d-flex flex-center flex-wrap">
-              <a href="#" class="btn btn-outline btn-outline-danger btn-active-danger m-2">Cancelar</a>
-              <a href="#" class="btn btn-danger m-2">Ok, Converter</a>
-            </div>
-          </div>
         </div>
-
-
 
 
 

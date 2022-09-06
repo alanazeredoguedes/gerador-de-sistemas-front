@@ -12,7 +12,7 @@
 
   <div id="canvas" class="CanvasComponent cavasDiagram"></div>
 
-  <ModalActionsCanvas ref="ModalActionsCanvas" :diagrama="diagrama" />
+  <ModalActionsCanvas ref="ModalActionsCanvas" :diagrama="diagrama" :diagramaData="diagramaData" />
 
   <ModalEditClass ref="ModalEditClass" :class-edit="classEdit" :diagrama="diagrama" />
 
@@ -187,8 +187,8 @@ export default {
 
       let id2 = new Attribute('id','id','integer', true);
       let titulo = new Attribute('titulo','titulo','string', false);
-      let autorFk = new Attribute('autor ','autor_id','string', false, true);
-      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk, ], [],'-735 223' )
+      let autorFk1 = new Attribute('autor ','autor_id','string', false, true);
+      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk1, ], [],'-735 223' )
 
       let id3 = new Attribute('id','id','integer', true);
       let rua = new Attribute('rua ','rua','string', false);
@@ -197,9 +197,9 @@ export default {
 
 
       let id4 = new Attribute('id','id','integer', true);
-       autorFk = new Attribute('autor ','autor_id','string', false, true);
+       let autorFk2 = new Attribute('autor ','autor_id','string', false, true);
        let enderecoFk = new Attribute('endereco ','endereco_id','string', false, true);
-       let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk, enderecoFk ], [  ],'' )
+       let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk2, enderecoFk ], [  ],'' )
        autorEndereco.associativeModel = true
 
 
@@ -207,9 +207,9 @@ export default {
        * @type {Relationship}
        */
           //let oneToOne = new Relationship(autor.key, endereco.key, 'one-to-one', autorFk.key)
-      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many', autorFk.key)
-      let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many')
-      let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-many')
+      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many', autorFk1.key)
+      let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many', autorFk2.key)
+      let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-maany', enderecoFk.key)
 
       const diagrama = new Diagrama()
       this.diagrama = Object.freeze([diagrama])
@@ -232,10 +232,10 @@ export default {
       this.diagrama[0].addRelationship(ManyToMany2)
 
 
-      console.log(this.diagrama[0].models)
-      console.log(this.diagrama[0].linksModels)
-      console.log(this.diagrama[0].diagram.model.nodeDataArray)
-      console.log(this.diagrama[0].diagram.model.linkDataArray)
+      //console.log(this.diagrama[0].models)
+      //console.log(this.diagrama[0].linksModels)
+      //console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      //console.log(this.diagrama[0].diagram.model.linkDataArray)
 
 
     }
@@ -243,17 +243,21 @@ export default {
   },
   mounted() {
 
-    /** ‘ID’ do diagrama Atual */
-    //let diagramaId = this.$route.params.id
 
-   /* this.getDiagrama(diagramaId)
-        .then( response => this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Diagrama') )
-        .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
-   */
-
-    //this.initDiagramData()
     this.initDiagramData()
 
+    /** ‘ID’ do diagrama Atual */
+    let diagramaId = this.$route.params.id
+
+    this.getDiagrama(diagramaId)
+        .then( response => {
+
+          console.log(this.diagramaData)
+          this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Diagrama')
+        })
+        .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+
+    //this.initDiagramData()
 
 
     /** Redefinição dos Eventos do Diagrama */
