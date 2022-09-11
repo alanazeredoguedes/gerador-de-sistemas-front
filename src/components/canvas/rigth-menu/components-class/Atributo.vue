@@ -1,24 +1,38 @@
 <template>
-  <div class="row" style="margin-bottom: 2px;">
+  <div class="row d-flex align-items-center" style="margin-bottom: 2px;">
 
     <!-- ###################################################################### -->
-    <div class="col-1">
+    <div class="col-1 ">
       <div class="row">
 
         <div class="col-6">
           <a class="handle" href="javascript:void(0)" style="color: white;">
-            <Icon :name="'fas fa-arrows-alt'" :color="'white'" />
+            <Icon :name="'fas fa-arrows-alt'" :color="'white'" :size="'17px'"  />
           </a>
         </div>
 
         <div class="col-6">
+
           <span v-if="atributo.primaryKey === true">
-            <Icon :name="'fa-solid fa-key'" :size="'11px'" :color="'#e0bc32'" />
+            <Icon :name="'fa-solid fa-key'" :size="'13px'" :color="'#e0bc32'"
+                  class="pov"
+                  data-bs-toggle="popover"
+                  data-bs-dismiss="true"
+                  data-bs-placement="top"
+                  data-bs-content="Chave Primaria"
+            />
           </span>
 
           <span v-else-if="atributo.foreingKey === true">
-            <Icon :name="'fas fa-key'" :size="'11px'" :color="'rgb(55, 232, 184)'" />
+            <Icon :name="'fas fa-key'" :size="'13px'" :color="'rgb(55, 232, 184)'"
+                  class="pov"
+                  data-bs-toggle="popover"
+                  data-bs-dismiss="true"
+                  data-bs-placement="top"
+                  data-bs-content="Chave Estrangeira"
+            />
           </span>
+
         </div>
 
       </div>
@@ -29,12 +43,20 @@
 
     <!-- ###################################################################### -->
     <div class="col-5 input-group-sm">
-      <input type="text" class="form-control input" v-model="attributeName" @change="changeAttributeName" placeholder="Nome do Atributo">
+      <input type="text" class="form-control input pov" v-model="attributeName" @change="changeAttributeName" placeholder="Nome do Atributo"
+             data-bs-toggle="popover"
+             data-bs-placement="top"
+             title="Nome do Atributo"
+      >
     </div>
 
 
     <div class="col-4">
-      <v-select placeholder="Tipo" :clearable="false" :options="fieldsTypes" v-model="type" @option:selected="changeType" class="vue-select" />
+      <v-select placeholder="Tipo" :clearable="false" :options="fieldsTypes" v-model="type" @option:selected="changeType" class="vue-select pov"
+                data-bs-toggle="popover"
+                data-bs-placement="top"
+                title="Tipo de dado"
+      />
     </div>
     <!-- ###################################################################### -->
 
@@ -42,19 +64,25 @@
 
     <!-- ###################################################################### -->
     <div class="col-1">
-      <div class="row">
+      <div class="row d-flex align-items-center">
 
         <div class="col-6">
-
-          <a href="javascript:void(0)" @click="changeNullable" v-bind:style="{ color: (atributo.nullable === true ? 'rgb(255,255,255)' : 'rgba(255,255,255,0.5)'), }">
-            <b>N</b>
+          <a href="javascript:void(0)" @click="changeNullable" v-bind:style="{ color: (atributo.nullable === true ? 'rgb(255,255,255)' : 'rgba(255,255,255,0.5)'), }" >
+            <b class="pov" style="font-size: 17px;"
+               data-bs-toggle="popover"
+               data-bs-placement="top"
+               title="Atributo pode ser nulo?"
+            >N</b>
           </a>
-
         </div>
 
         <div class="col-6">
-          <a href="javascript:void(0)" style="color: white; font-size: 15px;" @click="changeFieldOption">
-            <i class="fa-solid fa-gear"></i>
+          <a href="javascript:void(0)" style="color: white;" @click="changeFieldOption">
+            <i class="fa-solid fa-gear pov" style="font-size: 16px"
+               data-bs-toggle="popover"
+               data-bs-placement="top"
+               title="Mais Opções"
+            ></i>
           </a>
         </div>
 
@@ -63,8 +91,8 @@
     </div>
 
     <div class="col-1 text-center">
-      <a class="delete-field" href="javascript:void(0)" @click="removerAtributo" style="color: red; font-size: 15px;">
-        <i class="fa-solid fa-trash-can" style="color: red"></i>
+      <a class="delete-field" href="javascript:void(0)" @click="removerAtributo">
+        <i class="fa-solid fa-trash-can" style="color: red; font-size: 16px"></i>
       </a>
     </div>
     <!-- ###################################################################### -->
@@ -73,41 +101,56 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
     <!-- ###################################################################### -->
-    <div class="field-options" :id="'field-options-'+atributo.key" style="margin-top: 20px; display: none;" >
-
+    <div class="field-options" :id="'field-options-'+atributo.key" style="margin-top: 15px; display: none;" >
       <div class="row" style="color: white; ">
 
-        <div class="col-md-8" style="text-align: start;" >
-          <div class="row" style="margin-left: 5px;">
 
+        <div class="col-12" style="margin-top: 10px; margin-left: 10px">
+          <div class="row">
 
-            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-2">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    v-model="nullable"
-                    @change="changeNullable"
-                    :disabled="atributo.primaryKey === true"
-                    :id="'nullable' + atributo.key"
-                />
-                <label class="form-check-label" :for="'nullable' + atributo.key">
-                  Nulo
-                </label>
+            <div v-if="!atributo.foreingKey &&( (existPkInClass && atributo.primaryKey) || !existPkInClass )" class="form-check form-check-custom form-check-solid form-check-sm text-left col-auto" >
+              <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="primaryKey"
+                  :id="'primaryKey' + atributo.key"
+              />
+<!--                           :disabled="atributo.nullable === true || atributo.foreingKey === true || existPkInClass"     -->
+              <label class="form-check-label" :for="'primaryKey' + atributo.key">
+                Chave Primaria
+              </label>
             </div>
 
 
-            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-2">
+            <div v-if="atributo.primaryKey && !atributo.foreingKey &&( (existPkInClass && atributo.primaryKey) || !existPkInClass )" class="form-check form-check-custom form-check-solid  form-check-sm text-left col-auto">
+              <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="atributo.autoGenerate"
+                  :id="'autoGenerate' + atributo.key"
+              />
+              <label class="form-check-label" :for="'autoGenerate' + atributo.key">
+                Geração Automatica
+              </label>
+            </div>
+
+            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-auto">
+              <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="nullable"
+                  @change="changeNullable"
+                  :disabled="atributo.primaryKey === true"
+                  :id="'nullable' + atributo.key"
+              />
+              <label class="form-check-label" :for="'nullable' + atributo.key">
+                Nulo
+              </label>
+            </div>
+
+
+            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-auto">
               <input
                   class="form-check-input"
                   type="checkbox"
@@ -119,7 +162,7 @@
               </label>
             </div>
 
-            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-2">
+            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-auto">
               <input
                   class="form-check-input"
                   type="checkbox"
@@ -132,27 +175,38 @@
             </div>
 
 
+            <!--            <div class="form-check form-check-custom form-check-solid form-check-sm text-left col-auto" >
+                          <input
+                              class="form-check-input"
+                              type="checkbox"
+                              v-model="foreingKey"
+                              :disabled="true"
+                              :id="'foreingKey' + atributo.key"
+                          />
+                          <label class="form-check-label" :for="'foreingKey' + atributo.key">
+                            Chave Estrangeira
+                          </label>
+                        </div>-->
+
           </div>
         </div>
 
-        <div class="col-md-4" style="text-align: right;">
-          <span style="color: white; font-size: 12px;">
-            Mais Opções
-            <i class="fa-solid fa-gear"></i>
-          </span>
-        </div>
 
 
-        <div class="col-6 input-group-sm" style="margin-top: 10px">
-          <label class="form-check-label">Nome do Campo</label>
-          <input type="text" class="form-control input" v-model="fieldName" @change="" placeholder="Nome do Campo">
-        </div>
 
-        <div class="col-md-6 input-group-sm" style="margin-top: 10px">
-          <label class="form-check-label">Valor Padrão</label>
-          <input type="text" class="form-control input" v-model="atributo.defaultValue" placeholder="Valor Padrão">
-        </div>
 
+
+
+
+            <div class="col-6 input-group-sm" style="margin-top: 10px">
+              <label class="form-check-label">Nome do Campo</label>
+              <input type="text" class="form-control input" v-model="fieldName" @change="" placeholder="Nome do Campo">
+            </div>
+
+            <div v-if="!atributo.foreingKey" class="col-6 input-group-sm" style="margin-top: 10px">
+              <label class="form-check-label">Valor Padrão</label>
+              <input type="text" class="form-control input" v-model="atributo.defaultValue" placeholder="Valor Padrão">
+            </div>
 
 
         <div class="col-12 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
@@ -179,60 +233,8 @@
                  placeholder="Scala">
         </div>
 
-
-
-        <div class="col-12" style="margin-top: 15px; margin-left: 10px">
-          <div class="row">
-
-
-            <div class="form-check form-check-custom form-check-solid form-check-sm text-left col-6" >
-              <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="primaryKey"
-                  :disabled="atributo.nullable === true || atributo.foreingKey === true || existPkInClass"
-                  :id="'primaryKey' + atributo.key"
-              />
-              <label class="form-check-label" :for="'primaryKey' + atributo.key">
-                Chave Primaria
-              </label>
-            </div>
-
-
-            <div class="form-check form-check-custom form-check-solid form-check-sm text-left col-6" >
-              <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="atributo.foreingKey"
-                  @change="changeForeingKey"
-                  :disabled="true"
-                  :id="'foreingKey' + atributo.key"
-              />
-              <label class="form-check-label" :for="'foreingKey' + atributo.key">
-                Chave Estrangeira
-              </label>
-            </div>
-
-
-
-<!--
-<div class="col-6">
-<div class="custom-control custom-checkbox input-group-sm text-left" style="">
-                <input class="custom-control-input" type="checkbox"
-                       v-model="atributo.fk"
-                       @change="changeFk"
-                       :disabled="atributo.pk === true"
-                       :id="'fk' + atributo.key">
-                <label :for="'fk' + atributo.key" class="custom-control-label">Foreign Key</label>
-              </div>
-
-            </div>-->
-
-          </div>
-        </div>
-
       </div>
-      <hr>
+      <hr style="margin-top: 20px;">
     </div>
     <!-- ###################################################################### -->
 
@@ -247,6 +249,8 @@
 import $ from "jquery";
 import '../../../../assets/plugins/custom/jquery-ui/jquery-ui'
 import Icon from "../../../global/icons/Icon.vue";
+
+
 
 export default {
   name: 'Atributo',
@@ -302,13 +306,23 @@ export default {
     primaryKey(val){
       this.primaryKey = val
       this.atributo.primaryKey = this.primaryKey
-      this.atributo.setIco()
+      this.setIco()
+
+      if(this.primaryKey){
+        this.atributo.nullable = false
+      }else{
+        this.atributo.autoGenerate = false
+      }
+
       this.diagrama[0].updateDiagram();
     },
     foreingKey(val){
-
+      this.foreingKey = val
+      this.atributo.foreingKey = this.foreingKey
+      this.setIco()
+      this.diagrama[0].updateDiagram();
     },
-    nullable(){},
+    nullable(val){},
     unique(){},
     indexx(){},
     defaultValue(){},
@@ -323,10 +337,24 @@ export default {
   },
   methods: {
     updateDiagramAtrribute(){
+      this.diagrama[0].updateDiagram()
       //this.diagrama.diagram.model.updateTargetBindings(this.classEdit.attributes[this.index]);
     },
     changeAttributeName(){
       //this.diagrama.updateDiagram()
+    },
+    setIco(){
+      this.atributo.ico = ""
+
+      if(this.atributo.nullable === true)
+        this.atributo.ico = "nulo"
+
+      if(this.atributo.foreingKey === true)
+        this.atributo.ico = "fk"
+
+      if(this.atributo.primaryKey === true)
+        this.atributo.ico = "pk"
+
     },
     changeType(){
       this.atributo.type = this.type
@@ -341,16 +369,6 @@ export default {
         this.diagrama[0].updateDiagram()
       }
     },
-    /*changeNullable2(){
-
-      if(this.atributo.primaryKey === true){
-        this.atributo.nullable = false;
-        this.$functions.alerts.notification('error','Erro',`A <b>Chave Primaria</b> não pode ser nulo!`)
-      }else{
-        this.atributo.nullable = !this.nullable;
-        this.diagrama[0].updateDiagram()
-      }
-    },*/
     changeForeingKey(){
       //this.atributo.foreingKey
       this.atributo.setIco()
@@ -402,15 +420,13 @@ export default {
       let atrributes = this.classEdit.attributes;
 
       for(let i=0; i < atrributes.length; i++){
-        if(i !== this.index){
+        if(i !== this.index){ }
           if(atrributes[i].primaryKey === true){
             return true;
           }
-        }
       }
 
     },
-
 
   },
   updated() {
@@ -427,6 +443,9 @@ export default {
     this.scale = this.atributo.scale
     this.size = this.atributo.size
 
+    console.log(this.atributo)
+    console.log(this.atributo.primaryKey)
+
 
     /** Inicializa o Jquery Sortable */
     $(".sortable").sortable({
@@ -437,6 +456,13 @@ export default {
       scrollSpeed: 5,
     });
 
+    $(function () {
+      $('.pov').popover({
+        container: 'body',
+        trigger: 'hover'
+      })
+    })
+
   }
 }
 </script>
@@ -446,6 +472,15 @@ input[type="checkbox"]:disabled{
   background: rgba(255, 255, 255, 0.66);
 }
 .input{
-  height: 35px;
+  height: 40px;
 }
+.vue-select {
+  border-radius: 3px;
+  white-space: normal;
+  background-color: white;
+  color: black;
+  height: 40px;
+  width: 100%;
+}
+
 </style>

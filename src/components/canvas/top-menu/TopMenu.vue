@@ -7,7 +7,7 @@
         <!-- mobile dont show: d-none -->
 
         <div class="header-brand me-5" >
-          <router-link :to="{ name: 'diagramas_list' }" style="font-size: 20px; text-decoration: none; color: white">
+          <router-link :to="{ name: 'diagramas_list' }" @click="salvarDiagrama" style="font-size: 20px; text-decoration: none; color: white">
             <img alt="Logo" src="@/assets/logo.svg" class="h-25px h-lg-30px" />
             Gerador de Sistemas<!-- - {{ diagramaData.nome }}-->
           </router-link>
@@ -46,9 +46,6 @@
             </a>
 
           </div>
-
-
-
 
 
 
@@ -102,7 +99,7 @@
 
 
           <div class="d-flex align-items-center">
-            <router-link :to="{ name: 'diagramas_list' }" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
+            <router-link :to="{ name: 'diagramas_list' }" @click="salvarDiagrama" class="btn btn-icon btn-color-white btn-active-color-primary border-0 me-n3" data-bs-toggle="tooltip" data-bs-placement="left" title="Return to launcher">
                <span class="svg-icon svg-icon-2x">
 											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 												<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
@@ -130,7 +127,7 @@
 
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import ModalAdicionarClasse from "../modal/ModalAdicionarClasse.vue";
 import ModalAdicionarRelacionamento from "../modal/ModalAdicionarRelacionamento.vue";
 
@@ -139,7 +136,7 @@ import $ from 'jquery'
 export default {
   name: 'TopMenu',
   components: {ModalAdicionarRelacionamento, ModalAdicionarClasse},
-  props: [ 'diagrama', ],
+  props: [ 'diagrama', 'diagramaData' ],
   data: function() {
     return {
     }
@@ -149,6 +146,30 @@ export default {
       diagramaData: state => state.diagramaStore.items.diagrama,
     })
   },
-  methods:{  }
+  methods:{
+    ...mapActions([
+      'getDiagramas',
+      'updateDiagrama'
+    ]),
+    salvarDiagrama(){
+
+      let saveDiagrama = {
+        //nome: this.diagramaData.nome,
+        //descricao: this.diagramaData.descricao,
+        estrutura: JSON.stringify({
+          class: this.diagrama[0].models,
+          relationships: this.diagrama[0].linksModels,
+        })
+      }
+
+      this.updateDiagrama({ id: this.diagramaData.id, data: saveDiagrama })
+          .then((response)=>{
+            this.$functions.alerts.notification('success', "Sucesso", 'Diagrama salvo com successo!')
+          })
+          .catch((response)=>{
+            this.$functions.alerts.notification('error', "Erro", 'Não foi possivel salvar o diagrama no momento!')
+          })
+    },
+  }
 }
 </script>

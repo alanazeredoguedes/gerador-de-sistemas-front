@@ -10,11 +10,9 @@
 
           <div class="pb-5">
             <div class="d-flex flex-stack border rounded px-7 py-3">
-              <a href="javascript:void(0)" class="fs-5 text-white text-hover-success fw-semibold w-375px text-center">Menu De Contexto</a>
+              <a href="javascript:void(0)" class="fs-5 text-white text-hover-success fw-semibold w-375px text-center">{{ diagramaData.nome }}</a>
             </div>
           </div>
-
-
 
 
 
@@ -77,6 +75,19 @@
               <a href="javascript:void(0)" @click="exportarDiagrama" class="btn btn-sm btn-hover-rise text-white bg-white bg-opacity-10">Exportar</a>
             </div>
 
+            <div class="d-flex flex-stack border rounded p-4 mb-5">
+              <div class="d-flex align-items-center me-2">
+                <i class="fa-solid fa-file-export w-30px me-3" style="font-size: 25px"></i>
+                <div class="d-flex flex-stack">
+                  <div class="d-flex flex-column me-2">
+                    <a href="javascript:void(0)" class="fs-7 text-white text-hover-success fw-bold">Exporta Imagem</a>
+                    <div class="text-white opacity-75">Exporte o diagrama no formato de imagem SVG.</div>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:void(0)" @click="exportarImagem" class="btn btn-sm btn-hover-rise text-white bg-white bg-opacity-10">Exportar</a>
+            </div>
+
 
           </div>
 
@@ -92,6 +103,8 @@
 
 <script>
 
+
+import {mapActions} from "vuex";
 
 function exportToJsonFile(jsonData) {
   let dataStr = JSON.stringify(jsonData);
@@ -115,6 +128,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'getDiagramas',
+      'updateDiagrama'
+    ]),
     show(){
       $(this.$el).modal('show')
     },
@@ -131,24 +148,87 @@ export default {
     },
     salvarDiagrama(){
 
-      console.log(this.diagramaData)
+      let saveDiagrama = {
+        //nome: this.diagramaData.nome,
+         //descricao: this.diagramaData.descricao,
+        estrutura: JSON.stringify({
+          class: this.diagrama[0].models,
+          relationships: this.diagrama[0].linksModels,
+        })
+      }
 
-      alert('Salvar Diagrama')
+      this.updateDiagrama({ id: this.diagramaData.id, data: saveDiagrama })
+          .then((response)=>{
+            this.$functions.alerts.notification('success', "Sucesso", 'Diagrama salvo com successo!')
+          })
+          .catch((response)=>{
+            this.$functions.alerts.notification('error', "Erro", 'Não foi possivel salvar o diagrama no momento!')
+          })
+          .finally(()=>{
+            this.close()
+          })
+
     },
     exportarDiagrama(){
-      //alert('Exportar Diagrama')
 
-      //console.log(this.diagrama[0].models)
-      //console.log(this.diagrama[0].linksModels)
+      let data = JSON.parse( this.diagrama[0].diagram.model.toJson() )
+      let exportData = {}
 
+      exportData.diagrama = this.diagramaData.nome
+      exportData.descricao = this.diagramaData.descricao
+      exportData.class = data.nodeDataArray
+      exportData.relationships = data.linkDataArray
+
+
+
+      /* data = data.replace("linkDataArray", "relationships");
+       data = data.replace("class", "diagrama");
+       data = data.replace("GraphLinksModel", this.diagramaData.nome);
+       data = data.replace("nodeDataArray", "class");
+
+       data.descricao = 'dasdsadsa'*/
+/*
       let exportData = {
         'class': this.diagrama[0].models,
         'relationships': this.diagrama[0].linksModels,
-      }
+      }*/
 
+
+      //exportToJsonFile(exportData)
       exportToJsonFile(exportData)
 
+      this.close()
     },
+
+    exportarImagem(){
+
+      let svg = this.diagrama[0].diagram.makeSvg({
+        scale: 1.0,
+        background: "white",
+        shadowColor: "white",
+        //size: new go.Size(100,100),
+      });
+
+      let svgstr = new XMLSerializer().serializeToString(svg);
+      let blob = new Blob([svgstr], { type: "image/svg+xml" });
+
+
+      let url = window.URL.createObjectURL(blob);
+      let filename = this.diagramaData.nome + '' + ".svg";
+      let a = document.createElement("a");
+      a.style = "display: none";
+      a.href = url;
+      a.download = filename;
+
+      document.body.appendChild(a);
+      requestAnimationFrame(function() {
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      });
+
+    },
+
 
   },
 

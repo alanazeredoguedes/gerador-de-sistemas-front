@@ -4,7 +4,7 @@
     <div class="page d-flex flex-row flex-column-fluid">
       <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-        <TopMenu :diagrama="diagrama" />
+        <TopMenu :diagrama="diagrama" :diagramaData="diagramaData" />
 
       </div>
     </div>
@@ -15,7 +15,6 @@
   <ModalActionsCanvas ref="ModalActionsCanvas" :diagrama="diagrama" :diagramaData="diagramaData" />
 
   <ModalEditClass ref="ModalEditClass" :class-edit="classEdit" :diagrama="diagrama" />
-
 
 </template>
 
@@ -238,13 +237,32 @@ export default {
       //console.log(this.diagrama[0].diagram.model.linkDataArray)
 
 
+    },
+    initDiagrama(models, relationships){
+      const diagrama = new Diagrama(models, relationships)
+      this.diagrama = Object.freeze([diagrama])
+    },
+    initEventos(){
+
+      /** Redefinição dos Eventos do Diagrama */
+      this.diagrama[0].eventClick = this.eventClick();
+      this.diagrama[0].eventDoubleClick = this.eventDoubleClick();
+      this.diagrama[0].eventRightClick = this.eventRightClick();
+      this.diagrama[0].eventMouseEnter = this.eventMouseEnter();
+      this.diagrama[0].eventMouseLeave = this.eventMouseLeave();
+      this.diagrama[0].eventChangeLocation = this.eventChangeLocation();
+      this.diagrama[0].eventClickDiagram = this.eventClickDiagram();
+      this.diagrama[0].eventRightClickDiagram = this.eventRightClickDiagram();
+      this.diagrama[0].initEvents()
     }
 
   },
   mounted() {
 
 
-    this.initDiagramData()
+    //this.initDiagramData()
+    this.initDiagrama()
+    this.initEventos()
 
     /** ‘ID’ do diagrama Atual */
     let diagramaId = this.$route.params.id
@@ -252,25 +270,27 @@ export default {
     this.getDiagrama(diagramaId)
         .then( response => {
 
-          console.log(this.diagramaData)
+          let estrutura = JSON.parse(this.diagramaData.estrutura);
+
+          /** Adiciona as classes ao canvas */
+          estrutura.class.forEach((data)=>{
+
+            this.diagrama[0].addClass( data )
+            //this.diagrama[0].diagram.model.highlight( data )
+
+            //highlight
+
+          })
+
+          /** Adiciona os relacionamentos ao canvas */
+          estrutura.relationships.forEach((data)=>{ this.diagrama[0].addRelationship(data) })
+
           this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Diagrama')
+
         })
         .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
 
-    //this.initDiagramData()
 
-
-    /** Redefinição dos Eventos do Diagrama */
-    this.diagrama[0].eventClick = this.eventClick();
-    this.diagrama[0].eventDoubleClick = this.eventDoubleClick();
-    this.diagrama[0].eventRightClick = this.eventRightClick();
-    this.diagrama[0].eventMouseEnter = this.eventMouseEnter();
-    this.diagrama[0].eventMouseLeave = this.eventMouseLeave();
-    this.diagrama[0].eventChangeLocation = this.eventChangeLocation();
-    this.diagrama[0].eventClickDiagram = this.eventClickDiagram();
-    this.diagrama[0].eventRightClickDiagram = this.eventRightClickDiagram();
-
-    this.diagrama[0].initEvents()
   },
 
 

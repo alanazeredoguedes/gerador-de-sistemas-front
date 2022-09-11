@@ -311,10 +311,6 @@ class Diagrama
                 nodeDataArray: models,
                 linkDataArray: linksModels
             });
-        /*return new go.GraphLinksModel(
-            [],
-            []);*/
-
     }
 
     arrayRemove(arr, value) {
@@ -324,6 +320,7 @@ class Diagrama
     }
 
     convertIco(ico) {
+
         switch (ico) {
             //url('/img/background-1.png')
             case "pk": return "/img/pk.svg";

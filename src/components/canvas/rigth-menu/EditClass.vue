@@ -33,11 +33,6 @@
             <b>Metodos</b>
           </h5>
 
-          <h5 style="margin-top: 40px; margin-bottom: 20px; color: white;">
-            <b>Relacionamentos</b>
-          </h5>
-
-
         </div>
 
 

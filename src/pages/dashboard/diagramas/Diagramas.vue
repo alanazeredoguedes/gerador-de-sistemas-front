@@ -1,8 +1,6 @@
 <template>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content" >
 
-
-
       <div class="toolbar d-flex flex-stack mb-3 mb-lg-5" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack flex-wrap">
           <div class="page-title d-flex flex-column me-5 py-2">
@@ -10,9 +8,6 @@
           </div>
         </div>
       </div>
-
-
-
 
       <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl" style="padding: 0">
@@ -34,28 +29,10 @@
               </div>
 
               <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-<!--                <div class="w-100 mw-150px">
-                  <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Status" data-kt-ecommerce-product-filter="status">
-                    <option value="all">Todos</option>
-                    <option value="published">Andamento</option>
-                    <option value="scheduled">Concluido</option>
-                    <option value="inactive">Inativo</option>
-                  </select>
-                </div>
-                <a href="javascript:void(0)" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bold" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
-											</svg>
-										</span>
-                  Filtros
-                </a>-->
-                <a href="javascript:void(0)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_criar_diagrama">Novo Diagrama</a>
+                <a href="javascript:void(0)" @click="$refs.ModalCriarDiagrama.show();" class="btn btn-primary">Novo Diagrama</a>
               </div>
 
             </div>
-
-
 
 
             <div class="card-body pt-0">
@@ -68,7 +45,6 @@
                       </div>
                     </th>
                     <th class="min-w-100px">Diagrama</th>
-<!--                    <th class="min-w-50px">Status</th>-->
                     <th class="min-w-100px">Descricao</th>
                     <th class="text-end min-w-70px">Ações</th>
                   </tr>
@@ -76,57 +52,7 @@
                 <tbody class="fw-semibold text-gray-600">
 
 
-                <tr v-for="(diagrama, index) in diagramas['hydra:member']" :key="diagrama.id">
-
-                  <td>
-                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                      <input class="form-check-input" type="checkbox" value="1" />
-                    </div>
-                  </td>
-
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="">
-                        <router-link :to="{ name: 'diagrama', params: { id: diagrama.id } }" class="text-gray-800 text-hover-primary fs-5 fw-bold">
-                          {{ diagrama.nome }}
-                        </router-link>
-                      </div>
-                    </div>
-                  </td>
-
-
-<!--                  <td class="pe-0" data-order="Scheduled">
-                    <div class="badge badge-light-primary">Ativo</div>
-                  </td>-->
-
-                  <td class="pe-0">
-                    <span class="fw-bold">{{ diagrama.descricao }}</span>
-                  </td>
-
-
-                  <td class="text-end">
-
-                    <a href="javascript:void(0)" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bold">
-                      <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor"></path></svg>
-                      </span>
-                      Editar
-                    </a>
-
-                    <a href="javascript:void(0)" @click="remove(diagrama.id)" class="btn btn-sm btn-flex btn-light btn-active-danger fw-bold" style="margin-left: 10px;">
-                      <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor"></path></svg>
-                      </span>
-                      Excluir
-                    </a>
-
-                  </td>
-
-
-                </tr>
-
-
-
+                  <ListDiagrama v-for="(diagrama, index) in diagramas['hydra:member']" :key="diagrama.id" :diagrama="diagrama"/>
 
 
                 </tbody>
@@ -173,32 +99,31 @@
       </div>
 
 
-
     </div>
 
-  <ModalCriarDiagrama/>
+  <ModalCriarDiagrama ref="ModalCriarDiagrama" />
 
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import ModalCriarDiagrama from "../../../components/dashboard/modal/ModalCriarDiagrama.vue";
+import $ from "jquery";
+import ListDiagrama from "../../../components/dashboard/diagramas/ListDiagrama.vue";
 
 export default {
-  components: {ModalCriarDiagrama},
+  components: { ListDiagrama, ModalCriarDiagrama },
   data() {
     return {
       data: null
     }
   },
-
   mounted() {
-
-    this.getDiagramas()
-        .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
-
+    this.updateListDiagramas()
+  },
+  updated() {
+    this.updateListDiagramas()
   },
   computed:{
-
     ...mapState({
       diagramas: state => state.diagramaStore.items.diagramas
     })
@@ -207,28 +132,11 @@ export default {
   methods: {
     ...mapActions([
         'getDiagramas',
-        'createDiagrama',
-        'removeDiagrama'
     ]),
-    remove(id) {
-
-      this.$functions.alerts.modalConfirm('Remover Diagrama', "Deseja realmente remover o diagrama ?",
-          ()=>{
-            this.removeDiagrama(id)
-                .then( ()=>{
-                  this.$functions.alerts.notification('success', "Successo", 'Succeso ao remover Diagrama!')
-                  this.getDiagramas()
-                })
-                .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao remover Diagrama!') )
-        }
-      )
-
-
-      //alert('remove: '+ id );
-
-
-
-    },
+    updateListDiagramas(){
+      this.getDiagramas()
+          .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+    }
 
   }
 

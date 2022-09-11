@@ -17,7 +17,7 @@ const actions = {
     createDiagrama({commit}, data){
         //console.log(data)
         return axios.post(`${API_VERSION}${RESOURCE}`, data)
-            .then( response => console.log(response.data) /*commit('SET_DIAGRAMA', response.data)*/ )
+            //.then( response => console.log(response.data) /*commit('SET_DIAGRAMA', response.data)*/ )
     },
     removeDiagrama({commit}, id){
         //console.log(data)
@@ -25,8 +25,8 @@ const actions = {
     },
     updateDiagrama({commit}, data){
         //console.log(data)
-        return axios.post(`${API_VERSION}${RESOURCE}/${id}`, data)
-            .then( response => console.log(response.data) /*commit('SET_DIAGRAMA', response.data)*/ )
+        return axios.put(`${API_VERSION}${RESOURCE}/${data.id}`, data.data)
+            //.then( response => console.log(response.data) /*commit('SET_DIAGRAMA', response.data)*/ )
     }
 
 }

@@ -18,6 +18,7 @@ class Attribute {
 
         this.primaryKey = primaryKey
         this.foreingKey = foreingKey
+        this.autoGenerate = false
         this.nullable = false
         this.unique = false
         this.index = false
