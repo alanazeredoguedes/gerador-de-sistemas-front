@@ -9,7 +9,7 @@
                 <img alt="Logo" src="../assets/media/auth/agency.png" width="150" />
                 <h1 style="color: white; font-size: 35px;">Gerador de Sistemas</h1>
               </RouterLink>
-            <h2 class="text-white fw-normal m-0">A ferramenta do ideal para o Profissional de Tecnologia!</h2>
+            <h2 class="text-white fw-normal m-0">A ferramenta do Profissional de Tecnologia!</h2>
           </div>
         </div>
 
@@ -33,12 +33,12 @@
 @import url("@/assets/plugins/global/plugins.bundle.css");
 @import url("@/assets/css/style.bundle.css");
 
-body {
+/*body {
   background-image: url('@/assets/media/auth/bg4.jpg');
 }
 [data-theme="dark"] body {
   background-image: url('@/assets/media/auth/bg4-dark.jpg');
-}
+}*/
 </style>
 
 <script>
@@ -51,10 +51,10 @@ export default {
 
   components: {  },
   mounted() {
-    let body = $('body')
-    body.removeClass('page-bg');
-    body.css('background-image', 'none');
-  },
+    $('body').addClass('page-bg');
+    //document.body.style.backgroundImage = 'url("../src/assets/themes/10/media/misc/page-bg.jpg")';
+    document.body.style.backgroundImage = 'url("../src/assets/media/auth/bg4.jpg")';
+  }
 
 }
 </script>

@@ -1,11 +1,9 @@
 <template>
   <div class="text-center mb-11">
     <h1 class="text-dark fw-bolder mb-3">Inscrever-se</h1>
-    <div class="text-gray-500 fw-semibold fs-6">Entrar com:</div>
-
   </div>
 
-  <div class="row g-3 mb-9">
+<!--  <div class="row g-3 mb-9">
 
     <div class="col-md-6">
       <a href="javascript:void(0)" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
@@ -18,7 +16,7 @@
         <img alt="Logo" src="@/assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3" />Entrar com Apple</a>
     </div>
 
-  </div>
+  </div>-->
 
   <div class="separator separator-content my-14">
     <span class="w-125px text-gray-500 fw-semibold fs-7">Entrar com Email</span>
@@ -30,13 +28,8 @@
   </div>
 
   <div class="row">
-    <div class="fv-row mb-6 col-6">
-      <input type="text" id="client_register_name" name="client_register[name]" required="required" placeholder="Nome" class="form-control bg-transparent">
-      <div class="fv-plugins-message-container invalid-feedback"></div>
-    </div>
-
-    <div class="fv-row mb-6 col-6">
-      <input type="text" id="client_register_lastName" name="client_register[lastName]" required="required" placeholder="Sobrenome" class="form-control bg-transparent">
+    <div class="fv-row mb-6 col-12">
+      <input type="text" name="username" required="required" placeholder="Nome de usuário" class="form-control bg-transparent">
       <div class="fv-plugins-message-container invalid-feedback"></div>
     </div>
   </div>

@@ -104,8 +104,8 @@ export default {
       this.diagrama[0].addClass(classs)
 
       let attribute = new Attribute('id','id','integer', true);
+      attribute.autoGenerate = true
       this.diagrama[0].addAttribute(classs, attribute)
-
 
       this.nome = this.tabela = this.descricao = ''
       this.close()

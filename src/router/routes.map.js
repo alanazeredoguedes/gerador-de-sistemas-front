@@ -1,3 +1,5 @@
+import loginPage from "../pages/auth/LoginPage.vue";
+
 const routes = [
     /** Dashboard Routes */
     {
@@ -43,7 +45,7 @@ const routes = [
             {
                 path: '/login',
                 name: 'login',
-                component: () => import('@/pages/auth/LoginPage.vue')
+                component: loginPage
             },
             {
                 path: '/register',

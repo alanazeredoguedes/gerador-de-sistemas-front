@@ -297,11 +297,26 @@ export default {
   },
   watch: {
     attributeName(val){
-      this.attributeName = val
+      val = this.$functions.string_validation.normalizeString( val )
+      val = this.$functions.string_validation.capitalize( val )
+      val = this.$functions.string_validation.removeSpace( val )
+      //
+      this.attributeName = val.charAt(0).toLowerCase() + val.slice(1);
       this.atributo.attributeName = this.attributeName
+      this.atributo.fieldName = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+
       this.diagrama[0].updateDiagram()
     },
-    fieldName(){},
+    fieldName(val){
+      /*val = this.$functions.string_validation.normalizeString( val )
+      val = this.$functions.string_validation.capitalize( val )
+      val = this.$functions.string_validation.removeSpace( val )
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+*/
+      this.fieldName = val
+      this.atributo.fieldName = this.fieldName
+      this.diagrama[0].updateDiagram();
+    },
     type(){},
     primaryKey(val){
       this.primaryKey = val
@@ -443,8 +458,8 @@ export default {
     this.scale = this.atributo.scale
     this.size = this.atributo.size
 
-    console.log(this.atributo)
-    console.log(this.atributo.primaryKey)
+    //console.log(this.atributo)
+    //console.log(this.atributo.primaryKey)
 
 
     /** Inicializa o Jquery Sortable */

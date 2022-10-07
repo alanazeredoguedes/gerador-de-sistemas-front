@@ -71,6 +71,18 @@
             </div>-->
 
 
+        <div class="col-md-12" style="margin-top: 10px;"  v-if="class1 && class2 && relationship">
+          <label class="form-label">Campo a ser exibido ao realizar relacionamento</label>
+          <div>
+            <v-select placeholder="Escolha"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="optionsClass1ForeignKeyPK"
+                      v-model="class1LabelFk"
+            />
+          </div>
+        </div>
+
 
 
       <div class="col-md-12" style="margin-top: 10px;"  v-if="class1 && class2 && relationship && relationship.code === 'many-to-many'">
@@ -116,8 +128,6 @@
         <label class="form-label">Nome da chave Estrangeira</label>
         <input v-model="class2ForeignKeyName" class="form-control" >
       </div>
-
-
 
 
 
@@ -170,6 +180,8 @@ export default {
       class1ForeignKeyPK: null,
       class1ForeignKeyName: null,
       optionsClass1ForeignKeyPK: [],
+      class1LabelFk: null,
+
 
       class2ForeignKeyPK: null,
       class2ForeignKeyName: null,
@@ -314,14 +326,17 @@ export default {
 
       this.diagrama[0].addAttribute(toClass, foreignKey)
 
-      let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', foreignKey.key)
+       //this.class1LabelFk
+
+      let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', foreignKey.key, this.class1LabelFk.obj.key)
+      console.log(relation)
 
       this.diagrama[0].addRelationship(relation)
 
-      console.log(this.diagrama[0].models)
-      console.log(this.diagrama[0].linksModels)
-      console.log(this.diagrama[0].diagram.model.nodeDataArray)
-      console.log(this.diagrama[0].diagram.model.linkDataArray)
+      // console.log(this.diagrama[0].models)
+      // console.log(this.diagrama[0].linksModels)
+      // console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      // console.log(this.diagrama[0].diagram.model.linkDataArray)
     },
     /**
      * ADICIONA RELACIONAMENTO UM PARA MUITOS
@@ -435,6 +450,7 @@ export default {
       this.class1ForeignKeyPK = null
       this.class1ForeignKeyName = null
       this.optionsClass1ForeignKeyPK = []
+      this.class1LabelFk = null
 
       this.class2ForeignKeyPK = null
       this.class2ForeignKeyName = null
