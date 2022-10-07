@@ -27,3 +27,6 @@ app.config.globalProperties.$functions = functions;
 
 app.mount('#app')
 
+
+store.dispatch("getUserAuthenticated")
+

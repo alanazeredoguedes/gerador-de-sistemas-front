@@ -1,18 +1,26 @@
 import axios from "axios";
-import { API_VERSION, URI_BASE_API } from "../../../configs/api";
+import { TOKEN_NAME } from "../../../configs/api";
+import sessionStorage from "../../../services/session-storage";
 
 const RESOURCE = '/user'
 
 const actions = {
-    login({commit}, {email, password}){
-        //console.log(data)
-        return axios.post(`${API_VERSION}${RESOURCE}/login`, {email, password})
+    login({commit, dispatch }, {email, password}){
+        return axios.post(`${RESOURCE}/login`, {email, password})
             .then( (response) => {
-                console.log(response.data.token)
-                //commit('SET_DIAGRAMA', response.data)
+                sessionStorage.set(TOKEN_NAME, response.data.token)
 
+                commit('SET_AUTHENTICATED')
+                dispatch('getUserAuthenticated')
             })
     },
+    getUserAuthenticated({commit}){
+        axios.get(`${RESOURCE}/authenticated`)
+            .then( response => commit('SET_USER', response.data) )
+            .catch( error => commit('SET_UNAUTHENTICATED') )
+    },
+
+
 }
 
 export default actions

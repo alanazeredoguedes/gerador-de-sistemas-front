@@ -25,8 +25,8 @@
         <span class="w-125px text-gray-500 fw-semibold fs-7">Entrar com Email</span>
       </div>
 
-      <div class="fv-plugins-message-container invalid-feedback" style="margin-bottom: 10px;">
-
+      <div v-if="error.status" class="fv-plugins-message-container invalid-feedback" style="margin-bottom: 10px;">
+        {{ error.message }}
       </div>
 
       <div class="fv-row mb-8">
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapState } from 'vuex'
 export default {
   components: { },
@@ -69,6 +70,10 @@ export default {
       user:{
         email: '',
         password: '',
+      },
+      error: {
+        status: false,
+        message: ''
       }
     }
   },
@@ -78,7 +83,24 @@ export default {
   methods: {
     login(){
       this.$store.dispatch('login', this.user)
-      alert('dsa')
+          .then( (response) => {
+            this.error.status = false
+            this.$functions.alerts.notification('success', "Autenticado com Sucesso", 'Sucesso ao logar no sistema')
+
+            this.$router.push({ name: 'homePage' })
+          })
+          .catch((responseError) => {
+            this.error.status = true
+
+            console.log(responseError)
+
+            if (responseError.response.status === 406){
+              this.error.message = responseError.response.data.message;
+            }else{
+              this.error.message = "Falha ao se autenticar!"
+            }
+
+          })
     }
 
   }

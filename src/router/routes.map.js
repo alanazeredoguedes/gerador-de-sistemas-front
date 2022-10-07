@@ -9,17 +9,20 @@ const routes = [
             {
                 path: '/',
                 name: 'homePage',
-                component: () => import('@/pages/dashboard/home/Dashboard.vue')
+                component: () => import('@/pages/dashboard/home/Dashboard.vue'),
+                meta: { auth: true }
             },
             {
                 path: '/app',
                 name: 'app_list',
-                component: () => import('@/pages/dashboard/app/App.vue')
+                component: () => import('@/pages/dashboard/app/App.vue'),
+                meta: { auth: true }
             },
             {
                 path: '/diagramas',
                 name: 'diagramas_list',
-                component: () => import('@/pages/dashboard/diagramas/Diagramas.vue')
+                component: () => import('@/pages/dashboard/diagramas/Diagramas.vue'),
+                meta: { auth: true }
             },
         ]
 
@@ -32,7 +35,8 @@ const routes = [
             {
                 path: '/diagrama/:id',
                 name: 'diagrama',
-                component: () => import('@/pages/diagram/Diagram.vue')
+                component: () => import('@/pages/diagram/Diagram.vue'),
+                meta: { auth: true }
             },
         ]
 
@@ -45,22 +49,26 @@ const routes = [
             {
                 path: '/login',
                 name: 'login',
-                component: loginPage
+                component: loginPage,
+                meta: { auth: false }
             },
             {
                 path: '/register',
                 name: 'register',
-                component: () => import('@/pages/auth/RegisterPage.vue')
+                component: () => import('@/pages/auth/RegisterPage.vue'),
+                meta: { auth: false }
             },
             {
                 path: '/reset-password',
                 name: 'resetPassword',
-                component: () => import('@/pages/auth/ResetPassword.vue')
+                component: () => import('@/pages/auth/ResetPassword.vue'),
+                meta: { auth: false }
             },
             {
                 path: '/new-password',
                 name: 'newPassword',
-                component: () => import('@/pages/auth/NewPassword.vue')
+                component: () => import('@/pages/auth/NewPassword.vue'),
+                meta: { auth: false }
             },
         ]
 
@@ -73,12 +81,14 @@ const routes = [
             {
                 path: '/:pathMatch(.*)*',
                 name: 'error404',
-                component: () => import('@/pages/error/404.vue')
+                component: () => import('@/pages/error/404.vue'),
+                meta: { auth: false }
             },
             {
                 path: '/terms',
                 name: 'terms',
-                component: () => import('@/pages/terms/Terms.vue')
+                component: () => import('@/pages/terms/Terms.vue'),
+                meta: { auth: false }
             },
         ]
     },
