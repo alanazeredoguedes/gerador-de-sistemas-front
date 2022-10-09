@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr v-if="diagrama && diagrama.name.toLowerCase().includes( diagramsSearch.toLowerCase() )">
 
     <td>
       <div class="form-check form-check-sm form-check-custom form-check-solid">
@@ -66,7 +66,7 @@ import ModalEditarDiagrama from "../modal/ModalEditarDiagrama.vue";
 
 export default {
   components: { ModalEditarDiagrama },
-  props: [ 'diagrama', ],
+  props: [ 'diagrama', 'diagramsSearch' ],
   name: 'ListDiagrama',
   data() {
     return {

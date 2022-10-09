@@ -23,6 +23,10 @@
 
 
         <div class="mx-auto mw-600px w-100 py-10"  id="kt_create_account_form">
+
+
+
+
           <div class="current d-tab-1 d-tab" data-kt-stepper-element="content">
 
             <div class="w-100">

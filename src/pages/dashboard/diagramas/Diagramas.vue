@@ -24,7 +24,7 @@
 														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
 													</svg>
 												</span>
-                  <input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Pesquisar Diagrama" />
+                  <input type="text" v-model="diagramsSearch" class="form-control form-control-solid w-250px ps-14" placeholder="Pesquisar Diagrama" />
                 </div>
               </div>
 
@@ -52,15 +52,20 @@
                 <tbody class="fw-semibold text-gray-600">
 
 
-                  <ListDiagrama v-for="(diagrama, index) in diagramas" :key="diagrama.id" :diagrama="diagrama"/>
+                  <ListDiagrama v-for="(diagrama, index) in diagramas" :key="diagrama.id" :diagrama="diagrama" :diagramsSearch="diagramsSearch"/>
+
+
 
 
                 </tbody>
               </table>
 
+              <div v-if="!existDiagramFilter" class="text-center" style="padding-top: 20px;">
+                <div class="fs-7 fw-bold text-muted">Não foi possivel localizar o diagrama por: <b>{{ diagramsSearch }}</b></div>
+              </div>
 
-<!--              <div class="d-flex flex-stack flex-wrap pt-10" v-if="diagramas.length !== 0">
-                <div class="fs-6 fw-semibold text-gray-300">Exibindo de 1 a 10 de 50 projetos</div>
+              <div class="d-flex flex-stack flex-wrap pt-10" v-if="diagramas.length !== 0">
+                <div class="fs-6 fw-semibold text-gray-700">Exibindo de 1 a {{ diagramas.length }} de {{ diagramas.length }} diagramas</div>
                 <ul class="pagination">
                   <li class="page-item previous">
                     <a href="javascript:void(0)" class="page-link">
@@ -70,7 +75,7 @@
                   <li class="page-item active">
                     <a href="javascript:void(0)" class="page-link">1</a>
                   </li>
-                  <li class="page-item">
+<!--                  <li class="page-item">
                     <a href="javascript:void(0)" class="page-link">2</a>
                   </li>
                   <li class="page-item">
@@ -84,14 +89,14 @@
                   </li>
                   <li class="page-item">
                     <a href="javascript:void(0)" class="page-link">6</a>
-                  </li>
+                  </li>-->
                   <li class="page-item next">
                     <a href="javascript:void(0)" class="page-link">
                       <i class="next"></i>
                     </a>
                   </li>
                 </ul>
-              </div>-->
+              </div>
 
             </div>
           </div>
@@ -114,7 +119,8 @@ export default {
   components: { ListDiagrama, ModalCriarDiagrama },
   data() {
     return {
-      data: null
+      data: null,
+      diagramsSearch: '',
     }
   },
   mounted() {
@@ -123,10 +129,18 @@ export default {
   updated() {
     //this.updateListDiagramas()
   },
-  computed:{
+  computed: {
     ...mapState({
       diagramas: state => state.diagramaStore.items.diagramas
-    })
+    }),
+    existDiagramFilter(){
+        let exist = 0
+        this.diagramas.forEach((diagram)=>{
+          if(diagram && diagram.name.toLowerCase().includes( this.diagramsSearch.toLowerCase() ))
+            exist += 1
+        })
+        return exist !== 0
+    },
 
   },
   methods: {

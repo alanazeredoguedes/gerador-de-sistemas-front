@@ -262,7 +262,6 @@ export default {
     show(){
       this.$refs.modal.show()
       this.optionsSelectClass = this.updateOpcoesClassesSelect()
-
     },
     close(){
       this.$refs.modal.close()

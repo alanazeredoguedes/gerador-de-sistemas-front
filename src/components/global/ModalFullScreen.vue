@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" :id="id" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen p-9">
+    <div class="modal-dialog modal-fullscreen p-9" style="padding: 5%">
       <div class="modal-content">
 
         <div class="modal-header header-bg">
