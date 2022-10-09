@@ -52,7 +52,7 @@
                 <tbody class="fw-semibold text-gray-600">
 
 
-                  <ListDiagrama v-for="(diagrama, index) in diagramas['hydra:member']" :key="diagrama.id" :diagrama="diagrama"/>
+                  <ListDiagrama v-for="(diagrama, index) in diagramas" :key="diagrama.id" :diagrama="diagrama"/>
 
 
                 </tbody>
@@ -121,7 +121,7 @@ export default {
     this.updateListDiagramas()
   },
   updated() {
-    this.updateListDiagramas()
+    //this.updateListDiagramas()
   },
   computed:{
     ...mapState({
@@ -135,7 +135,12 @@ export default {
     ]),
     updateListDiagramas(){
       this.getDiagramas()
-          .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+          .catch( (response)=>{
+            console.log(response)
+            if(response.response.status !== 403)
+              this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas')
+
+          })
     }
 
   }

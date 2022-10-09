@@ -3,6 +3,7 @@ const mutations = {
         state.items.diagramas = diagramas
     },
     SET_DIAGRAMA(state, diagrama){
+        //console.log(diagrama)
         state.items.diagrama = diagrama
     },
 

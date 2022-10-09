@@ -47,8 +47,8 @@
                         <i class="fa-solid fa-diagram-project" style="font-size: 40px"></i>
                       </span>
                       <span class="d-block fw-semibold text-start">
-                        <span class="text-dark fw-bold d-block fs-4 mb-2">Classe de Projeto</span>
-                        <span class="text-muted fw-semibold fs-6">Implemente diagramas de classe de projeto</span>
+                        <span class="text-dark fw-bold d-block fs-4 mb-2">Objeto Relacional</span>
+                        <span class="text-muted fw-semibold fs-6">Implemente um diagrama objeto relacional</span>
                       </span>
                     </label>
 
@@ -175,7 +175,7 @@ export default {
         return
       }
 
-      this.createDiagrama({nome: this.nome, descricao: this.descricao, estrutura: '{"class":[],"relationships":[]}'})
+      this.createDiagrama({name: this.nome, description: this.descricao, structure: '{"class":[],"relationships":[]}'})
           .then((response)=>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama criado com successo!')
             this.$router.push({ name: 'diagramas_list' })

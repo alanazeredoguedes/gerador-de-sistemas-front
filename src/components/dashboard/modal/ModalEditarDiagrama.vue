@@ -45,8 +45,8 @@
                         <i class="fa-solid fa-diagram-project" style="font-size: 40px"></i>
                       </span>
                       <span class="d-block fw-semibold text-start">
-                        <span class="text-dark fw-bold d-block fs-4 mb-2">Classe de Projeto</span>
-                        <span class="text-muted fw-semibold fs-6">Implemente diagramas de classe de projeto</span>
+                        <span class="text-dark fw-bold d-block fs-4 mb-2">Objeto Relacional</span>
+                        <span class="text-muted fw-semibold fs-6">Implemente um diagrama objeto relacional</span>
                       </span>
                     </label>
 
@@ -175,7 +175,7 @@ export default {
         return
       }
 
-      this.updateDiagrama({ id: this.diagrama.id, data: {nome: this.nome, descricao: this.descricao} } )
+      this.updateDiagrama({ id: this.diagrama.id, data: {name: this.nome, description: this.descricao} } )
           .then((response)=>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama Atualizado com successo!')
             this.getDiagramas().catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
@@ -210,8 +210,8 @@ export default {
     },
   },
   mounted() {
-    this.nome = this.diagrama.nome
-    this.descricao = this.diagrama.descricao
+    this.nome = this.diagrama.name
+    this.descricao = this.diagrama.description
   }
 }
 </script>

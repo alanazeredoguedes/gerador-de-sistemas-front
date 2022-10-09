@@ -270,7 +270,7 @@ export default {
     this.getDiagrama(diagramaId)
         .then( response => {
 
-          let estrutura = JSON.parse(this.diagramaData.estrutura);
+          let estrutura = JSON.parse(this.diagramaData.structure);
 
           /** Adiciona as classes ao canvas */
           estrutura.class.forEach((data)=>{

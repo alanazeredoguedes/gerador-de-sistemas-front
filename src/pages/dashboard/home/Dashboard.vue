@@ -43,10 +43,10 @@
           <div class="col-xxl-7">
             <div class="row g-lg-7">
               <div class="col-sm-6">
-                <a href="javascript:void(0)"  class="card border-0 shadow-none min-h-200px mb-7" style="background-color: #F9666E">
+                <a href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#modal_criar_aplicacao" class="card border-0 shadow-none min-h-200px mb-7" style="background-color: #F9666E">
                   <div class="card-body d-flex flex-column flex-center text-center">
                     <img class="mw-100 h-100px mb-7 mx-auto" src="@/assets/themes/10/media/illustrations/sigma-1/4.png" />
-                    <h4 class="text-white fw-bold text-uppercase">Criar APP</h4>
+                    <h4 class="text-white fw-bold text-uppercase">Criar Aplicação</h4>
                   </div>
                 </a>
               </div>
@@ -83,6 +83,7 @@
   </div>
 
     <ModalCriarDiagrama/>
+    <CriarAplicacaoModal/>
 </div>
 </template>
 
@@ -91,9 +92,10 @@
 import { mapActions } from 'vuex'
 import LogoTitle from "../../../components/dashboard/LogoTitle.vue";
 import ModalCriarDiagrama from "../../../components/dashboard/modal/ModalCriarDiagrama.vue";
+import CriarAplicacaoModal from "../../../components/dashboard/aplicacao/modal/CriarAplicacaoModal.vue";
 
 export default {
-  components: {ModalCriarDiagrama, LogoTitle},
+  components: {CriarAplicacaoModal, ModalCriarDiagrama, LogoTitle},
   data() {
     return {
       data: null

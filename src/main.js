@@ -29,4 +29,6 @@ app.mount('#app')
 
 
 store.dispatch("getUserAuthenticated")
+store.dispatch("getProgrammingLanguage")
+store.dispatch("getFramework")
 

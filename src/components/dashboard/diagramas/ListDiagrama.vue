@@ -11,14 +11,14 @@
       <div class="d-flex align-items-center">
         <div class="">
           <router-link :to="{ name: 'diagrama', params: { id: diagrama.id } }" class="text-gray-700 text-hover-primary fs-5 fw-bold">
-            {{ diagrama.nome }}
+            {{ diagrama.name }}
           </router-link>
         </div>
       </div>
     </td>
 
     <td class="pe-0">
-      <span class="fw-bold text-gray-700" >{{ diagrama.descricao }}</span>
+      <span class="fw-bold text-gray-700" >{{ diagrama.description }}</span>
     </td>
 
 
@@ -37,14 +37,14 @@
                       </span>
       </button>
 
-      <div style="position: fixed; margin-top: 0.5%; margin-left: -10%;" :class="'showActions-'+diagrama.id" class="showActions menu menu-sub menu-sub-dropdown w-250px w-md-400px ">
+      <div style="position: fixed; margin-top: 0.5%; margin-left: -10%;" :class="'showActions-'+diagrama.id" class="showActions menu menu-sub menu-sub-dropdown w-250px w-md-300px ">
         <div class="px-7 py-5">
           <div class="fs-5 text-dark fw-bold" style="float: left;">Ações</div>
         </div>
         <div class="separator border-gray-200"></div>
         <div class="px-7 py-5">
           <div class="d-flex justify-content-end">
-            <button type="reset" @click="exportar(); openActions(diagrama.id)" class="btn btn-sm btn-light btn-active-light-primary me-2" >Exportar</button>
+<!--            <button type="reset" @click="exportar(); openActions(diagrama.id)" class="btn btn-sm btn-light btn-active-light-primary me-2" >Exportar</button>-->
             <button type="reset" @click="$refs.ModalEditarDiagrama.show(); openActions(diagrama.id)" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Editar</button>
             <button type="reset" class="btn btn-sm btn-light btn-active-light-dark me-2" data-kt-menu-dismiss="true">Duplicar</button>
             <button type="reset" @click="remove" class="btn btn-sm btn-light btn-active-light-danger me-2" data-kt-menu-dismiss="true">Excluir</button>
@@ -65,7 +65,7 @@ import {mapActions} from "vuex";
 import ModalEditarDiagrama from "../modal/ModalEditarDiagrama.vue";
 
 export default {
-  components: {ModalEditarDiagrama},
+  components: { ModalEditarDiagrama },
   props: [ 'diagrama', ],
   name: 'ListDiagrama',
   data() {
@@ -86,11 +86,14 @@ export default {
       this.$functions.alerts.modalConfirm('Remover Diagrama', "Deseja realmente remover o diagrama ?",
           ()=>{
             this.removeDiagrama(this.diagrama.id)
-                .then( ()=>{
+                .then( (response) => {
                   this.$functions.alerts.notification('success', "Successo", 'Succeso ao remover Diagrama!')
                   this.getDiagramas()
                 })
-                .catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao remover Diagrama!') )
+                .catch( (response) => {
+                  //console.log(response)
+                    this.$functions.alerts.notification('error', "Falha ao remover", response.response.data.message)
+                })
           }
       )
     },

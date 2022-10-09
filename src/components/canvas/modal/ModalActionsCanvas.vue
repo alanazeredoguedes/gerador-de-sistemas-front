@@ -10,7 +10,7 @@
 
           <div class="pb-5">
             <div class="d-flex flex-stack border rounded px-7 py-3">
-              <a href="javascript:void(0)" class="fs-5 text-white text-hover-success fw-semibold w-375px text-center">{{ diagramaData.nome }}</a>
+              <a href="javascript:void(0)" class="fs-5 text-white text-hover-success fw-semibold w-375px text-center">{{ diagramaData.name }}</a>
             </div>
           </div>
 
@@ -148,16 +148,16 @@ export default {
     },
     salvarDiagrama(){
 
-      let saveDiagrama = {
-        //nome: this.diagramaData.nome,
+      let diagram = {
+         //nome: this.diagramaData.nome,
          //descricao: this.diagramaData.descricao,
-        estrutura: JSON.stringify({
-          class: this.diagrama[0].models,
-          relationships: this.diagrama[0].linksModels,
+          structure: JSON.stringify({
+           class: this.diagrama[0].models,
+           relationships: this.diagrama[0].linksModels,
         })
       }
 
-      this.updateDiagrama({ id: this.diagramaData.id, data: saveDiagrama })
+      this.updateDiagrama({ id: this.diagramaData.id, data: diagram })
           .then((response)=>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama salvo com successo!')
           })
@@ -174,8 +174,8 @@ export default {
       let data = JSON.parse( this.diagrama[0].diagram.model.toJson() )
       let exportData = {}
 
-      exportData.diagrama = this.diagramaData.nome
-      exportData.descricao = this.diagramaData.descricao
+      exportData.name = this.diagramaData.name
+      exportData.description = this.diagramaData.description
       exportData.class = data.nodeDataArray
       exportData.relationships = data.linkDataArray
 
@@ -214,7 +214,7 @@ export default {
 
 
       let url = window.URL.createObjectURL(blob);
-      let filename = this.diagramaData.nome + '' + ".svg";
+      let filename = this.diagramaData.name + '' + ".svg";
       let a = document.createElement("a");
       a.style = "display: none";
       a.href = url;
