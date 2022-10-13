@@ -5,6 +5,7 @@ import diagramaStore from './modules/diagramas'
 import userStore from  './modules/user'
 import programmingLanguageStore from "./modules/programmingLanguage";
 import frameworkStore from "./modules/framework";
+import applicationStore from "./modules/application";
 
 const store = createStore({
     modules: {
@@ -13,6 +14,7 @@ const store = createStore({
         userStore: userStore,
         programmingLanguageStore: programmingLanguageStore,
         frameworkStore: frameworkStore,
+        applicationStore: applicationStore,
     }
 })
 

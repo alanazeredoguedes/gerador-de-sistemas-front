@@ -108,7 +108,7 @@
 
                 <div class="fs-6 fw-semibold mb-2" style="padding-bottom: 10px;">
 
-                  <label class="fs-6 fw-semibold mb-2">Diagramas: {{ application.diagram }}</label>
+                  <label class="fs-6 fw-semibold mb-2">Diagramas: </label>
                   <input type="text" v-model="diagramsSearch" class="form-control form-control-solid" placeholder="Busque pelo seu diagrama aqui..">
 
                 </div>
@@ -166,7 +166,7 @@
 
               </div>
 
-              <div class=" flex-stack" style="padding-top: 40px;">
+              <div class=" flex-stack" >
                 <button @click="changeTab(1)" type="button" class="btn btn-lg btn-light " style="float: left; display: block">
                   <i class="fa-solid fa-arrow-left"></i>Voltar
                 </button>
@@ -206,7 +206,7 @@
               <div class="fv-row">
 
                 <label class="d-flex align-items-center fs-5 fw-semibold mb-4 required">
-                  Linguagem de Programação {{ application.programmingLanguage }}
+                  Linguagem de Programação
                 </label>
 
                 <div class="row row-cols-2 row-cols-md-4 g-5">
@@ -220,7 +220,7 @@
                     >
                     <!--:disabled="!pl.active"-->
 
-                    <label :for="'programmingLanguage'+pl.id" class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex flex-column flex-center gap-5 h-100" >
+                    <label @click="changeProgrammingLanguage" :for="'programmingLanguage'+pl.id" class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex flex-column flex-center gap-5 h-100" >
                       <img
                           v-if="pl.logo"
                           :src="URI_BASE_API + pl.logo.url.reference"
@@ -239,7 +239,7 @@
               <div class="fv-row" style="margin-top: 50px">
 
                 <label class="d-flex align-items-center fs-5 fw-semibold mb-4 required">
-                  Frameworks {{ application.framework }}
+                  Frameworks
                 </label>
 
                 <div class="row row-cols-2 row-cols-md-4 g-5">
@@ -277,9 +277,9 @@
                 </button>
 
 
-<!--                <button @click="changeTab(3)"  type="button" class="btn btn-lg btn-primary" style="float: right;">
-                  Continuar <i class="fa-solid fa-arrow-right"></i>
-                </button>-->
+                <button @click="salvar()"  type="button" class="btn btn-lg btn-primary" style="float: right;">
+                  Salvar
+                </button>
               </div>
 
 
@@ -323,16 +323,16 @@ import { URI_BASE_API } from "../../../../configs/api";
 import ModalFullScreen from "../../../global/ModalFullScreen.vue";
 
 
-
-
-
 export default {
   name: 'CriarAplicacaoModal',
   components: {ModalFullScreen  },
+  props: [ 'applicationEdit', ],
+
   data() {
     return {
       URI_BASE_API: URI_BASE_API,
       application: {
+        id: '',
         name: '',
         description: '',
         programmingLanguage: '',
@@ -373,16 +373,72 @@ export default {
 
   },
   methods: {
-    show(){
-      this.$refs.modal.show()
+    ...mapActions([
+      'getApplication',
+      'getApplications',
+      'createApplication',
+      'updateApplication'
+    ]),
+    changeProgrammingLanguage(){
+      this.application.framework = ''
     },
-    close(){
-      this.$refs.modal.close()
-    },
+    salvar(){
 
+      if(!this.application.programmingLanguage){
+        this.$functions.alerts.notification('error', 'Escolha uma linguagem de programação antes de continuar!')
+        return
+      }
+
+      if(!this.application.framework){
+        this.$functions.alerts.notification('error', 'Escolha um framework antes de continuar!')
+        return
+      }
+
+      if(this.applicationEdit){
+        this.updateApplication(this.application)
+            .then((response)=>{
+              this.$functions.alerts.notification('success', "Sucesso", 'Aplicação atualizada com sucesso!')
+              this.getApplication(this.applicationEdit.id)
+              this.resetComponent()
+              this.close()
+            })
+            .catch((response)=>{
+              this.$functions.alerts.notification('error', "Erro", 'Não foi possível atualizar a aplicação, tente novamente em outro momento!')
+            })
+      }else{
+
+        this.createApplication(this.application)
+            .then((response)=>{
+              this.$functions.alerts.notification('success', "Sucesso", 'Aplicação criada com sucesso!')
+              this.$router.push({ name: 'app_list' })
+              this.getApplications().catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar aplicações') )
+              this.resetComponent()
+              this.close()
+            })
+            .catch((response)=>{
+              this.$functions.alerts.notification('error', "Erro", 'Não foi possível cadastrar a aplicação, tente novamente em outro momento!')
+            })
+
+      }
+
+
+
+    },
     changeTab(tab = null){
       if(!tab)
         return;
+
+      if(tab === 2)
+        if(!this.application.name || !this.application.description){
+          this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
+          return
+        }
+
+      if(tab === 3)
+        if(!this.application.diagram){
+          this.$functions.alerts.notification('error', 'Escolha um diagrama antes de continuar!')
+          return
+        }
 
       $('.d-tab').removeClass('current')
       $('.d-menu').removeClass('current')
@@ -397,6 +453,26 @@ export default {
       this.application.programmingLanguage = ''
       this.application.framework = ''
       this.application.diagram = ''
+      this.changeTab(1)
+    },
+    show(){
+      this.$refs.modal.show()
+      this.resetComponent()
+
+      if(this.applicationEdit){
+        this.application.id = this.applicationEdit.id
+        this.application.name = this.applicationEdit.name
+        this.application.description = this.applicationEdit.description
+        this.application.programmingLanguage = this.applicationEdit.framework.programmingLanguage.id
+        this.application.framework = this.applicationEdit.framework.id
+        this.application.diagram = this.applicationEdit.diagram.id
+      }
+
+    },
+
+    close(){
+      this.$refs.modal.close()
+      this.resetComponent()
     },
 
 
@@ -405,8 +481,10 @@ export default {
 
   },
   created() {
-    //alert('ada')
-      //this.resetComponent()
+
+
+  },
+  updated() {
 
   }
 }

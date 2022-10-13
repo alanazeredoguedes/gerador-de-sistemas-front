@@ -19,6 +19,12 @@ const actions = {
             .then( response => commit('SET_USER', response.data) )
             .catch( error => commit('SET_UNAUTHENTICATED') )
     },
+    createUser({commit}, { username, email, password }){
+        return axios.post(`${RESOURCE}`, { username, email, password })
+            //.then( response => commit('SET_USER', response.data) )
+            //.catch( error => commit('SET_UNAUTHENTICATED') )
+    },
+
 
 
 }

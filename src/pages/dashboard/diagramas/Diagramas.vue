@@ -1,13 +1,21 @@
 <template>
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content" >
+  <div class="d-flex flex-wrap flex-stack mb-6" >
+    <h1 class="fw-bold my-2" style="color: white">
+      Diagramas
+      <span class="fs-6 text-gray-400 fw-semibold ms-1"></span>
+    </h1>
 
-      <div class="toolbar d-flex flex-stack mb-3 mb-lg-5" id="kt_toolbar">
-        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack flex-wrap">
-          <div class="page-title d-flex flex-column me-5 py-2">
-            <h1 class="d-flex flex-column text-white fw-bold fs-1 mb-0">Meus Diagramas</h1>
-          </div>
-        </div>
-      </div>
+    <div class="d-flex flex-wrap my-2">
+
+      <a href="javascript:void(0)" class="btn btn-primary btn-sm" @click="$refs.ModalCriarDiagrama.show();" >
+        Novo Diagrama
+      </a>
+
+    </div>
+  </div>
+
+
+  <div class="content d-flex flex-column flex-column-fluid" style="margin-top: -20px">
 
       <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl" style="padding: 0">
@@ -26,10 +34,6 @@
 												</span>
                   <input type="text" v-model="diagramsSearch" class="form-control form-control-solid w-250px ps-14" placeholder="Pesquisar Diagrama" />
                 </div>
-              </div>
-
-              <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-                <a href="javascript:void(0)" @click="$refs.ModalCriarDiagrama.show();" class="btn btn-primary">Novo Diagrama</a>
               </div>
 
             </div>

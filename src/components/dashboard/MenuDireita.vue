@@ -34,25 +34,23 @@
       >
         <!--begin::Menu item-->
         <div class="menu-item px-3">
-          <div class="menu-content fs-6 text-dark fw-bold px-3 py-4">Ações Rápidas</div>
+          <div class="menu-content fs-6 text-dark fw-bold px-3 py-4">Menu Rápida</div>
         </div>
 
         <div class="separator mb-3 opacity-75"></div>
 
         <div class="menu-item px-3">
-          <a href="#" class="menu-link px-3">Perfil</a>
+          <a href="javascript:void(0)" @click="notImplement" class="menu-link px-3">Perfil</a>
         </div>
 
         <div class="menu-item px-3">
-          <a href="#" class="menu-link px-3">Configurações</a>
+          <a href="javascript:void(0)" @click="deslogar" class="menu-link px-3">Deslogar</a>
         </div>
 
         <div class="separator mt-3 opacity-75"></div>
 
         <div class="menu-item px-3">
-          <div class="menu-content px-3 py-3">
-            <a class="btn btn-danger btn-sm px-4" @click="deslogar">Deslogar</a>
-          </div>
+
         </div>
       </div>
 
@@ -167,8 +165,9 @@
 
 
             <!-- GUIA RAPIDO MENU -->
+            <a href="javascript:void(0)" @click="notImplement">
+
             <div class="timeline-item">
-              <a href="javascript:void(0)">
 
                 <div class="timeline-line w-40px"></div>
 
@@ -193,9 +192,9 @@
                   </div>
                 </div>
 
-              </a>
-            </div>
 
+            </div>
+            </a>
 
 
 
@@ -205,8 +204,9 @@
       </div>
 
       <div class="text-center" id="kt_sidebar_footer">
-        <a href="#" class="btn btn-hover-rise text-white bg-white bg-opacity-10 text-uppercase fs-7 fw-bold">View
-          Updates</a>
+        <a href="javascript:void(0)" @click="notImplement" class="btn btn-hover-rise text-white bg-white bg-opacity-10 text-uppercase fs-7 fw-bold">
+          Ver Atualizações
+        </a>
       </div>
 
     </div>
@@ -236,7 +236,10 @@ export default {
     deslogar(){
       store.commit('SET_UNAUTHENTICATED')
       this.$router.push({name: 'login'})
-    }
+    },
+    notImplement(){
+      this.$functions.alerts.notification('info', "Em Construção!", 'A funcionalidade estará disponível em breve!')
+    },
   },
   computed: {
     ...mapState({

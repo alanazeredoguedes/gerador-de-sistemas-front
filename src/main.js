@@ -32,4 +32,5 @@ store.dispatch("getUserAuthenticated")
 store.dispatch("getProgrammingLanguage")
 store.dispatch("getFramework")
 store.dispatch("getDiagramas")
+store.dispatch("getApplications")
 

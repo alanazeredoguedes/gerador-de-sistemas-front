@@ -7,6 +7,7 @@
 
         <div class="d-flex flex-column flex-root">
 
+<!--          <LogoTitle/>-->
 
           <router-view></router-view>
 

@@ -209,9 +209,11 @@ export default {
     },
     show(){
       this.$refs.modal.show()
+      this.resetModal()
     },
     close(){
       this.$refs.modal.close()
+      this.resetComponent()
     },
   }
 }

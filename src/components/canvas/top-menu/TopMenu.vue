@@ -153,22 +153,27 @@ export default {
     ]),
     salvarDiagrama(){
 
-      let saveDiagrama = {
+      let diagram = {
         //nome: this.diagramaData.nome,
         //descricao: this.diagramaData.descricao,
-        estrutura: JSON.stringify({
+        structure: JSON.stringify({
           class: this.diagrama[0].models,
           relationships: this.diagrama[0].linksModels,
         })
       }
 
-      this.updateDiagrama({ id: this.diagramaData.id, data: saveDiagrama })
+      this.updateDiagrama({ id: this.diagramaData.id, data: diagram })
           .then((response)=>{
-            this.$functions.alerts.notification('success', "Sucesso", 'Diagrama salvo com successo!')
+            this.$functions.alerts.notification('success', "Sucesso", 'Diagrama salvo com sucesso!')
           })
           .catch((response)=>{
-            this.$functions.alerts.notification('error', "Erro", 'Não foi possivel salvar o diagrama no momento!')
+            this.$functions.alerts.notification('error', "Erro", 'Não foi possível salvar o diagrama no momento!')
           })
+          .finally(()=>{
+            this.close()
+          })
+
+
     },
   }
 }

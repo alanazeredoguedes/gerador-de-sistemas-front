@@ -19,6 +19,12 @@ const routes = [
                 meta: { auth: true }
             },
             {
+                path: '/app/:id',
+                name: 'app_edit',
+                component: () => import('@/pages/dashboard/app/Edit.vue'),
+                meta: { auth: true }
+            },
+            {
                 path: '/diagramas',
                 name: 'diagramas_list',
                 component: () => import('@/pages/dashboard/diagramas/Diagramas.vue'),
