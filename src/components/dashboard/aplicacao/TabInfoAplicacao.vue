@@ -172,7 +172,8 @@
 <script>
 import {URI_BASE_API} from "../../../configs/api";
 import {mapActions} from "vuex";
-
+import axios from "axios";
+import jQuery from "jquery";
 
 export default {
   props: ['application'],
@@ -191,6 +192,7 @@ export default {
 
       this.$functions.alerts.modalConfirm('Gerar uma nova Aplicação', `Em alguns minutos sua aplicação estará
        disponível e voce recebera os acessos para utilização`, ()=>{
+
               this.generateApplication(this.application.id)
                   .then( (response) => {
 
