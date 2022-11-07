@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
 
-        <div class="modal-header header-modal" style="background-color: rgb(3,83,171);">
+        <div class="modal-header header-modal header-bg">
 
           <h3 class="modal-title">
             <slot name="title">
@@ -17,7 +17,7 @@
 
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body ">
 
           <slot name="body">
             Body

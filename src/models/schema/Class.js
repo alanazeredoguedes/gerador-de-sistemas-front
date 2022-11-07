@@ -13,6 +13,8 @@ class Class {
 
         /** Atributes Model */
         this.associativeModel = false;
+        this.associativeModel = false;
+        this.systemModel = false
 
         this.className = className
         this.tableName = tableName

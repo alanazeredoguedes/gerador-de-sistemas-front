@@ -285,7 +285,6 @@ export default {
 <style>
 .bg-modal{
   background-image: url('@/assets/themes/10/media/header-bg.png');
-  /*background-image: url('@/assets/themes/10/media/misc/page-bg.jpg');*/
 }
 .actions-btn-link{
   background-color: #D5D83D;

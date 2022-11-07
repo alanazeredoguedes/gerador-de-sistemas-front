@@ -11,13 +11,13 @@
 
         </span>
 
-         <a href="javascript:void(0)" @click="removeClass" style="margin-left: 10px;">
+         <a href="javascript:void(0)" @click="removeClass" style="float: right">
            <i aria-hidden="true" class="far fa-trash-alt" style="color: red; font-size: 20px;"></i>
          </a>
 
-          <a type="button" data-bs-dismiss="offcanvas" aria-label="Close" class="text-reset closeRightMenu" style="float: right;">
+<!--          <a type="button" class="text-reset" style="float: right;">
             <i aria-hidden="true" class="fas fa-times" style="font-size: 25px; color: white;"></i>
-          </a>
+          </a>-->
 
       </div>
 

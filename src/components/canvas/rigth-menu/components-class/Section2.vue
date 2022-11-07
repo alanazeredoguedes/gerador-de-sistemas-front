@@ -6,6 +6,9 @@
 
         <label class="form-label" style="color: white">Nome da Classe</label>
         <input class="form-control input" type="text" v-model="className" placeholder="Nome da Classe" >
+        <div style="color: rgb(255,0,0)" v-if="classNameAvailable">
+          <b>  Existem mais de uma classe com o mesmo nome!</b>
+        </div>
 
       </div>
 
@@ -43,6 +46,9 @@
         <div class="mb-3 col-12">
           <label class="form-label"  style="color: white">Nome da Tabela</label>
           <input type="text" v-model="tableName" class="form-control input" placeholder="Nome da Tabela">
+          <div style="color: rgb(255,0,0)" v-if="tableNameAvailable">
+            <b>  Existem mais de uma tabela com o mesmo nome!</b>
+          </div>
         </div>
 
         <div class="col-12">
@@ -84,21 +90,29 @@ export default {
       val = this.$functions.string_validation.removeSpace( val )
 
       this.className = val
-      this.tableName = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+      //this.tableName = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
 
+      if( !this.diagrama[0].classNameAvailable(this.className, this.classEdit) )
+        this.$functions.alerts.notification('error', `Já existe uma classe chamada ${this.className}`)
 
-      //this.className = this.$functions.string_validation.ucwords( this.className )
       this.classEdit.className = this.className
+      this.diagrama[0].updateDiagram()
+
+      this.tableName = this.$functions.string_validation.ucwords( this.className )
       this.classEdit.tableName = this.tableName
 
-      this.diagrama[0].updateDiagram()
     },
     tableName(val){
       val = this.$functions.string_validation.capitalizeLetterToUnderline( val )
       val = this.$functions.string_validation.removeSpace(val).toLowerCase()
       this.tableName = val
+
+      if( !this.diagrama[0].tableNameAvailable(this.tableName, this.classEdit) )
+        this.$functions.alerts.notification('error', `Já existe uma tabela chamada ${this.tableName}`)
+
       this.classEdit.tableName = this.tableName
       this.diagrama[0].updateDiagram()
+
     },
     description(val){
 
@@ -120,6 +134,14 @@ export default {
         divChange.css("display", "block");
       }
     },
+  },
+  computed: {
+    classNameAvailable(){
+      return !this.diagrama[0].classNameAvailable(this.className, this.classEdit);
+    },
+    tableNameAvailable(){
+      return !this.diagrama[0].tableNameAvailable(this.tableName, this.classEdit);
+    }
   },
   updated() {
     this.className = this.classEdit.className

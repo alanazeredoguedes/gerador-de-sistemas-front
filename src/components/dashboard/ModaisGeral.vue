@@ -1,5 +1,5 @@
 <template>
-  <div>
+<!--  <div>
 
     <div id="kt_engage_demos" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="explore"
       data-kt-drawer-activate="true" data-kt-drawer-overlay="true"
@@ -2073,7 +2073,7 @@
       </div>
     </div>
 
-  </div>
+  </div>-->
 </template>
 
 

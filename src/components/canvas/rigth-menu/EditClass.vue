@@ -29,9 +29,7 @@
 
           <Atributos :classEdit="classEdit" :diagrama="diagrama" />
 
-          <h5 style="margin-top: 40px; margin-bottom: 20px; color: white;">
-            <b>Metodos</b>
-          </h5>
+          <Metodos :classEdit="classEdit" :diagrama="diagrama" />
 
         </div>
 
@@ -52,11 +50,13 @@ import Atributos from "./components-class/Atributos.vue";
 import TableSection1 from "./components-table/TableSection1.vue";
 import TableSection2 from "./components-table/TableSection2.vue";
 import TableFields from "./components-table/TableFields.vue";
+import Metodos from "./components-class/Metodos.vue";
+import $ from "jquery";
 
 export default {
   props: [ 'diagrama', 'classEdit' ],
   name: 'ModalEditClass',
-  components: {TableFields, TableSection2, TableSection1, Atributos, Section2, Section1, ModalRight },
+  components: { Metodos, TableFields, TableSection2, TableSection1, Atributos, Section2, Section1, ModalRight },
   data(){
     return {
       initObject: true,
@@ -80,13 +80,15 @@ export default {
     },
     close(){
       this.$refs.modalRight.close()
+      this.$parent.classEdit = null
     },
   },
   updated() {
-    //console.log(this.classEdit)
-    //console.log(this.diagrama)
+    this.$functions.events_front.jquerySortable(this.diagrama[0])
+    this.$functions.events_front.popover()
 
-  }
+
+  },
 }
 </script>
 

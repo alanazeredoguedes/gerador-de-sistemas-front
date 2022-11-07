@@ -102,6 +102,24 @@ class Diagrama
         this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
         this.updateDiagram()
     }
+    removeAttributeWithoutValidation = (classs, attribute) => {
+        this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
+        this.updateDiagram()
+    }
+
+    /** Adiciona novo Método */
+    addMethod = (classs, metodo) => {
+        this.diagram.model.addArrayItem(classs.methods, metodo)
+        this.updateDiagram();
+    }
+
+    /** Remove Método */
+    removeMethod = (classs, metodo) => {
+        /** Remove Método */
+        this.diagram.model.removeArrayItem(classs.methods, this.findIndexAttribute(classs, metodo));
+        this.updateDiagram()
+    }
+
 
     /** Adiciona Relacionamento */
     addRelationship = (relationship)=>{
@@ -185,12 +203,93 @@ class Diagrama
 
     }
 
+    classNameAvailable = (className, classe = null) => {
+        let status = true;
+        this.diagram.model.nodeDataArray.forEach((model, index)=>{
+            if(classe){
+                if(model.key !== classe.key){
+                    if(model.className.toLowerCase() === className.toLowerCase())
+                        status = false
+                }
+            }else{
+                if(model.className.toLowerCase() === className.toLowerCase())
+                    status = false
+            }
+        })
+
+        return status
+    }
+
+    tableNameAvailable = (tableName, classe = null) => {
+        let status = true;
+        this.diagram.model.nodeDataArray.forEach((model, index)=>{
+            if(classe){
+                if(model.key !== classe.key){
+                    if(model.tableName.toLowerCase() === tableName.toLowerCase())
+                        status = false
+                }
+            }else{
+                if(model.tableName.toLowerCase() === tableName.toLowerCase())
+                    status = false
+            }
+        })
+
+        return status
+    }
+
+    attributeNameAvailable = (attribute, classe = null) => {
+
+        let status = true;
+
+        this.diagram.model.nodeDataArray.forEach((model)=>{
+            if(classe){
+                if(model.key === classe.key){
+                    model.attributes.forEach((attr)=> {
+                        if(attribute.key !== attr.key ){
+                            if(attribute.attributeName.toLowerCase() === attr.attributeName.toLowerCase()){
+                                status = false
+                            }
+                        }
+                    })
+                }
+            }else{
+                model.attributes.forEach((attr)=> {
+                    if(attribute.key !== attr.key ){
+                        if(attribute.attributeName.toLowerCase() === attr.attributeName.toLowerCase()){
+                            status = false
+                        }
+                    }
+                })
+            }
+        })
+
+        return status
+    }
 
 
+    reorderAttributes = (classKey, listAttributes) => {
 
+        let newAttributeList = []
+        let classs = null
+        this.diagram.model.nodeDataArray.forEach((model)=> {
+            if (model.key === classKey) {
+                classs = model
+                listAttributes.forEach((attrKey)=>{
+                    model.attributes.forEach((attr)=> {
+                        if(attrKey === attr.key ){
+                            newAttributeList.push(attr);
+                            this.removeAttributeWithoutValidation(model, attr)
+                        }
+                    })
+                })
+            }
+        })
 
+        newAttributeList.forEach((attr)=>{
+            this.addAttribute(classs, attr)
+        })
 
-
+    }
 
 
 
@@ -325,7 +424,7 @@ class Diagrama
             //url('/img/background-1.png')
             case "pk": return "/img/pk.svg";
             case "fk": return "/img/fk.svg";
-            case "nulo": return "/img/blank.png";
+            case "nulo": return "/img/null.svg";
             default: return "/img/blank.png";
         }
     }
@@ -564,9 +663,13 @@ class Diagrama
                         margin: new go.Margin(5, 5, 5, 5),  // leave room for Button
 
                     },
-                    //new go.Binding("visible", "methods", function (arr) { return arr.length <= 0; })
+                    //new go.Binding("visible", "visible", function (v) { return !v; }).ofObject("METHODS"),
+                    //new go.Binding("visible", "methods", function (arr) { return arr.length <= 0; }),
+                    //new go.Binding("visible", "visible", function (v) { return !v; }).ofObject("METHODS"),
+                    //new go.Binding("visible", "associativeModel", function (v) { return !v; } ),
+
                     new go.Binding("visible", "visible", function (v) { return !v; }).ofObject("METHODS"),
-                    new go.Binding("visible", "associativeModel", function (v) { return !v; } ),
+                    new go.Binding("text", "associativeModel", function (v) { return !v ? 'Métodos': '' ; } ),
 
                 ),
 
@@ -595,7 +698,9 @@ class Diagrama
                         alignment: go.Spot.TopRight,
                         visible: true,
                     },
-                    new go.Binding("visible", "associativeModel", function (v) { return !v; } ),
+                    //new go.Binding("visible", "associativeModel", function (v) { return !v; } ),
+                    new go.Binding("visible", "methods", function (arr) { return arr.length > 0; })
+
                 ),
 
             ));
@@ -693,9 +798,9 @@ class Diagrama
                     editable: false,
                     //textAlign: 'leftCenter',
                     font: "bold 11pt system-ui",
-                    stroke: 'rgb(3,83,171)'
+                    stroke: 'rgb(0,0,0)'
                 },
-                new go.Binding("text", "name", function (item) { return item + '()'; }).makeTwoWay(),
+                new go.Binding("text", "name", function (item) { return item + ''; }).makeTwoWay(),
             ),
 
         );

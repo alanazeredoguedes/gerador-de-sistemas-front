@@ -21,11 +21,12 @@ class Attribute {
         this.autoGenerate = false
         this.nullable = false
         this.unique = false
-        this.index = false
-        this.defaultValue = ""
-        this.precision = 0.0
-        this.scale = 0.0
-        this.size = 0
+        this.precision = false
+        this.scale = false
+        this.length = false
+        this.lengthMax = false
+        this.lengthMin = false
+
         this.setIco()
     }
 

@@ -33,6 +33,23 @@
             />
           </span>
 
+          <span v-else-if="atributo.nullable === true"
+                class="pov"
+                data-bs-toggle="popover"
+                data-bs-dismiss="true"
+                data-bs-placement="top"
+                data-bs-content="Atributo Nulo">
+            <b style="">N</b>
+          </span>
+
+          <span v-else
+                data-bs-toggle="popover"
+                data-bs-dismiss="true"
+                data-bs-placement="top"
+                data-bs-content="Não Nulo">
+            <b style="color: rgba(255,255,255,0.32);">N</b>
+          </span>
+
         </div>
 
       </div>
@@ -43,7 +60,7 @@
 
     <!-- ###################################################################### -->
     <div class="col-5 input-group-sm">
-      <input type="text" class="form-control input pov" v-model="attributeName" @change="changeAttributeName" placeholder="Nome do Atributo"
+      <input type="text" class="form-control input pov" v-model="attributeName" placeholder="Nome do Atributo"
              data-bs-toggle="popover"
              data-bs-placement="top"
              title="Nome do Atributo"
@@ -95,10 +112,14 @@
         <i class="fa-solid fa-trash-can" style="color: red; font-size: 16px"></i>
       </a>
     </div>
+
+    <div class="col-1"></div>
+    <div class="col-10" style="color: rgb(255,0,0); margin-bottom: 2px;" v-if="attributeNameAvailable">
+      <b>Existem mais de um atributo com o mesmo nome!</b>
+    </div>
+
+
     <!-- ###################################################################### -->
-
-
-
 
 
     <!-- ###################################################################### -->
@@ -156,65 +177,53 @@
                   type="checkbox"
                   v-model="atributo.unique"
                   :id="'unique' + atributo.key"
+                  :disabled="atributo.primaryKey === true"
               />
               <label class="form-check-label" :for="'unique' + atributo.key">
                 Unico
               </label>
             </div>
 
-            <div class="form-check form-check-custom form-check-solid  form-check-sm text-left col-auto">
+            <div class="form-check form-check-custom form-check-solid form-check-sm text-left col-auto" v-if="foreingKey">
               <input
                   class="form-check-input"
                   type="checkbox"
-                  v-model="atributo.index"
-                  :id="'index' + atributo.key"
+                  v-model="foreingKey"
+                  :disabled="true"
+                  :id="'foreingKey' + atributo.key"
               />
-              <label class="form-check-label" :for="'index' + atributo.key">
-                Index
+              <label class="form-check-label" :for="'foreingKey' + atributo.key">
+                Chave Estrangeira
               </label>
             </div>
-
-
-            <!--            <div class="form-check form-check-custom form-check-solid form-check-sm text-left col-auto" >
-                          <input
-                              class="form-check-input"
-                              type="checkbox"
-                              v-model="foreingKey"
-                              :disabled="true"
-                              :id="'foreingKey' + atributo.key"
-                          />
-                          <label class="form-check-label" :for="'foreingKey' + atributo.key">
-                            Chave Estrangeira
-                          </label>
-                        </div>-->
 
           </div>
         </div>
 
 
 
-
-
-
-
-
-            <div class="col-6 input-group-sm" style="margin-top: 10px">
-              <label class="form-check-label">Nome do Campo</label>
-              <input type="text" class="form-control input" v-model="fieldName" @change="" placeholder="Nome do Campo">
-            </div>
-
-            <div v-if="!atributo.foreingKey" class="col-6 input-group-sm" style="margin-top: 10px">
-              <label class="form-check-label">Valor Padrão</label>
-              <input type="text" class="form-control input" v-model="atributo.defaultValue" placeholder="Valor Padrão">
-            </div>
-
-
         <div class="col-12 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
           <label class="form-check-label">Tamanho</label>
           <input type="number" min="0"  class="form-control input"
-                 v-model="atributo.size"
+                 v-model="atributo.length"
                  @change=""
                  placeholder="Tamanho">
+        </div>
+
+        <div class="col-6 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
+          <label class="form-check-label">Tamanho Minimo</label>
+          <input type="number" min="0"  class="form-control input"
+                 v-model="atributo.lengthMin"
+                 @change=""
+                 placeholder="Tamanho Minimo">
+        </div>
+
+        <div class="col-6 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
+          <label class="form-check-label">Tamanho Máximo</label>
+          <input type="number" min="0"  class="form-control input"
+                 v-model="atributo.lengthMax"
+                 @change=""
+                 placeholder="Tamanho Máximo">
         </div>
 
         <div class="col-6 input-group-sm" style="margin-top: 10px;" v-bind:style="showPrecisionScale">
@@ -254,44 +263,38 @@ import Icon from "../../../global/icons/Icon.vue";
 
 export default {
   name: 'Atributo',
-  components: {Icon  },
+  components: { Icon  },
   props: [ 'index', 'atributo', 'classEdit', 'diagrama', ],
   data(){
     return {
       attributeName: this.atributo.attributeName,
-      fieldName: this.atributo.fieldName,
       type: this.atributo.type,
       primaryKey: this.atributo.primaryKey,
       foreingKey: this.atributo.foreingKey,
       nullable: this.atributo.nullable,
       unique: this.atributo.unique,
-      indexx: this.atributo.indexx,
-      defaultValue: this.atributo.defaultValue,
       precision: this.atributo.precision,
       scale: this.atributo.scale,
-      size: this.atributo.size,
-
+      length: this.atributo.length,
+      min: this.atributo.lengthMin,
+      max: this.atributo.lengthMax,
       fieldsTypes: [
-        'smallint',
-        'integer',
-        'bigint',
-        'decimal',
-        'float',
-        'string',
-        'ascii_string',
-        'text',
-        'guid',
-        'binary',
-        'blob',
-        'boolean',
-        'date',
-        'datetime',
-        'datetimetz',
-        'time',
-        'array',
-        'simple_array',
-        'json',
-        'object',
+          'string',
+          'text',
+          'integer',
+          'smallint',
+          'bigint',
+          'decimal',
+          'float',
+          'boolean',
+          'date',
+          'datetime',
+          'datetimetz',
+          'time',
+          'json',
+          'array',
+          'simple_array',
+          'object',
       ],
     }
   },
@@ -300,22 +303,15 @@ export default {
       val = this.$functions.string_validation.normalizeString( val )
       val = this.$functions.string_validation.capitalize( val )
       val = this.$functions.string_validation.removeSpace( val )
-      //
-      this.attributeName = val.charAt(0).toLowerCase() + val.slice(1);
-      this.atributo.attributeName = this.attributeName
-      this.atributo.fieldName = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
 
+      this.attributeName = val.charAt(0).toLowerCase() + val.slice(1);
+
+      this.atributo.attributeName = this.attributeName
       this.diagrama[0].updateDiagram()
-    },
-    fieldName(val){
-      /*val = this.$functions.string_validation.normalizeString( val )
-      val = this.$functions.string_validation.capitalize( val )
-      val = this.$functions.string_validation.removeSpace( val )
-      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
-*/
-      this.fieldName = val
-      this.atributo.fieldName = this.fieldName
-      this.diagrama[0].updateDiagram();
+
+       if( !this.diagrama[0].attributeNameAvailable(this.atributo, this.classEdit) )
+         this.$functions.alerts.notification('error', `Já existe um atributo chamado ${this.attributeName}`)
+
     },
     type(){},
     primaryKey(val){
@@ -325,8 +321,10 @@ export default {
 
       if(this.primaryKey){
         this.atributo.nullable = false
+        this.atributo.unique = true
       }else{
         this.atributo.autoGenerate = false
+        this.atributo.unique = false
       }
 
       this.diagrama[0].updateDiagram();
@@ -337,10 +335,12 @@ export default {
       this.setIco()
       this.diagrama[0].updateDiagram();
     },
-    nullable(val){},
+    nullable(val){
+      this.setIco()
+      this.diagrama[0].updateDiagram();
+
+    },
     unique(){},
-    indexx(){},
-    defaultValue(){},
     precision(){},
     scale(){},
     size(){},
@@ -355,9 +355,6 @@ export default {
       this.diagrama[0].updateDiagram()
       //this.diagrama.diagram.model.updateTargetBindings(this.classEdit.attributes[this.index]);
     },
-    changeAttributeName(){
-      //this.diagrama.updateDiagram()
-    },
     setIco(){
       this.atributo.ico = ""
 
@@ -371,9 +368,17 @@ export default {
         this.atributo.ico = "pk"
 
     },
+    resetAttributeProperty(){
+      this.precision = false
+      this.scale = false
+      this.length = false
+      this.min = false
+      this.max = false
+    },
     changeType(){
       this.atributo.type = this.type
       this.diagrama[0].updateDiagram()
+      this.resetAttributeProperty()
     },
     changeNullable(){
       if(this.atributo.primaryKey === true){
@@ -419,8 +424,11 @@ export default {
 
   },
   computed: {
+    attributeNameAvailable(){
+      return !this.diagrama[0].attributeNameAvailable(this.atributo, this.classEdit);
+    },
     showSize: function () {
-      let typesShow = ['ascii_string', 'string'];
+      let typesShow = ['ascii_string', 'string', 'text'];
       return {
         display: ( typesShow.includes(this.atributo.type) ? 'block' : 'none' )
       }
@@ -446,37 +454,24 @@ export default {
   },
   updated() {
     this.attributeName = this.atributo.attributeName
-    this.fieldName = this.atributo.fieldName
     this.type = this.atributo.type
     this.primaryKey = this.atributo.primaryKey
     this.foreingKey = this.atributo.foreingKey
     this.nullable = this.atributo.nullable
     this.unique = this.atributo.unique
-    this.indexx = this.atributo.index
-    this.defaultValue = this.atributo.defaultValue
     this.precision = this.atributo.precision
     this.scale = this.atributo.scale
-    this.size = this.atributo.size
+    this.length = this.atributo.length
+    this.min = this.atributo.lengthMin
+    this.max = this.atributo.lengthMax
 
     //console.log(this.atributo)
     //console.log(this.atributo.primaryKey)
 
 
     /** Inicializa o Jquery Sortable */
-    $(".sortable").sortable({
-      scroll: false,
-      handle: ".handle",
-      opacity: 0.7,
-      scrollSensitivity: 2,
-      scrollSpeed: 5,
-    });
-
-    $(function () {
-      $('.pov').popover({
-        container: 'body',
-        trigger: 'hover'
-      })
-    })
+    this.$functions.events_front.jquerySortable(this.diagrama[0])
+    this.$functions.events_front.popover()
 
   }
 }

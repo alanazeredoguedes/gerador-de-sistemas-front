@@ -3,7 +3,7 @@
     <a data-bs-toggle="offcanvas" :href="'#'+id" :class="'btn'+id" style="display: none"></a>
 
 <!--    <div :id="id" class="offcanvas offcanvas-end rightModal" v-bind:style="{ backgroundColor: (isTable ? 'rgb(119 51 51 / 95%)' : 'rgba(51, 86, 119, 0.95)'),  borderColor: (isTable ? 'rgb(119 51 51 / 95%)' : 'rgba(51, 86, 119, 0.95)') }"  data-bs-backdrop="false" tabindex="-1" >-->
-    <div :id="id" class="offcanvas offcanvas-end rightModal" v-bind:class="[ isTable ? 'tableModel' : 'classModel']" data-bs-backdrop="false" tabindex="-1" >
+    <div :id="id" class="offcanvas offcanvas-end " v-bind:class="[ isTable ? 'tableModel' : 'classModel']" data-bs-keyboard="false" data-bs-backdrop="false" data-bs-scroll="true" tabindex="-1" >
 
       <div class="offcanvas-body">
 

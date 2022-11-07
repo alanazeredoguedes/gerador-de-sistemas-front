@@ -85,6 +85,9 @@ export default {
     eventClick(){
       return (e, obj) => {
 
+        if(obj.part.data.systemModel)
+          return
+
         let menuRight = this.$refs.ModalEditClass
 
         if(!menuRight)
@@ -107,7 +110,6 @@ export default {
 
         }else if( menuRight.isOpen() && this.classEdit.key === obj.part.data.key){
           menuRight.close();
-
         }
 
         //this.classEdit = null
@@ -140,6 +142,7 @@ export default {
         let menuRight = this.$refs.ModalEditClass
 
         if(menuRight.isOpen()){
+          this.classEdit = null
           menuRight.close();
         }
 
@@ -170,74 +173,6 @@ export default {
     },
     /** FIM Criação de novos eventos para o diagrama. */
 
-    initDiagramData(){
-
-      /**
-       * @type {Method}
-       */
-      let validarCpf = new Method('validarCpf','metodo responsavel por validar cpf')
-
-      /**
-       * @type {Attribute}
-       */
-      let id1 = new Attribute('id','id','integer', true);
-      let nome = new Attribute('nome','nome','string', false);
-      let autor = new Class('Autor', 'autor', '...',[ id1, nome ], [],'-526 -94' )
-
-      let id2 = new Attribute('id','id','integer', true);
-      let titulo = new Attribute('titulo','titulo','string', false);
-      let autorFk1 = new Attribute('autor ','autor_id','string', false, true);
-      let documento = new Class('Documento', 'documetos', '...',[ id2, titulo, autorFk1, ], [],'-735 223' )
-
-      let id3 = new Attribute('id','id','integer', true);
-      let rua = new Attribute('rua ','rua','string', false);
-      //let autorFk = new Attribute('autor ','autor_id','string', false, true);
-      let endereco = new Class('Endereco', 'endereco', '...',[ id3, rua ], [ validarCpf ],'-758 -362' )
-
-
-      let id4 = new Attribute('id','id','integer', true);
-       let autorFk2 = new Attribute('autor ','autor_id','string', false, true);
-       let enderecoFk = new Attribute('endereco ','endereco_id','string', false, true);
-       let autorEndereco = new Class('', 'autor_endereco', '...',[ autorFk2, enderecoFk ], [  ],'' )
-       autorEndereco.associativeModel = true
-
-
-      /**
-       * @type {Relationship}
-       */
-          //let oneToOne = new Relationship(autor.key, endereco.key, 'one-to-one', autorFk.key)
-      let oneToMany = new Relationship(autor.key, documento.key, 'one-to-many', autorFk1.key)
-      let ManyToMany1 = new Relationship(autor.key, autorEndereco.key, 'one-to-many', autorFk2.key)
-      let ManyToMany2 = new Relationship(endereco.key, autorEndereco.key, 'one-to-maany', enderecoFk.key)
-
-      const diagrama = new Diagrama()
-      this.diagrama = Object.freeze([diagrama])
-
-
-      //console.log(this.diagrama[0])
-
-      /** ADICIONANDO CLASSES */
-      this.diagrama[0].addClass(autor)
-      this.diagrama[0].addClass(documento)
-      this.diagrama[0].addClass(endereco)
-      this.diagrama[0].addClass(autorEndereco)
-
-
-
-      /** ADICIONANDO RELACIONAMENTOS */
-      //this.diagrama[0].addRelationship(oneToOne)
-      this.diagrama[0].addRelationship(oneToMany)
-      this.diagrama[0].addRelationship(ManyToMany1)
-      this.diagrama[0].addRelationship(ManyToMany2)
-
-
-      //console.log(this.diagrama[0].models)
-      //console.log(this.diagrama[0].linksModels)
-      //console.log(this.diagrama[0].diagram.model.nodeDataArray)
-      //console.log(this.diagrama[0].diagram.model.linkDataArray)
-
-
-    },
     initDiagrama(models, relationships){
       const diagrama = new Diagrama(models, relationships)
       this.diagrama = Object.freeze([diagrama])
@@ -273,14 +208,7 @@ export default {
           let estrutura = JSON.parse(this.diagramaData.structure);
 
           /** Adiciona as classes ao canvas */
-          estrutura.class.forEach((data)=>{
-
-            this.diagrama[0].addClass( data )
-            //this.diagrama[0].diagram.model.highlight( data )
-
-            //highlight
-
-          })
+          estrutura.class.forEach((data)=>{ this.diagrama[0].addClass( data ) })
 
           /** Adiciona os relacionamentos ao canvas */
           estrutura.relationships.forEach((data)=>{ this.diagrama[0].addRelationship(data) })
@@ -302,8 +230,8 @@ export default {
 
 
 .cavasDiagram {
-  width: 100vw;
-  height: 92vh;
+  width: 200vw;
+  height: 152vh;
   /*margin-top: -0.2vh;*/
 /*  width: 200vw;
   height: 200vh;*/

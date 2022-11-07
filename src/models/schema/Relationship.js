@@ -9,12 +9,28 @@ class Relationship {
         /** Atributes Canvas */
         this.key = uuidv4();
 
-        this.to = to;
+        /**
+         * Este é o lado inverso.
+         * ex: Autor um-para-muitos Documento
+         * Autor
+         */
         this.from = from;
+
+        /**
+         * Este é o lado proprietário.
+         * ex: Autor um-para-muitos Documento
+         * Documento
+         */
+        this.to = to;
+
         this.attributeTo = attributeTo
         this.attributeFromField = attributeFromField
         this.typeRelationship = typeRelationship
+
+
+
     }
+
 
 
 }

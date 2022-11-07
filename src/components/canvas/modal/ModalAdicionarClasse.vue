@@ -100,6 +100,16 @@ export default {
           return
         }
 
+        if(!this.diagrama[0].classNameAvailable(this.nome)){
+          this.$functions.alerts.notification('error', `Já existe uma classe chamada ${this.nome}`)
+          return
+        }
+
+      if(!this.diagrama[0].tableNameAvailable(this.tabela)){
+        this.$functions.alerts.notification('error', `Já existe uma tabela chamada ${this.tabela}`)
+        return
+      }
+
       let classs = new Class(this.nome, this.tabela, this.descricao)
       this.diagrama[0].addClass(classs)
 
@@ -110,6 +120,10 @@ export default {
       this.nome = this.tabela = this.descricao = ''
       this.close()
     },
+
+
+
+
   },
   mounted() {
     //console.log(diagrama)

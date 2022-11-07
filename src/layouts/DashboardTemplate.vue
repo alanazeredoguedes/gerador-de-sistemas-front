@@ -32,13 +32,6 @@
 @import url("@/assets/themes/10/css/style.bundle.css");
 @import url("@/assets/themes/10/plugins/global/plugins.bundle.css");
 
-/*.header-bg2{
-  background-image: url('../@/assets/themes/themes/10/media/header-bg.png')
-}
-.body {
-  background-image: url('../src/assets/themes/10/media/misc/page-bg.jpg');
-}
-*/
 
 </style>
 
@@ -65,7 +58,7 @@ export default {
   },
   mounted() {
     $('body').addClass('page-bg');
-    document.body.style.backgroundImage = 'url("../src/assets/themes/10/media/misc/page-bg.jpg")';
+    document.body.style.backgroundImage = 'url("img/page-bg.jpg")';
   }
 
 }

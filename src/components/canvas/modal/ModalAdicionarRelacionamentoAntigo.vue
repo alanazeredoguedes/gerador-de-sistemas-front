@@ -12,7 +12,7 @@
 
       <div class="col-4">
         <div>
-          <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado inverso do relacionamento!" content="Este é o lado inverso do relacionamento!"/>
+          <InfoInput v-if="class1 && class1.owner" ico="fa-solid fa-fingerprint" title="Este é o lado proprietário do relacionamento!" content="Este é o lado proprietário do relacionamento!"/>
           <label>Classe 1</label>
           <v-select placeholder="Escolha a Classe"
                     class="vue-select"
@@ -41,7 +41,7 @@
 
       <div class="col-4">
         <div>
-          <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado proprietário do relacionamento!" content="Este é o lado proprietário do relacionamento!"/>
+          <InfoInput v-if="class2 && class2.owner" ico="fa-solid fa-fingerprint" title="Este é o lado proprietário do relacionamento!" content="Este é o lado proprietário do relacionamento!"/>
           <label>Classe 2</label>
           <v-select placeholder="Escolha a Classe"
                     class="vue-select"
@@ -54,42 +54,8 @@
         </div>
       </div>
 
-      <div class="col-12" style="margin-top: 20px;"></div>
-
-        <div class="col-12" style="margin-top: 10px;" v-if="class1 && class2 && relationship">
-          <hr>
-          <div class="row" >
-          {{ typeAssociation }}
-
-
-
-            <div class="col-12">
-              <h4>
-<!--                <InfoInput ico="fa-solid fa-circle-info" title="Este é o lado inverso do relacionamento!"/>-->
-                Classe {{ class1.obj.className }}
-              </h4>
-            </div>
-
-            <div class="col-md-6" style="margin-top: 10px;"  >
-              <InfoInput ico="fa-solid fa-circle-info" title="Atributo que será exibido para escolha do relacionamento" />
-
-              <label class="form-label">Atributo a ser exibido</label>
-              <div>
-                <v-select placeholder="Escolha"
-                          class="vue-select"
-                          :clearable="false"
-                          :options="optionsClass1ForeignKeyPK"
-                          v-model="class1LabelFk"
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6" style="margin-top: 10px;"  >
-              <InfoInput ico="fa-solid fa-circle-info" title="Nome do atributo responsável pelo relacionamento" />
-
-              <label class="form-label">Nome do Atributo</label>
-              <input class="form-control" >
-            </div>
+      <div class="col-12" style="margin-top: 1px;">
+      </div>
 
 
 
@@ -99,35 +65,69 @@
 
 
 
-            <div class="col-12" style="margin-top: 10px;">
-              <h4>
-<!--                <InfoInput ico="fa-solid fa-circle-info" title="Este é o lado proprietário do relacionamento!" />-->
-
-                Classe {{ class2.obj.className }}
-              </h4>
-            </div>
-
-            <div class="col-12">
-
-            </div>
+      <!--      <div class="col-md-4" style="margin-top: 10px;">
+                <label class="form-label">Relationship Name</label>
+                <input name="" class="form-control" >
+            </div>-->
 
 
-
-
-
-
-
-          <br><br><br>
-
+        <div class="col-md-12" style="margin-top: 10px;"  v-if="class1 && class2 && relationship">
+          <label class="form-label">Campo a ser exibido ao realizar relacionamento</label>
+          <div>
+            <v-select placeholder="Escolha"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="optionsClass1ForeignKeyPK"
+                      v-model="class1LabelFk"
+            />
           </div>
         </div>
 
 
 
+      <div class="col-md-12" style="margin-top: 10px;"  v-if="class1 && class2 && relationship && relationship.code === 'many-to-many'">
+        <label class="form-label">Nome da Tabela Associativa</label>
+        <input v-model="associativeTableName" class="form-control" >
+      </div>
+
+
+      <div class="col-md-6" style="margin-top: 10px;"  v-if="class1 && class2 && relationship">
+        <label class="form-label">Chave Primaria: {{ class1.label }}</label>
+        <div>
+          <v-select placeholder="Escolha"
+                    class="vue-select"
+                    :clearable="false"
+                    :options="optionsClass1ForeignKeyPK"
+                    v-model="class1ForeignKeyPK"
+                    :selectable="(option) => (option.obj && option.obj.primaryKey === true)"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6" style="margin-top: 10px;"  v-if="class1 && class2 && relationship">
+        <label class="form-label">Nome da chave Estrangeira</label>
+        <input v-model="class1ForeignKeyName" class="form-control" >
+      </div>
 
 
 
+      <div class="col-md-6" style="margin-top: 10px;"  v-if="class1 && class2 && relationship && relationship.code === 'many-to-many'">
+        <label class="form-label">Chave Primaria: {{ class2.label }}</label>
+        <div>
+          <v-select placeholder="Escolha"
+                    class="vue-select"
+                    :clearable="false"
+                    :options="optionsClass2ForeignKeyPK"
+                    v-model="class2ForeignKeyPK"
+                    :selectable="(option) => (option.obj && option.obj.primaryKey === true)"
+          />
+        </div>
+      </div>
 
+      <div class="col-md-6" style="margin-top: 10px;"  v-if="class1 && class2 && relationship && relationship.code === 'many-to-many'">
+        <label class="form-label">Nome da chave Estrangeira</label>
+        <input v-model="class2ForeignKeyName" class="form-control" >
+      </div>
 
 
 
@@ -161,7 +161,7 @@ import $ from "jquery";
 import Class from "../../../models/schema/Class";
 
 export default {
-  name: 'ModalAdicionarRelacionamento',
+  name: 'ModalAdicionarRelacionamentoAntigo',
 
   components: {InfoInput, Modal },
 
@@ -172,7 +172,6 @@ export default {
       class1: null,
       class2: null,
       relationship: null,
-      typeAssociation: null,
 
       associativeTableName: null,
 
@@ -190,19 +189,20 @@ export default {
       optionsSelectClass1: [],
       optionsSelectClass2: [],
 
-      optionsRelationship: [
-        { label: 'Um-para-Um', code: 'one-to-one'},
-        { label: 'Um-para-Muitos', code: 'one-to-many'},
-        { label: 'Muitos-para-Muitos', code: 'many-to-many'},
-      ],
+      optionsRelationship: []/*[
+        //{ label: 'Many-To-One', code: 'Many-To-One'},
+        // { label: 'One-To-One', code: 'one-to-one'},
+        // { label: 'One-To-Many', code: 'one-to-many'},
+        // { label: 'Many-To-Many', code: 'many-to-many'},
+        // { label: 'Um-para-Um', code: 'one-to-one'},
+        // { label: 'Um-para-Muitos', code: 'one-to-many'},
+        // { label: 'Muitos-para-Muitos', code: 'many-to-many'},
+      ]*/,
     }
   },
 
   watch: {
     class1(){
-      if(this.class1.obj.key === "1" || this.class1.obj.key === "2")
-        //this.relationship = "one-to-many"
-
       this.changeRelationship()
       this.updateOptionsRelationShip();
     },
@@ -314,6 +314,85 @@ export default {
       this.resetModalRelationship()
       this.close()
     },
+    /**
+     * ADICIONA RELACIONAMENTO UM PARA UM
+     * @param fromClass
+     * @param toClass
+     */
+    createOneToOne(fromClass, toClass){
+
+      let foreignKey = new Attribute(this.class1ForeignKeyName, this.class1ForeignKeyName, 'integer',  false, true)
+      foreignKey.setIco()
+
+      this.diagrama[0].addAttribute(toClass, foreignKey)
+
+       //this.class1LabelFk
+
+      let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', foreignKey.key, this.class1LabelFk.obj.key)
+      console.log(relation)
+
+      this.diagrama[0].addRelationship(relation)
+
+      // console.log(this.diagrama[0].models)
+      // console.log(this.diagrama[0].linksModels)
+      // console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      // console.log(this.diagrama[0].diagram.model.linkDataArray)
+    },
+    /**
+     * ADICIONA RELACIONAMENTO UM PARA MUITOS
+     * @param fromClass
+     * @param toClass
+     */
+    createOneToMany(fromClass, toClass){
+
+      let foreignKey = new Attribute(this.class1ForeignKeyName, this.class1ForeignKeyName, 'integer',  false, true)
+      foreignKey.setIco()
+      toClass.attributes.push(foreignKey)
+
+      let relation = new Relationship(fromClass.key, toClass.key,'one-to-many', foreignKey.key)
+
+      this.diagrama[0].addRelationship(relation)
+    },
+    /**
+     * ADICIONA RELACIONAMENTO MUITOS PARA MUITOS
+     * @param fromClass
+     * @param toClass
+     */
+    createManyToMany(fromClass, toClass){
+
+      let class1 = this.class1.obj
+      let class2 = this.class2.obj
+
+      /** Cria atributo/chave_estrangeira da classe 1 */
+      let foreignKeyClass1 = new Attribute(this.class1ForeignKeyName, this.class1ForeignKeyName, 'integer',  false, true)
+      foreignKeyClass1.setIco()
+
+      /** Cria atributo/chave_estrangeira da classe 2 */
+      let foreignKeyClass2 = new Attribute(this.class2ForeignKeyName, this.class2ForeignKeyName, 'integer',  false, true)
+      foreignKeyClass2.setIco()
+
+      /** Cria Classe/tabela associativa */
+      let associativeClass = new Class(this.associativeTableName, this.associativeTableName,'', [foreignKeyClass1,foreignKeyClass2] );
+      associativeClass.associativeModel = true
+      /** Adiciona as chaves estrangeiras na tabela associativa */
+      //associativeModel.attributes.push()
+      //associativeModel.attributes.push(foreignKeyClass2)
+
+
+      /** Crias os relacionamentos entre a classe 1 e a classe 2 com a classe/tabela associativa */
+      let relationClass1 = new Relationship(class1.key, associativeClass.key,'many-to-many')
+      let relationClass2 = new Relationship(class2.key, associativeClass.key,'many-to-many')
+
+
+      /** Adiciona a Classe/tabela associativa ao modelo */
+      this.diagrama[0].addClass(associativeClass);
+
+
+      /** Adiciona os relacionamentos ao modelo */
+      this.diagrama[0].addRelationship(relationClass1)
+      this.diagrama[0].addRelationship(relationClass2)
+
+    },
 
 
     changeRelationship(){
@@ -380,16 +459,7 @@ export default {
     },
 
     changeSelect(){
-      this.typeAssociation = 'bidirectional'
-
-      if( this.class1.obj.key === this.class2.obj.key )
-        this.typeAssociation = 'self-referencing'
-
-      if( this.class1.obj.key === "1" || this.class1.obj.key === "2" )
-        this.typeAssociation = 'unidirectional'
-
       this.$functions.string_validation.resetEventsFront()
-
     },
 
     changeOptionsClass1ForeignKeyPK(attributes){
