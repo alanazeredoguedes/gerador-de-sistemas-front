@@ -51,7 +51,7 @@ export default {
       this.$functions.alerts.modalConfirm('Remover Tabela Associativa?',
           `Os <b>relacionamentos</b> e <b>chaves estrangeiras</b> vinculados serão removidos!`,
           ()=>{
-            this.diagrama[0].removeTable(this.classEdit)
+            this.diagrama[0].removeTableByKey(this.classEdit.key)
             this.$functions.alerts.notification('success','Sucesso',`<b>Tabela</b> removida com sucesso!`)
             this.$parent.close()
           })

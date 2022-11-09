@@ -374,10 +374,10 @@ export default {
       /** Cria Classe/tabela associativa */
       let associativeClass = new Class(this.associativeTableName, this.associativeTableName,'', [foreignKeyClass1,foreignKeyClass2] );
       associativeClass.associativeModel = true
+
       /** Adiciona as chaves estrangeiras na tabela associativa */
       //associativeModel.attributes.push()
       //associativeModel.attributes.push(foreignKeyClass2)
-
 
       /** Crias os relacionamentos entre a classe 1 e a classe 2 com a classe/tabela associativa */
       let relationClass1 = new Relationship(class1.key, associativeClass.key,'many-to-many')

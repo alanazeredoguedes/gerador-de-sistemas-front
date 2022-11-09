@@ -102,10 +102,9 @@ class Diagrama
         this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
         this.updateDiagram()
     }
-    removeAttributeWithoutValidation = (classs, attribute) => {
-        this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
-        this.updateDiagram()
-    }
+
+
+
 
     /** Adiciona novo Método */
     addMethod = (classs, metodo) => {
@@ -127,16 +126,12 @@ class Diagrama
         this.updateDiagram()
     }
 
-    /** Remove Relacionamento */
-    removeRelationship = (relacionamento)=>{
-        this.diagram.model.removeLinkData(relacionamento)
-        this.updateDiagram()
-    }
+
 
     /** Remove Relacionamento pela chave estrangeira */
     removeRelationshipByForeingKey(attribute){
         this.diagram.model.linkDataArray.forEach((value, index)=>{
-            if(value.attributeTo === attribute.key)
+            if(value.attributeOwningSide === attribute.key || value.attributeinverseSide === attribute.key)
                 this.removeRelationship(value)
         })
     };
@@ -153,7 +148,12 @@ class Diagrama
                 linksRemove.push(link)
                 this.diagram.model.nodeDataArray.forEach((model, index)=>{
                     if(model.key === link.to){
-                        this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, this.findAttributeBy(link.attributeTo)))
+                        if(this.findAttributeBy(link.attributeOwningSide)){
+                            this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, link.attributeOwningSide))
+                        }
+                        if(this.findAttributeBy(link.attributeinverseSide)){
+                            this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, link.attributeinverseSide))
+                        }
                     }
                 })
             }
@@ -190,7 +190,7 @@ class Diagrama
                 linksRemove.push(link)
                 this.diagram.model.nodeDataArray.forEach((model, index)=>{
                     if(model.key === link.to){
-                        this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, this.findAttributeBy(link.attributeTo)))
+                        this.diagram.model.removeArrayItem(model.attributes, this.findIndexAttribute(model, this.findAttributeBy(link.attributeOwningSide)))
                     }
                 })
             }
@@ -232,6 +232,19 @@ class Diagrama
                 if(model.tableName.toLowerCase() === tableName.toLowerCase())
                     status = false
             }
+        })
+
+        return status
+    }
+    attributeNameAvailableByName = (attributeName, classe ) => {
+        let status = true;
+
+        this.diagram.model.nodeDataArray.forEach((model)=>{
+            if(model.key === classe.key)
+                model.attributes.forEach((attr)=> {
+                    if(attributeName.toLowerCase() === attr.attributeName.toLowerCase() )
+                        status = false
+                })
         })
 
         return status
@@ -278,7 +291,7 @@ class Diagrama
                     model.attributes.forEach((attr)=> {
                         if(attrKey === attr.key ){
                             newAttributeList.push(attr);
-                            this.removeAttributeWithoutValidation(model, attr)
+                            this.removeAttributeByKey(attr.key, model.key)
                         }
                     })
                 })
@@ -290,8 +303,6 @@ class Diagrama
         })
 
     }
-
-
 
 
 
@@ -314,93 +325,11 @@ class Diagrama
         return indexAttribute
     }
 
-    /** Localiza classe por key */
-    findClassByKey = (key)=>{
-        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
-            if(value.key === key)
-                return value
-        })
-        return classe[0];
-    }
 
-    /** Localiza atributo por key */
-    findAttributeBy = (key)=>{
-        let attribute = -1;
-        this.diagram.model.nodeDataArray.forEach((model, index) => {
-            model.attributes.forEach((attr, index) => {
-                if(attr.key === key)
-                    attribute = attr
-            })
-        })
-        return attribute
-    }
-
-    /*/!** Remove todos os atributos da classe *!/
-    removeRelationshipByClass = (classe)=>{
-
-        this.diagram.model.linkDataArray.forEach((link, index)=>{
-            if(link.from === classe.key){
-                let classeAtributo = this.findClassByKey(link.to)
-                let attribute = this.findAttributeBy(link.attributeTo)
-                console.log(attribute)
-                console.log(classeAtributo)
-                this.removeAttribute(classeAtributo, attribute)
-            }
-        })
-
-        classe.attributes.forEach((attribute, index)=>{
-            this.removeAttribute(classe, attribute)
-        })
-
-    }
-
-    removeRelationshipByForeingKey(attribute){
-        this.diagram.model.linkDataArray.forEach((value, index)=>{
-            if(value.attributeFrom === attribute.key || value.attributeTo === attribute.key)
-                this.removeRelacionamento(value)
-        })
-    };
-
-
-
-    /!** Localiza indice do atributo *!/
-    findIndexAttribute = (classs, attribute)=>{
-        let indexAttribute = -1;
-
-        classs.attributes.forEach((value, index) => {
-            if(value.key === attribute.key)
-                indexAttribute = index
-        })
-
-        return indexAttribute
-    }
-
-    /!** Localiza classe por key *!/
-    findClassByKey = (key)=>{
-
-        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
-            if(value.key === key)
-                return value
-        })
-        return classe[0];
-    }
-
-    /!** Localiza classe por key *!/
-    findAttributeBy = (key)=>{
-        let attribute = -1;
-        this.diagram.model.nodeDataArray.forEach((model, index) => {
-            model.attributes.forEach((attr, index) => {
-                if(attr.key === key)
-                    attribute = attr
-            })
-        })
-        return attribute
-    }*/
 
     updateDiagram = ()=>{
         this.diagram.updateAllTargetBindings();
     }
-
 
     setData(models, linksModels){
         return goStruct(go.GraphLinksModel,
@@ -424,6 +353,7 @@ class Diagrama
             //url('/img/background-1.png')
             case "pk": return "/img/pk.svg";
             case "fk": return "/img/fk.svg";
+            case "fkOwning": return "/img/fkOwning.svg";
             case "nulo": return "/img/null.svg";
             default: return "/img/blank.png";
         }
@@ -490,7 +420,228 @@ class Diagrama
     }
 
 
+    /** ############################################################################################################################ */
+    /** ######## Tratamento dos relacionamentos e chaves estrangeiras  */
+    /** ############################################################################################################################ */
 
+
+
+
+
+
+
+
+    /** ############################################################################################################################ */
+    /** ######## REMOVE FUNCTIONS  */
+
+
+
+
+    /** Remove Atributo */
+    removeAttributeByKey = (attributeKey, classKey) => {
+        let classs = this.findClassByKey(classKey)
+        let attribute = this.findAttributeBy(attributeKey)
+
+        this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
+        this.updateDiagram()
+    }
+
+
+    /** Remove Relacionamento */
+    removeRelationship = (relacionamento)=>{
+        this.diagram.model.removeLinkData(relacionamento)
+        this.updateDiagram()
+    }
+
+
+    /** Remove Classe Ou Tabela */
+    removeClassByKey = (classKey)=>{
+        let classs = this.findClassByKey(classKey)
+
+        let listAttributesFk = this.findAllFkAttributes(classKey)
+
+        listAttributesFk.forEach( (attribute) => {
+            this.removeForeingKey(attribute.key, classKey)
+        })
+
+        this.removeClassByKeyWithoutValidation(classKey)
+
+        this.updateDiagram()
+    }
+
+    removeClassByKeyWithoutValidation = (classKey) => {
+        this.diagram.model.removeNodeData(this.diagram.model.findNodeDataForKey(classKey))
+    }
+
+    removeTableByKey = (tableKey)=>{
+
+        let allRelationshipTable = this.findAllRelationshipByClass(tableKey)
+        allRelationshipTable.forEach( (value, index) => {
+            if(value.attributeOwningSide && value.from)
+                this.removeAttributeByKey(value.attributeOwningSide, value.from)
+            this.removeRelationship(value)
+        })
+        this.removeClassByKey(tableKey)
+
+    }
+
+    /** Remover Chave Estrangeira */
+    removeForeingKey = (foreingKeyId, classId)=>{
+        let relationShip = this.findForeignKeyRelationship(foreingKeyId);
+
+        if(!relationShip)
+            return;
+
+        console.log(relationShip)
+
+        let typeAssociation = relationShip.typeAssociation
+        let typeRelationship = relationShip.typeRelationship
+
+        let attributeOwningSide = relationShip.attributeOwningSide
+        let classOwningSide = relationShip.to
+
+        let attributeInverseSide = relationShip.attributeinverseSide
+        let classInverseSide = relationShip.from
+
+        if(typeRelationship === "one-to-one" || typeRelationship === "one-to-many"){
+
+            if(typeAssociation === "self-referencing" || typeAssociation === "unidirectional"){
+                this.removeAttributeByKey(foreingKeyId, classId)
+                this.removeRelationship(relationShip)
+            }
+
+            if(typeAssociation === "bidirectional"){
+                this.removeAttributeByKey(attributeOwningSide, classOwningSide)
+                this.removeAttributeByKey(attributeInverseSide, classInverseSide)
+                this.removeRelationship(relationShip)
+            }
+
+        }
+
+        if(typeRelationship === "many-to-many"){
+
+            if(typeAssociation === "self-referencing" || typeAssociation === "unidirectional"){
+
+                let tableRemove = relationShip.to
+
+                this.removeAttributeByKey(relationShip.attributeOwningSide, relationShip.from)
+                this.removeRelationship(relationShip)
+
+                this.removeClassByKeyWithoutValidation(tableRemove)
+            }
+
+            if(typeAssociation === "bidirectional"){
+
+                let allRelationshipAssosiativeTable = this.findAllRelationshipByClass(relationShip.to)
+
+                let tableRemove = relationShip.to
+
+                allRelationshipAssosiativeTable.forEach( (value, index) => {
+                    if(value.attributeOwningSide && value.from)
+                        this.removeAttributeByKey(value.attributeOwningSide, value.from)
+                    this.removeRelationship(value)
+                })
+
+                this.removeClassByKeyWithoutValidation(tableRemove)
+            }
+
+        }
+
+        this.updateDiagram()
+    }
+
+
+
+
+
+
+
+    /** ############################################################################################################################ */
+    /** ######## FIND FUNCTIONS  */
+
+    findAllRelationshipByClass = (classKey) => {
+        let listRelationships = []
+        this.diagram.model.linkDataArray.forEach( (value, index) => {
+            if(value.to === classKey || value.from === classKey)
+                listRelationships.push(value)
+        })
+        return listRelationships;
+    }
+
+
+
+    findForeignKeyRelationship = (foreingKeyId) => {
+        let data = false;
+        this.diagram.model.linkDataArray.forEach( (value, index) => {
+            if(value.attributeOwningSide === foreingKeyId || value.attributeinverseSide === foreingKeyId)
+                data = value
+        })
+
+        return data;
+    }
+
+    /** Localiza classe por key */
+    findClassByKey = (key)=>{
+        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
+            if(value.key === key)
+                return value
+        })
+        return classe[0];
+    }
+
+    /** Localiza atributo por key */
+    findAttributeBy = (key)=>{
+        let attribute = -1;
+        this.diagram.model.nodeDataArray.forEach((model, index) => {
+            model.attributes.forEach((attr, index) => {
+                if(attr.key === key)
+                    attribute = attr
+            })
+        })
+        return attribute
+    }
+
+    findAllFkAttributes = (classKey) => {
+        let classs = this.findClassByKey(classKey)
+        let listAttributes = []
+        classs.attributes.forEach((attr, index) => {
+            if(attr.foreingKey === true)
+                listAttributes.push(attr)
+        })
+        return listAttributes
+    }
+
+
+    /** ############################################################################################################################ */
+    /** ######## VALIDATIONS FUNCTIONS  */
+
+    existAttributeInClass = (attributeKey, classKey)=>{
+        let classs = this.findClassByKey(classKey)
+
+        let response = false;
+        classs.attributes.forEach((attr, index) => {
+            if(attr.key === attributeKey)
+                response = true
+        })
+
+        return response
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /** ############################################################################################################################ */
+    /** ############################################################################################################################ */
+    /** ############################################################################################################################ */
+    /** ############################################################################################################################ */
     /** ############################################################################################################################ */
 
 
@@ -797,10 +948,10 @@ class Diagrama
                     width: 240,
                     editable: false,
                     //textAlign: 'leftCenter',
-                    font: "bold 11pt system-ui",
+                    font: " 11pt system-ui",
                     stroke: 'rgb(0,0,0)'
                 },
-                new go.Binding("text", "name", function (item) { return item + ''; }).makeTwoWay(),
+                new go.Binding("text", "name", function (item) { return item + '()'; }),
             ),
 
         );
@@ -826,7 +977,7 @@ class Diagrama
             //new go.Shape.defineArrowheadGeometry("xx", "m 0,4 l 8,0 m -8,0 l 8,-4 m -8,4 l 8,4"),
 
             goStruct(go.Shape,{
-                stroke: "rgba(0,0,0,0.5)",
+                stroke: "rgb(61,61,61)",
                 strokeWidth: 2.5,
             }),
 
@@ -834,7 +985,7 @@ class Diagrama
                 {
                     scale: 2.0,
                     fill: "white",
-                    stroke: "rgba(0,0,0,0.5)",
+                    stroke: "rgb(61,61,61)",
                     segmentOffset: new go.Point(-2, 0),
 
                 },
@@ -846,7 +997,7 @@ class Diagrama
                 {
                     //textAlign: "centter",
                     font: "bold 14px sans-serif",
-                    stroke: "rgba(0,0,0,0.5)",
+                    stroke: "rgb(61,61,61)",
                     segmentIndex: 0,
                     segmentOffset: new go.Point(30, -30),
                     segmentOrientation: go.Link.OrientUpright45,
@@ -860,7 +1011,7 @@ class Diagrama
                 {
                     scale: 2.0,
                     fill: "white",
-                    stroke: "rgba(0,0,0,0.5)",
+                    stroke: "rgb(61,61,61)",
                     segmentOffset: new go.Point(2, 0),
                 },
                 new go.Binding("toArrow", "typeRelationship", this.convertToArrow),
@@ -871,7 +1022,7 @@ class Diagrama
                 {
                     //textAlign: "center",
                     font: "bold 14px sans-serif",
-                    stroke: "rgba(0,0,0,0.5)",
+                    stroke: "rgb(61,61,61)",
                     segmentIndex: -1,
                     segmentOffset: new go.Point(-30, -20),
                     segmentOrientation: go.Link.OrientUpright45,

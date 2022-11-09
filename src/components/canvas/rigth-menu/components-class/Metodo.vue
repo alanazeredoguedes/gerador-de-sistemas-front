@@ -81,7 +81,7 @@ export default {
       val = this.$functions.string_validation.capitalize( val )
       val = this.$functions.string_validation.removeSpace( val )
 
-      this.name = val.charAt(0).toLowerCase() + val.slice(1) + '()'
+      this.name = val.charAt(0).toLowerCase() + val.slice(1)
       this.metodo.name = this.name
 
       // if( !this.diagrama[0].attributeNameAvailable(this.classEdit, this.atributo) ){

@@ -55,7 +55,8 @@ export default {
       this.$functions.alerts.modalConfirm('Remover Classe',
           `Os <b>relacionamentos</b> e <b>chaves estrangeiras</b> vinculados serão removidos!`,
           ()=>{
-            this.diagrama[0].removeClass(this.classEdit)
+            //this.diagrama[0].removeClass(this.classEdit)
+            this.diagrama[0].removeClassByKey(this.classEdit.key)
             this.$functions.alerts.notification('success','Sucesso',`<b>Classe</b> removida com sucesso!`)
             this.$parent.close()
           })

@@ -1,5 +1,5 @@
 <template>
-  <div class="row d-flex align-items-center" style="margin-bottom: 2px;">
+  <div class="row d-flex align-items-center" style="margin-bottom: 2px;" v-if="attributeExist">
 
     <!-- ###################################################################### -->
     <div class="col-1 ">
@@ -20,6 +20,26 @@
                   data-bs-dismiss="true"
                   data-bs-placement="top"
                   data-bs-content="Chave Primaria"
+            />
+          </span>
+
+          <span v-else-if="atributo.foreingKey === true && atributo.typeForeingKey === 'owningSide' ">
+            <Icon :name="'fa-solid fa-fingerprint'" :size="'13px'" :color="'rgb(55, 232, 184)'"
+                  class="pov"
+                  data-bs-toggle="popover"
+                  data-bs-dismiss="true"
+                  data-bs-placement="top"
+                  data-bs-content="Chave Estrangeira e lado proprietário do relacionamento"
+            />
+          </span>
+
+          <span v-else-if="atributo.foreingKey === true && atributo.typeForeingKey === 'inverseSide' ">
+            <Icon :name="'fas fa-key'" :size="'13px'" :color="'rgb(55, 232, 184)'"
+                  class="pov"
+                  data-bs-toggle="popover"
+                  data-bs-dismiss="true"
+                  data-bs-placement="top"
+                  data-bs-content="Chave Estrangeira e lado inverso do relacionamento"
             />
           </span>
 
@@ -202,13 +222,13 @@
 
 
 
-        <div class="col-12 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
+<!--        <div class="col-12 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
           <label class="form-check-label">Tamanho</label>
           <input type="number" min="0"  class="form-control input"
                  v-model="atributo.length"
                  @change=""
                  placeholder="Tamanho">
-        </div>
+        </div>-->
 
         <div class="col-6 input-group-sm" style="margin-top: 10px;" v-bind:style="showSize">
           <label class="form-check-label">Tamanho Minimo</label>
@@ -278,6 +298,7 @@ export default {
       length: this.atributo.length,
       min: this.atributo.lengthMin,
       max: this.atributo.lengthMax,
+      attributeExist: true,
       fieldsTypes: [
           'string',
           'text',
@@ -397,15 +418,25 @@ export default {
     removerAtributo(){
 
       if(this.atributo.foreingKey){
+
         this.$functions.alerts.modalConfirm('Remover Chave Estrangeira?',
             `O <b>relacionamento</b> vinculado será removido!`,
             ()=>{
-              this.diagrama[0].removeAttribute(this.classEdit, this.atributo)
+
+              this.diagrama[0].removeForeingKey(this.atributo.key, this.classEdit.key)
+
               this.$functions.alerts.notification('success','Sucesso',`<b>Atributo</b> removido com sucesso!`)
+
+              if(!this.diagrama[0].existAttributeInClass(this.atributo.key, this.classEdit.key))
+                this.attributeExist = false;
             })
       }else{
         this.diagrama[0].removeAttribute(this.classEdit, this.atributo)
+
         this.$functions.alerts.notification('success','Sucesso',`<b>Atributo</b> removido com sucesso!`)
+
+        if(!this.diagrama[0].existAttributeInClass(this.atributo.key, this.classEdit.key))
+          this.attributeExist = false;
       }
 
     },

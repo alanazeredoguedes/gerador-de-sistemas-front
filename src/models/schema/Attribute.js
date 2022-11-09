@@ -5,7 +5,7 @@ import {v4 as uuidv4} from "uuid";
  */
 class Attribute {
 
-    constructor(attributeName = '', fieldName ='', type ='', primaryKey = false, foreingKey=false ) {
+    constructor(attributeName = '', fieldName ='', type ='', primaryKey = false, foreingKey=false, typeForeingKey = false, relationshipId ) {
 
         /** Atributes Canvas */
         this.key = uuidv4()
@@ -17,7 +17,11 @@ class Attribute {
         this.type = type
 
         this.primaryKey = primaryKey
+
         this.foreingKey = foreingKey
+        this.typeForeingKey = typeForeingKey
+        //this.relationshipId = relationshipId
+
         this.autoGenerate = false
         this.nullable = false
         this.unique = false
@@ -38,6 +42,9 @@ class Attribute {
 
         if(this.foreingKey === true)
             this.ico = "fk"
+
+        if(this.typeForeingKey === "owningSide")
+            this.ico = "fkOwning"
 
         if(this.primaryKey === true)
             this.ico = "pk"

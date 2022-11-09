@@ -10,122 +10,176 @@
 
       <div class="row" >
 
-      <div class="col-4">
-        <div>
-          <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado inverso do relacionamento!" content="Este é o lado inverso do relacionamento!"/>
-          <label>Classe 1</label>
-          <v-select placeholder="Escolha a Classe"
-                    class="vue-select"
-                    :clearable="false"
-                    :options="optionsSelectClass1"
-                    v-model="class1"
-                    @option:selected="changeSelect"
-                    :selectable="(option) => !option.label.includes('Escolha a Classe')"
-          />
+        <div class="col-4">
+          <div>
+            <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado inverso do relacionamento!" content="Este é o lado inverso do relacionamento!"/>
+            <label>Classe 1</label>
+            <v-select placeholder="Escolha a Classe"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="optionsSelectClass1"
+                      v-model="class1"
+                      @option:selected="changeSelect"
+                      :selectable="(option) => !option.label.includes('Escolha a Classe')"
+            />
+          </div>
         </div>
-      </div>
 
-      <div class="col-4">
-        <div>
-          <label for="selectType" >Tipo do Relacionamento</label>
-          <v-select placeholder="Escolha o Relacionamento"
-                    class="vue-select"
-                    :clearable="false"
-                    :options="optionsRelationship"
-                    v-model="relationship"
-                    @option:selected="changeSelect"
-                    :selectable="(option) => (option.code !== null)"
-          />
+        <div class="col-4">
+          <div>
+            <label for="selectType" >Tipo do Relacionamento</label>
+            <v-select placeholder="Escolha o Relacionamento"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="optionsRelationship"
+                      v-model="relationship"
+                      @option:selected="changeSelect"
+                      :selectable="(option) => (option.code !== null)"
+            />
+          </div>
         </div>
-      </div>
 
-      <div class="col-4">
-        <div>
-          <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado proprietário do relacionamento!" content="Este é o lado proprietário do relacionamento!"/>
-          <label>Classe 2</label>
-          <v-select placeholder="Escolha a Classe"
-                    class="vue-select"
-                    :clearable="false"
-                    :options="optionsSelectClass2"
-                    v-model="class2"
-                    @option:selected="changeSelect"
-                    :selectable="(option) => !option.label.includes('Escolha a Classe')"
-          />
-        </div>
-      </div>
-
-      <div class="col-12" style="margin-top: 20px;"></div>
-
-        <div class="col-12" style="margin-top: 10px;" v-if="class1 && class2 && relationship">
-          <hr>
-          <div class="row" >
-          {{ typeAssociation }}
-
-
-
-            <div class="col-12">
-              <h4>
-<!--                <InfoInput ico="fa-solid fa-circle-info" title="Este é o lado inverso do relacionamento!"/>-->
-                Classe {{ class1.obj.className }}
-              </h4>
-            </div>
-
-            <div class="col-md-6" style="margin-top: 10px;"  >
-              <InfoInput ico="fa-solid fa-circle-info" title="Atributo que será exibido para escolha do relacionamento" />
-
-              <label class="form-label">Atributo a ser exibido</label>
-              <div>
-                <v-select placeholder="Escolha"
-                          class="vue-select"
-                          :clearable="false"
-                          :options="optionsClass1ForeignKeyPK"
-                          v-model="class1LabelFk"
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6" style="margin-top: 10px;"  >
-              <InfoInput ico="fa-solid fa-circle-info" title="Nome do atributo responsável pelo relacionamento" />
-
-              <label class="form-label">Nome do Atributo</label>
-              <input class="form-control" >
-            </div>
-
-
-
-
-
-
-
-
-
-            <div class="col-12" style="margin-top: 10px;">
-              <h4>
-<!--                <InfoInput ico="fa-solid fa-circle-info" title="Este é o lado proprietário do relacionamento!" />-->
-
-                Classe {{ class2.obj.className }}
-              </h4>
-            </div>
-
-            <div class="col-12">
-
-            </div>
-
-
-
-
-
-
-
-          <br><br><br>
-
+        <div class="col-4">
+          <div>
+            <InfoInput ico="fa-solid fa-fingerprint" title="Este é o lado proprietário do relacionamento!" content="Este é o lado proprietário do relacionamento!"/>
+            <label>Classe 2</label>
+            <v-select placeholder="Escolha a Classe"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="optionsSelectClass2"
+                      v-model="class2"
+                      @option:selected="changeSelect"
+                      :selectable="(option) => !option.label.includes('Escolha a Classe')"
+            />
           </div>
         </div>
 
 
+        <div class="col-12" style="margin-top: 20px;" v-if="class1 && class2">
+          <div>
+            <label>Tipo de Associação</label>
+            <v-select placeholder="Escolha o tipo de Associação"
+                      class="vue-select"
+                      :clearable="false"
+                      :options="typeAssociationOptions"
+                      v-model="typeAssociation"
+                      @option:selected="changeSelect"
+                      :selectable="(option) => !option.label.includes('Escolha o tipo de Associação')"
+            />
+          </div>
+        </div>
+
+        <div class="col-12" style="margin-top: 20px;"></div>
+
+        <!-- ################################################################################################# -->
+        <!-- ################################################################################################# -->
+        <div class="row" v-if="class1 && class2 && relationship && typeAssociation">
 
 
 
+          <!-- ################################################################################################# -->
+          <!-- ##### LADO INVERSO DO RELACIONAMENTO -->
+          <div class="col-6" style="" v-if="typeAssociation.code === 'bidirectional'">
+            <div class="row">
+
+
+
+              <div class="col-12 text-center" style="margin-top: 10px; margin-bottom: 20px;">
+                <h4>Classe {{ class1.obj.className }}</h4>
+                <span style="color: black;"> Este é o lado <b>inverso</b> do relacionamento </span>
+              </div>
+
+
+              <div class="col-md-12" >
+                <InfoInput ico="fa-solid fa-circle-info" title="Atributo responsável pelo mapeamento do relacionamento" />
+
+                <label class="form-label">Nome do Atributo</label>
+                <input class="form-control" v-model="attributeInverseSide">
+              </div>
+
+
+  <!--            <div class="col-md-12" style="margin-top: 20px;"  >
+                <InfoInput ico="fa-solid fa-circle-info" title="Atributo que será exibido no formulário para escolha do relacionamento!" />
+
+                <label class="form-label">Atributo do {{ class2.obj.className }} a ser exibido.</label>
+                <div>
+                  <v-select placeholder="Escolha"
+                            class="vue-select"
+                            :clearable="false"
+                            :options="optionsClass1ForeignKeyPK"
+                            v-model="class1LabelFk"
+                  />
+                </div>
+              </div>-->
+
+
+            </div>
+          </div>
+          <!-- ##### FIM LADO INVERSO DO RELACIONAMENTO -->
+          <!-- ################################################################################################# -->
+
+
+
+
+
+          <!-- ################################################################################################# -->
+          <!-- ##### LADO PROPRIETARIO DO RELACIONAMENTO -->
+          <div v-bind:class="[ (typeAssociation.code === 'bidirectional') ? 'col-6' : 'col-12']" style="" v-if="class1 && class2 && relationship && typeAssociation">
+            <div class="row">
+
+
+              <div class="col-12 text-center"   style="margin-top: 10px; margin-bottom: 20px;">
+                <h4>Classe {{ class2.obj.className }}</h4>
+                <span style="color: black;"> Este é o lado <b>proprietário</b> do relacionamento </span>
+              </div>
+
+
+              <div class="col-md-12" >
+                <InfoInput ico="fa-solid fa-circle-info" title="Atributo responsável pelo mapeamento do relacionamento" />
+
+                <label class="form-label">Nome do Atributo</label>
+                <input class="form-control" v-model="attributeOwningSide" >
+              </div>
+
+
+  <!--            <div class="col-md-12" style="margin-top: 20px;"  >
+                <InfoInput ico="fa-solid fa-circle-info" title="Atributo que será exibido no formulário para escolha do relacionamento!" />
+
+                <label class="form-label">Atributo do {{ class2.obj.className }} a ser exibido.</label>
+                <div>
+                  <v-select placeholder="Escolha"
+                            class="vue-select"
+                            :clearable="false"
+                            :options="optionsClass1ForeignKeyPK"
+                            v-model="class1LabelFk"
+                  />
+                </div>
+              </div>-->
+
+
+            </div>
+          </div>
+          <!-- ##### FIM LADO PROPRIETARIO DO RELACIONAMENTO -->
+          <!-- ################################################################################################# -->
+
+
+
+          <div class="col-12" v-if="relationship.code === 'many-to-many'" style="margin-top: 20px;">
+            <div class="row">
+
+              <div class="col-md-12" >
+                <InfoInput ico="fa-solid fa-circle-info" title="Nome da tabela associativa que será gerada entre as classes" />
+
+                <label class="form-label">Nome da Tabela Associativa</label>
+                <input class="form-control" v-model="associativeTableName">
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <!-- ################################################################################################# -->
+        <!-- ################################################################################################# -->
 
 
 
@@ -173,8 +227,14 @@ export default {
       class2: null,
       relationship: null,
       typeAssociation: null,
-
       associativeTableName: null,
+
+
+      attributeOwningSide: null,
+      attributeInverseSide: null,
+
+
+
 
       class1ForeignKeyPK: null,
       class1ForeignKeyName: null,
@@ -187,9 +247,11 @@ export default {
       optionsClass2ForeignKeyPK: [],
 
 
+
+
+
       optionsSelectClass1: [],
       optionsSelectClass2: [],
-
       optionsRelationship: [
         { label: 'Um-para-Um', code: 'one-to-one'},
         { label: 'Um-para-Muitos', code: 'one-to-many'},
@@ -200,7 +262,8 @@ export default {
 
   watch: {
     class1(){
-      if(this.class1.obj.key === "1" || this.class1.obj.key === "2")
+
+      //if(this.class1.obj.key === "1" || this.class1.obj.key === "2")
         //this.relationship = "one-to-many"
 
       this.changeRelationship()
@@ -212,6 +275,42 @@ export default {
     relationship(){
       this.changeRelationship()
     },
+    attributeOwningSide(val){
+      if(!val)
+        return
+
+      val = this.$functions.string_validation.normalizeString( val )
+      val = this.$functions.string_validation.capitalize( val )
+      val = this.$functions.string_validation.removeSpace( val )
+
+      this.attributeOwningSide = val.charAt(0).toLowerCase() + val.slice(1);
+
+    },
+    attributeInverseSide(val){
+      if(!val)
+        return
+
+      val = this.$functions.string_validation.normalizeString( val )
+      val = this.$functions.string_validation.capitalize( val )
+      val = this.$functions.string_validation.removeSpace( val )
+
+      this.attributeInverseSide = val.charAt(0).toLowerCase() + val.slice(1);
+
+    },
+    associativeTableName(val){
+      if(!this.associativeTableName)
+        return
+
+      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
+      val = val.toLowerCase();
+      val = this.$functions.string_validation.changeSpaceTo(val, '_')
+
+      this.associativeTableName = val
+    },
+
+
+
+
     class1ForeignKeyPK(){
       if(!this.class1ForeignKeyPK)
         return
@@ -245,16 +344,7 @@ export default {
       this.class2ForeignKeyName = val
     },
 
-    associativeTableName(val){
-      if(!this.associativeTableName)
-        return
 
-      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
-      val = val.toLowerCase();
-      val = this.$functions.string_validation.changeSpaceTo(val, '_')
-
-      this.associativeTableName = val
-    }
 
 
   },
@@ -268,87 +358,229 @@ export default {
       this.$refs.modal.close()
     },
     createRelationship(){
+      let classInverseSide = this.class1.obj
+      let classOwningSide = this.class2.obj
 
-
-      if(!this.class1 || !this.class2 || !this.relationship ){
+      if(!this.class1 || !this.class2 || !this.relationship  || !this.typeAssociation ){
         this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
         return
       }
 
+      if(!this.attributeOwningSide){
+        this.$functions.alerts.notification('error', 'Informe o nome do atributo no lado proprietário antes de continuar!')
+        return;
+      }
+
+      if( !this.diagrama[0].attributeNameAvailableByName(this.attributeOwningSide, classOwningSide) ){
+        this.$functions.alerts.notification('error', `Já existe um atributo chamado ${this.attributeOwningSide} na classe ${classOwningSide.className}`)
+        return
+      }
+
+      if(this.typeAssociation.code === 'bidirectional'){
+
+        if(!this.attributeInverseSide){
+          this.$functions.alerts.notification('error', 'Informe o nome do atributo no lado inverso antes de continuar!')
+          return;
+        }
+
+        if( !this.diagrama[0].attributeNameAvailableByName(this.attributeInverseSide, classInverseSide) ){
+          this.$functions.alerts.notification('error', `Já existe um atributo chamado ${this.attributeInverseSide} na classe ${classInverseSide.className}`)
+          return
+        }
+
+      }
+
+
       switch (this.relationship.code) {
         case 'one-to-one':
 
-          if(!this.class1ForeignKeyPK || !this.class1ForeignKeyName ){
-            this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
-            return
-          }
-
-          this.createOneToOne(this.class1.obj, this.class2.obj)
+          //alert('criando um para um')
+          this.createOneToOne()
 
           break;
         case 'one-to-many':
 
-          if(!this.class1ForeignKeyPK || !this.class1ForeignKeyName ){
-            this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
-            return
-          }
+          //alert('criando um para muitos')
           this.createOneToMany(this.class1.obj, this.class2.obj)
 
           break;
         case 'many-to-many':
-          if(!this.class1ForeignKeyPK || !this.class1ForeignKeyName || !this.class2ForeignKeyPK || !this.class2ForeignKeyName ){
-            this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
-            return
+
+          if(!this.associativeTableName){
+            this.$functions.alerts.notification('error', 'Informe o nome da tabela associativa antes de continuar!')
+            return;
           }
 
-          this.createManyToMany(this.class1.obj, this.class2.obj)
+          //alert('criando muitos para muitos')
+          this.createManyToMany()
 
           break;
         default:
-          //console.log('');
+          return;
       }
 
-
       this.diagrama[0].updateDiagram()
-
+      //this.diagrama[0].updateDiagram()
       this.resetModalRelationship()
       this.close()
-    },
 
+    },
+    /** ADICIONA RELACIONAMENTO UM PARA UM */
+    createOneToOne(){
+      let classInverseSide = this.class1.obj
+      let classOwningSide = this.class2.obj
+
+      /** Atributo para o lado proprietario*/
+      let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
+      this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
+
+      if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){
+
+        let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-one', this.typeAssociation.code, attributeOwningSide.key)
+        this.diagrama[0].addRelationship(relation)
+
+      }
+
+      if(this.typeAssociation.code === "bidirectional"){
+
+        let attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
+        this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
+
+        let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-one', this.typeAssociation.code, attributeOwningSide.key, attributeInverseSide.key)
+        this.diagrama[0].addRelationship(relation)
+
+      }
+      // attributeOwningSide.typeForeingKey = "owningSide"
+      // attributeInverseSide.typeForeingKey = "inverseSide"
+
+      // console.log(this.diagrama[0].models)
+      // console.log(this.diagrama[0].linksModels)
+      //console.log(this.diagrama[0].diagram.model.nodeDataArray)
+      //console.log(this.diagrama[0].diagram.model.linkDataArray)
+
+
+    },
+    /** ADICIONA RELACIONAMENTO UM PARA MUITOS */
+    createOneToMany(){
+      let classInverseSide = this.class1.obj
+      let classOwningSide = this.class2.obj
+
+      /** Atributo para o lado proprietario*/
+      let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
+      attributeOwningSide.setIco()
+      this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
+
+      if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){
+
+        let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-many', this.typeAssociation.code, attributeOwningSide.key)
+        this.diagrama[0].addRelationship(relation)
+
+      }
+
+      if(this.typeAssociation.code === "bidirectional"){
+
+        let attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
+        //attributeInverseSide.setIco()
+        this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
+
+        let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-many', this.typeAssociation.code, attributeOwningSide.key, attributeInverseSide.key)
+        this.diagrama[0].addRelationship(relation)
+
+      }
+
+    },
+    /** ADICIONA RELACIONAMENTO MUITOS PARA MUITOS */
+    createManyToMany(){
+      let classInverseSide = this.class1.obj
+      let classOwningSide = this.class2.obj
+
+      /** ######################################################### */
+      /** ####### Criação da Tabela Associativa e Atributos */
+
+      /** Cria atributo/chave_estrangeira da classe 1 */
+      let fkClassOwningSide = new Attribute(this.formatFkName(classOwningSide.className), this.formatFkName(classOwningSide.className), 'integer',  false, true)
+      fkClassOwningSide.setIco()
+
+      /** Cria atributo/chave_estrangeira da classe 2 */
+      let fkClassInverseSide = new Attribute(this.formatFkName(classInverseSide.className), this.formatFkName(classInverseSide.className), 'integer',  false, true)
+      fkClassInverseSide.setIco()
+
+      /** Cria tabela associativa e Adiciona ao diagrama */
+      let associativeClass = new Class(this.associativeTableName, this.associativeTableName,'', [fkClassOwningSide, fkClassInverseSide] );
+      associativeClass.associativeModel = true
+      associativeClass.location = classInverseSide.location
+      this.diagrama[0].addClass(associativeClass);
+
+      /** ######################################################### */
+
+
+      /** Atributo para o lado proprietario*/
+      let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
+      attributeOwningSide.setIco()
+      this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
+
+      if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){}
+
+      let attributeInverseSide = null;
+      if(this.typeAssociation.code === "bidirectional"){
+
+        attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
+        this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
+        attributeInverseSide = attributeInverseSide.key
+      }
+
+      /** Crias os relacionamentos entre a classe 1 e a classe 2 com a classe associativa */
+      let relationClass1 = new Relationship(classOwningSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeOwningSide.key, fkClassOwningSide.key)
+      let relationClass2 = new Relationship(classInverseSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeInverseSide, fkClassInverseSide.key )
+      this.diagrama[0].addRelationship(relationClass1)
+      this.diagrama[0].addRelationship(relationClass2)
+
+
+    },
+    formatFkName(val){
+      val = this.$functions.string_validation.normalizeString( val )
+      val = this.$functions.string_validation.removeSpace( val )
+      val = this.$functions.string_validation.UpperCaseToScoreAndLower( val )
+
+      return val + '_id'
+    },
 
     changeRelationship(){
 
       if(!this.class1 || !this.class2 || !this.relationship )
         return
 
-      this.resetRelationshipInputs()
+      if( this.class1.obj.key === "1" || this.class1.obj.key === "2" )
+        this.relationship = { label: 'Um-para-Muitos', code: 'one-to-many'}
 
+
+
+        this.resetRelationshipInputs()
+
+      let class1 = this.class1.obj
+      let class2 = this.class2.obj
 
       switch (this.relationship.code) {
         case 'one-to-one':
-          this.class1.owner = false;
-          this.class2.owner = true;
-          this.changeOptionsClass1ForeignKeyPK(this.class1.obj.attributes)
+
+          this.attributeOwningSide = class1.className
+          this.attributeInverseSide = class2.className
+
 
           break;
         case 'one-to-many':
-          this.class1.owner = false;
-          this.class2.owner = true;
-          this.changeOptionsClass1ForeignKeyPK(this.class1.obj.attributes)
+          this.attributeOwningSide = class1.className
+          this.attributeInverseSide = class2.className + 's'
+
 
           break;
         case 'many-to-many':
-          this.class1.owner = false;
-          this.class2.owner = true;
 
-          let class1 = this.class1.obj
-          let class2 = this.class2.obj
+          this.attributeOwningSide = class1.className
+          this.attributeInverseSide = class2.className + 's'
 
           this.associativeTableName =  this.$functions.string_validation.UpperCaseToScoreAndLower(class1.className) +
               '_' + this.$functions.string_validation.UpperCaseToScoreAndLower(class2.className)
-
-          this.changeOptionsClass1ForeignKeyPK(this.class1.obj.attributes)
-          this.changeOptionsClass2ForeignKeyPK(this.class2.obj.attributes)
 
           break;
         default:
@@ -356,6 +588,11 @@ export default {
       }
     },
 
+    resetRelationshipInputs(){
+      this.attributeInverseSide = null
+      this.attributeOwningSide = null
+      this.associativeTableName = null
+    },
 
     resetModalRelationship(){
       this.class1 = null
@@ -364,48 +601,9 @@ export default {
       this.resetRelationshipInputs()
     },
 
-
-    resetRelationshipInputs(){
-      this.associativeTableName = null
-
-      this.class1ForeignKeyPK = null
-      this.class1ForeignKeyName = null
-      this.optionsClass1ForeignKeyPK = []
-      this.class1LabelFk = null
-
-      this.class2ForeignKeyPK = null
-      this.class2ForeignKeyName = null
-      this.optionsClass2ForeignKeyPK = []
-
-    },
-
     changeSelect(){
-      this.typeAssociation = 'bidirectional'
-
-      if( this.class1.obj.key === this.class2.obj.key )
-        this.typeAssociation = 'self-referencing'
-
-      if( this.class1.obj.key === "1" || this.class1.obj.key === "2" )
-        this.typeAssociation = 'unidirectional'
-
       this.$functions.string_validation.resetEventsFront()
-
     },
-
-    changeOptionsClass1ForeignKeyPK(attributes){
-
-      this.optionsClass1ForeignKeyPK = attributes.map( (value,index)=>{
-        return { label: value.attributeName, code: value.key, obj: value, owner: false, }
-      })
-    },
-    changeOptionsClass2ForeignKeyPK(attributes){
-
-      this.optionsClass2ForeignKeyPK = attributes.map( (value,index)=>{
-        return { label: value.attributeName, code: value.key, obj: value, owner: false, }
-      })
-    },
-
-
 
 
     /** Atualiza a lista de classe no select */
@@ -435,7 +633,7 @@ export default {
 
       return this.diagrama[0].models
           .filter((value,index)=>{ return !value.associativeModel; })
-          .map( (value,index)=>{ return { label: value.className, code: value.id, obj: value, owner: false, }})
+          .map( (value,index)=>{ return { label: value.className, code: value.id, obj: value }})
     },
     updateOpcoesClassesSelect2(){
       if(!this.diagrama[0].models)
@@ -444,11 +642,41 @@ export default {
       return this.diagrama[0].models
           .filter((value,index)=>{ return !value.associativeModel; })
           .filter((value,index)=>{ return !value.systemModel; })
-          .map( (value,index)=>{ return { label: value.className, code: value.id, obj: value, owner: false, }})
+          .map( (value,index)=>{ return { label: value.className, code: value.id, obj: value}})
     },
 
   },
   computed: {
+    typeAssociationOptions() {
+      this.typeAssociation = null
+
+      if(!this.class1 || !this.class2)
+        return
+
+      if( this.class1.obj.key === this.class2.obj.key ){
+        this.typeAssociation = { label: 'Auto Referencia', code: 'self-referencing'}
+
+        return [
+          { label: 'Auto Referencia', code: 'self-referencing'},
+        ];
+      }
+
+      if( this.class1.obj.key === "1" || this.class1.obj.key === "2" ){
+        this.typeAssociation = { label: 'Unidirecional', code: 'unidirectional'}
+
+        return [
+          { label: 'Unidirecional', code: 'unidirectional'},
+        ];
+      }
+
+      this.typeAssociation = { label: 'Bidirecional', code: 'bidirectional'}
+
+      return [
+        { label: 'Bidirecional', code: 'bidirectional'},
+        { label: 'Unidirecional', code: 'unidirectional'},
+      ];
+    }
+
 
   },
 
