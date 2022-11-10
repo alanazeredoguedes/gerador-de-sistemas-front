@@ -1,23 +1,29 @@
-FROM node:lts-alpine
+# stage1 as builder
+FROM node:lts-alpine as builder
 
-#RUN npm install -g http-server
+RUN mkdir /app
 
-#RUN mkdir /app
+WORKDIR /app
 
-WORKDIR /usr/app
-
+# Copy the package.json and install dependencies
 COPY package*.json ./
+RUN npm install
 
-RUN npm install --quiet
-
-RUN chmod -R 777 /usr/app/
-
+# Copy rest of the files
 COPY . .
 
-#EXPOSE 9000
-
-#RUN npm run dev
-
+# Build the project
+RUN npm run build
 
 
-#CMD [ "http-server", "dist" ]
+FROM nginx:1.17-alpine
+COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
+
+## Remove default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy from the stahg 1
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

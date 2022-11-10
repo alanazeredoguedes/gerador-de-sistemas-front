@@ -52,7 +52,6 @@ export default {
   components: {  },
   mounted() {
     $('body').addClass('page-bg');
-    //document.body.style.backgroundImage = 'url("../src/assets/themes/10/media/misc/page-bg.jpg")';
     document.body.style.backgroundImage = 'url("/img/auth/bg4.jpg")';
   }
 

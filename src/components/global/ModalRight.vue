@@ -66,7 +66,7 @@ export default {
 
 <style>
 .classModel {
-  background-image: url(../src/assets/themes/10/media/misc/page-bg.jpg);
+  background-image: url(/img/modal/page-bg.jpg);
   background-position: top !important;
   /*width: 35% !important;*/
   width: 700px !important;

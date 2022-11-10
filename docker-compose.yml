@@ -1,19 +1,11 @@
 version: "3.7"
 
 services:
-
     app:
       build:
-        context: ./
+        context: .
         dockerfile: Dockerfile
-      command: npm run dev
-      volumes:
-        - .:/usr/app/
-        - /usr/app/node_modules
       image: app-node
       container_name: gerador-de-sistemas-front-app
-      #command:
-      #  - "npm run dev"
       ports:
-        - "9025:9000"
-
+        - "8080:80"
