@@ -10,14 +10,14 @@ COPY package*.json ./
 RUN npm install
 
 # Copy rest of the files
-COPY . .
+COPY ../.. .
 
 # Build the project
 RUN npm run build
 
 
 FROM nginx:1.17-alpine
-COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ../node-ngix/nginx.conf /etc/nginx/nginx.conf
 
 ## Remove default nginx index page
 RUN rm -rf /usr/share/nginx/html/*
