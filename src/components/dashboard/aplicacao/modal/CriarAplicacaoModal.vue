@@ -153,7 +153,7 @@
 
 
 
-              <div class="d-flex flex-stack mb-15" style="padding-top: 10px;">
+<!--              <div class="d-flex flex-stack mb-15" style="padding-top: 10px;">
 
                     <div class="me-5 fw-semibold">
                       <label class="fs-6">Receber Notificação</label>
@@ -164,7 +164,7 @@
                       <input class="form-check-input" type="checkbox" disabled value="" checked="checked">
                     </label>
 
-              </div>
+              </div>-->
 
               <div class=" flex-stack" >
                 <button @click="changeTab(1)" type="button" class="btn btn-lg btn-light " style="float: left; display: block">
@@ -321,6 +321,7 @@ import { mapActions, mapState } from 'vuex'
 import $ from 'jquery'
 import { URI_BASE_API } from "../../../../configs/api";
 import ModalFullScreen from "../../../global/ModalFullScreen.vue";
+import store from "../../../../store";
 
 
 export default {
@@ -456,6 +457,10 @@ export default {
       this.changeTab(1)
     },
     show(){
+      store.dispatch("getProgrammingLanguage")
+      store.dispatch("getFramework")
+      store.dispatch("getDiagramas")
+
       this.$refs.modal.show()
       this.resetComponent()
 

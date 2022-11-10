@@ -27,10 +27,9 @@ app.config.globalProperties.$functions = functions;
 
 app.mount('#app')
 
+if(store.state.userStore.items.authenticated){
+    store.dispatch("getUserAuthenticated")
+}
 
-store.dispatch("getUserAuthenticated")
-store.dispatch("getProgrammingLanguage")
-store.dispatch("getFramework")
-store.dispatch("getDiagramas")
-store.dispatch("getApplications")
+//store.dispatch("getApplications")
 
