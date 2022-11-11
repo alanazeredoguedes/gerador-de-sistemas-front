@@ -1,1 +1,0 @@
-import{o as t,c as e,a as o}from"./index.9c5b9ee9.js";import"https://kit.fontawesome.com/e44281f0a2.js";const s={class:"about"},a=o("h1",null,"Erro 404",-1),c=o("h2",null,"Pagina N\xE3o Encontrada!",-1),n=[a,c],h={__name:"404",setup(_){return(r,i)=>(t(),e("div",s,n))}};export{h as default};
