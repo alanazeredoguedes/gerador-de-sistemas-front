@@ -1,1 +1,0 @@
-import{_ as e,o,c as r}from"./index.97b77b78.js";import"https://kit.fontawesome.com/e44281f0a2.js";const c={};function s(t,n){return o(),r("div",null," Termos de Uso ")}const m=e(c,[["render",s]]);export{m as default};

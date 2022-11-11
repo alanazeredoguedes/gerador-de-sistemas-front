@@ -248,8 +248,6 @@ export default {
 
 
 
-
-
       optionsSelectClass1: [],
       optionsSelectClass2: [],
       optionsRelationship: [
@@ -308,9 +306,6 @@ export default {
       this.associativeTableName = val
     },
 
-
-
-
     class1ForeignKeyPK(){
       if(!this.class1ForeignKeyPK)
         return
@@ -343,9 +338,6 @@ export default {
 
       this.class2ForeignKeyName = val
     },
-
-
-
 
   },
   methods:{
@@ -550,12 +542,14 @@ export default {
       if(!this.class1 || !this.class2 || !this.relationship )
         return
 
-      if( this.class1.obj.key === "1" || this.class1.obj.key === "2" )
-        this.relationship = { label: 'Um-para-Muitos', code: 'one-to-many'}
 
+        if( this.class1.obj.key === "1" || this.class1.obj.key === "2" ){
+          if( this.relationship === { label: 'Um-para-Muitos', code: 'one-to-many'} ){
+             this.relationship = { label: 'Um-para-Muitos', code: 'one-to-many'}
+          }
+        }
 
-
-        this.resetRelationshipInputs()
+      this.resetRelationshipInputs()
 
       let class1 = this.class1.obj
       let class2 = this.class2.obj
