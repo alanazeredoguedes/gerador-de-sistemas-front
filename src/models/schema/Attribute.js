@@ -22,6 +22,7 @@ class Attribute {
         this.typeForeingKey = typeForeingKey
         //this.relationshipId = relationshipId
 
+        this.attributeSearch = false
         this.autoGenerate = false
         this.nullable = false
         this.unique = false

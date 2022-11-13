@@ -424,6 +424,7 @@ export default {
 
       /** Atributo para o lado proprietario*/
       let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
+      attributeOwningSide.nullable = true
       this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
 
       if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){
@@ -436,6 +437,7 @@ export default {
       if(this.typeAssociation.code === "bidirectional"){
 
         let attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
+        attributeInverseSide.nullable = true
         this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
 
         let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-one', this.typeAssociation.code, attributeOwningSide.key, attributeInverseSide.key)
@@ -460,6 +462,7 @@ export default {
       /** Atributo para o lado proprietario*/
       let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
       attributeOwningSide.setIco()
+      attributeOwningSide.nullable = true
       this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
 
       if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){
@@ -473,6 +476,7 @@ export default {
 
         let attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
         //attributeInverseSide.setIco()
+        attributeInverseSide.nullable = true
         this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
 
         let relation = new Relationship(classInverseSide.key, classOwningSide.key, 'one-to-many', this.typeAssociation.code, attributeOwningSide.key, attributeInverseSide.key)
@@ -509,6 +513,7 @@ export default {
       /** Atributo para o lado proprietario*/
       let attributeOwningSide = new Attribute(this.attributeOwningSide, '', 'integer',  false, true, "owningSide")
       attributeOwningSide.setIco()
+      attributeOwningSide.nullable = true
       this.diagrama[0].addAttribute(classOwningSide, attributeOwningSide)
 
       if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){}
@@ -517,6 +522,7 @@ export default {
       if(this.typeAssociation.code === "bidirectional"){
 
         attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
+        attributeInverseSide.nullable = true
         this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
         attributeInverseSide = attributeInverseSide.key
       }

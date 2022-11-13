@@ -44,7 +44,7 @@
       <div class="row">
 
         <div class="mb-3 col-12">
-          <label class="form-label"  style="color: white">Nome da Tabela</label>
+          <label class="form-label"  style="color: white">Nomes da Tabela</label>
           <input type="text" v-model="tableName" class="form-control input" placeholder="Nome da Tabela">
           <div style="color: rgb(255,0,0)" v-if="tableNameAvailable">
             <b>  Existem mais de uma tabela com o mesmo nome!</b>
@@ -52,6 +52,18 @@
         </div>
 
         <div class="col-12">
+          <label class="form-label"  style="color: white">Atributo de Pesquisa</label>
+          <v-select placeholder="" :clearable="false" :options="selectFieldSearch" v-model="fieldSearch" class="vue-select pov"
+                    multiple
+                    :selectable="() => fieldSearch.length < 2"
+                    data-bs-toggle="popover"
+                    data-bs-placement="top"
+                    title="Atributo utilizado para consulta visual"
+          />
+        </div>
+
+
+        <div class="col-12" style="margin-top: 10px;">
           <label class="form-label"  style="color: white">Descrição</label>
           <textarea class="form-control" v-model="description" placeholder="Descrição" style="height: 100px;">
           </textarea>
@@ -80,10 +92,18 @@ export default {
     return {
       className: this.classEdit.className,
       tableName: this.classEdit.tableName,
-      description: this.classEdit.description
+      description: this.classEdit.description,
+      fieldSearch: this.filterFieldSearch(),
     }
   },
   watch: {
+    fieldSearch(val) {
+      let attributesSearch = []
+      val.forEach( (element) => {
+        attributesSearch.push(element.code)
+      })
+      this.diagrama[0].updateAttributeSearch(attributesSearch, this.classEdit.key)
+    },
     className(val) {
       val = this.$functions.string_validation.normalizeString( val )
       val = this.$functions.string_validation.capitalize( val )
@@ -134,6 +154,14 @@ export default {
         divChange.css("display", "block");
       }
     },
+    filterFieldSearch(){
+      let data = this.classEdit.attributes
+          .filter((value,index)=>{ return !value.primaryKey; })
+          .filter((value,index)=>{ return !value.foreingKey; })
+          .filter((value,index)=>{ return value.attributeSearch; })
+          .map( (value,index)=>{ return { label: value.attributeName, code: value.key }})
+      return data;
+    },
   },
   computed: {
     classNameAvailable(){
@@ -141,12 +169,20 @@ export default {
     },
     tableNameAvailable(){
       return !this.diagrama[0].tableNameAvailable(this.tableName, this.classEdit);
+    },
+    selectFieldSearch(){
+      return this.classEdit.attributes
+          .filter((value,index)=>{ return !value.primaryKey; })
+          .filter((value,index)=>{ return !value.foreingKey; })
+          .map( (value,index)=>{ return { label: value.attributeName, code: value.key }})
     }
+
   },
   updated() {
     this.className = this.classEdit.className
     this.tableName = this.classEdit.tableName
     this.description = this.classEdit.description
+    //this.fieldSearch = this.filterFieldSearch()
   }
 }
 </script>
@@ -154,5 +190,22 @@ export default {
 <style scoped>
 .input{
   height: 40px;
+}
+/*.vue-select {
+  border-radius: var(&#45;&#45;vs-border-radius);
+  white-space: normal;
+  background-color: white;
+  color: black;
+  height: 150px;
+  width: 100%;
+}*/
+
+.vue-select {
+  border-radius: 3px;
+  white-space: normal;
+  background-color: white;
+  color: black;
+  height: 40px;
+  width: 100%;
 }
 </style>

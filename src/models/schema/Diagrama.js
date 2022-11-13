@@ -554,6 +554,18 @@ class Diagrama
 
 
 
+    updateAttributeSearch = ( listAttributes, classKey ) => {
+        let classs = this.findClassByKey(classKey)
+        classs.attributes.forEach( (attribute) => {
+            if(listAttributes.includes(attribute.key)){
+                attribute.attributeSearch = true;
+            }else{
+                attribute.attributeSearch = false;
+            }
+        })
+        this.updateDiagram();
+    }
+
 
 
     /** ############################################################################################################################ */
