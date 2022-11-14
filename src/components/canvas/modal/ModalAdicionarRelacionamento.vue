@@ -79,23 +79,34 @@
 
           <!-- ################################################################################################# -->
           <!-- ##### LADO INVERSO DO RELACIONAMENTO -->
-          <div class="col-6" style="" v-if="typeAssociation.code === 'bidirectional'">
+          <div class="col-6" style="" v-if="typeAssociation.code === 'bidirectional' || typeAssociation.code === 'unidirectional'">
             <div class="row">
 
 
 
-              <div class="col-12 text-center" style="margin-top: 10px; margin-bottom: 20px;">
+              <div class="col-12 text-center" style="margin-top: 10px;">
                 <h4>Classe {{ class1.obj.className }}</h4>
                 <span style="color: black;"> Este é o lado <b>inverso</b> do relacionamento </span>
               </div>
 
 
-              <div class="col-md-12" >
+              <div class="col-md-12" style="margin-top: 20px;" v-bind:style="[ (typeAssociation.code === 'unidirectional') ? 'visibility:hidden' : '']" >
+
                 <InfoInput ico="fa-solid fa-circle-info" title="Atributo responsável pelo mapeamento do relacionamento" />
 
                 <label class="form-label">Nome do Atributo</label>
                 <input class="form-control" v-model="attributeInverseSide">
               </div>
+
+
+              <div class="col-md-12" v-if="relationship.code === 'many-to-many'" style="margin-top: 20px;">
+                <InfoInput ico="fa-solid fa-circle-info" :title="'Chave estrangeira da classe' + class1.obj.className" />
+
+                <label class="form-label">Chave Estrangeira {{ class1.obj.className }}</label>
+                <input class="form-control" v-model="foreignKeyInverseSide" >
+              </div>
+
+
 
 
   <!--            <div class="col-md-12" style="margin-top: 20px;"  >
@@ -124,21 +135,29 @@
 
           <!-- ################################################################################################# -->
           <!-- ##### LADO PROPRIETARIO DO RELACIONAMENTO -->
-          <div v-bind:class="[ (typeAssociation.code === 'bidirectional') ? 'col-6' : 'col-12']" style="" v-if="class1 && class2 && relationship && typeAssociation">
+          <div v-bind:class="[ (typeAssociation.code === 'bidirectional' || typeAssociation.code === 'unidirectional') ? 'col-6' : 'col-12']" style="" v-if="class1 && class2 && relationship && typeAssociation">
             <div class="row">
 
 
-              <div class="col-12 text-center"   style="margin-top: 10px; margin-bottom: 20px;">
+              <div class="col-12 text-center"   style="margin-top: 10px;">
                 <h4>Classe {{ class2.obj.className }}</h4>
                 <span style="color: black;"> Este é o lado <b>proprietário</b> do relacionamento </span>
               </div>
 
 
-              <div class="col-md-12" >
+              <div class="col-md-12" style="margin-top: 20px;">
                 <InfoInput ico="fa-solid fa-circle-info" title="Atributo responsável pelo mapeamento do relacionamento" />
 
                 <label class="form-label">Nome do Atributo</label>
                 <input class="form-control" v-model="attributeOwningSide" >
+              </div>
+
+
+              <div class="col-md-12" v-if="relationship.code === 'many-to-many'" style="margin-top: 20px;">
+                <InfoInput ico="fa-solid fa-circle-info" :title="'Chave estrangeira da classe ' + class2.obj.className" />
+
+                <label class="form-label">Chave Estrangeira {{ class2.obj.className }}</label>
+                <input class="form-control" v-model="foreignKeyOwningSide" >
               </div>
 
 
@@ -234,6 +253,9 @@ export default {
       attributeInverseSide: null,
 
 
+      foreignKeyOwningSide: null,
+      foreignKeyInverseSide: null,
+
 
 
       class1ForeignKeyPK: null,
@@ -294,6 +316,29 @@ export default {
 
       this.attributeInverseSide = val.charAt(0).toLowerCase() + val.slice(1);
 
+    },
+    foreignKeyOwningSide(val){
+      if(!val)
+        return
+
+      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val )
+      val = this.$functions.string_validation.removeSpace(val).toLowerCase()
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+
+      this.foreignKeyOwningSide = val
+    },
+    foreignKeyInverseSide(val){
+      if(!val)
+        return
+
+      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val )
+      val = this.$functions.string_validation.removeSpace(val).toLowerCase()
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+
+
+      this.foreignKeyInverseSide = val
     },
     associativeTableName(val){
       if(!this.associativeTableName)
@@ -494,15 +539,15 @@ export default {
       /** ####### Criação da Tabela Associativa e Atributos */
 
       /** Cria atributo/chave_estrangeira da classe 1 */
-      let fkClassOwningSide = new Attribute(this.formatFkName(classOwningSide.className), this.formatFkName(classOwningSide.className), 'integer',  false, true)
+      let fkClassOwningSide = new Attribute(this.foreignKeyOwningSide, this.foreignKeyOwningSide, 'integer',  false, true)
       fkClassOwningSide.setIco()
 
       /** Cria atributo/chave_estrangeira da classe 2 */
-      let fkClassInverseSide = new Attribute(this.formatFkName(classInverseSide.className), this.formatFkName(classInverseSide.className), 'integer',  false, true)
+      let fkClassInverseSide = new Attribute(this.foreignKeyInverseSide, this.foreignKeyInverseSide, 'integer',  false, true)
       fkClassInverseSide.setIco()
 
       /** Cria tabela associativa e Adiciona ao diagrama */
-      let associativeClass = new Class(this.associativeTableName, this.associativeTableName,'', [fkClassOwningSide, fkClassInverseSide] );
+      let associativeClass = new Class(this.associativeTableName, this.associativeTableName,'', [fkClassInverseSide, fkClassOwningSide] );
       associativeClass.associativeModel = true
       associativeClass.location = classInverseSide.location
       this.diagrama[0].addClass(associativeClass);
@@ -518,28 +563,29 @@ export default {
 
       if(this.typeAssociation.code === 'self-referencing' || this.typeAssociation.code === 'unidirectional'){}
 
-      let attributeInverseSide = null;
+        let attributeInverseSide = null;
+
       if(this.typeAssociation.code === "bidirectional"){
 
         attributeInverseSide = new Attribute(this.attributeInverseSide, '', 'integer',  false, true, "inverseSide")
         attributeInverseSide.nullable = true
+        attributeOwningSide.setIco()
         this.diagrama[0].addAttribute(classInverseSide, attributeInverseSide)
         attributeInverseSide = attributeInverseSide.key
+
       }
 
       /** Crias os relacionamentos entre a classe 1 e a classe 2 com a classe associativa */
-      let relationClass1 = new Relationship(classOwningSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeOwningSide.key, fkClassOwningSide.key)
-      let relationClass2 = new Relationship(classInverseSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeInverseSide, fkClassInverseSide.key )
-      this.diagrama[0].addRelationship(relationClass1)
-      this.diagrama[0].addRelationship(relationClass2)
-
+      let relationOwningSide = new Relationship(classOwningSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeOwningSide.key, fkClassOwningSide.key)
+      let relationInverseSide = new Relationship(classInverseSide.key, associativeClass.key,'many-to-many', this.typeAssociation.code, attributeInverseSide, fkClassInverseSide.key )
+      this.diagrama[0].addRelationship(relationOwningSide)
+      this.diagrama[0].addRelationship(relationInverseSide)
 
     },
     formatFkName(val){
       val = this.$functions.string_validation.normalizeString( val )
       val = this.$functions.string_validation.removeSpace( val )
       val = this.$functions.string_validation.UpperCaseToScoreAndLower( val )
-
       return val + '_id'
     },
 
@@ -547,7 +593,6 @@ export default {
 
       if(!this.class1 || !this.class2 || !this.relationship )
         return
-
 
         if( this.class1.obj.key === "1" || this.class1.obj.key === "2" ){
           if( this.relationship === { label: 'Um-para-Muitos', code: 'one-to-many'} ){
@@ -576,8 +621,15 @@ export default {
           break;
         case 'many-to-many':
 
+          let primaryKeyOwningSide = this.diagrama[0].findPrimaryKeyInClass(class2.key)
+          let primaryKeyInverseSide = this.diagrama[0].findPrimaryKeyInClass(class1.key)
+
           this.attributeOwningSide = class1.className
+          this.foreignKeyOwningSide = class2.className + "_" + primaryKeyOwningSide.attributeName
+
           this.attributeInverseSide = class2.className + 's'
+          this.foreignKeyInverseSide = class1.className + "_" + primaryKeyInverseSide.attributeName
+
 
           this.associativeTableName =  this.$functions.string_validation.UpperCaseToScoreAndLower(class1.className) +
               '_' + this.$functions.string_validation.UpperCaseToScoreAndLower(class2.className)
@@ -592,6 +644,8 @@ export default {
       this.attributeInverseSide = null
       this.attributeOwningSide = null
       this.associativeTableName = null
+      this.foreignKeyOwningSide = null
+      this.foreignKeyInverseSide = null
     },
 
     resetModalRelationship(){

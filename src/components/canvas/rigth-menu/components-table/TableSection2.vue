@@ -89,8 +89,12 @@ export default {
       this.diagrama[0].updateDiagram()
     },
     tableName(val){
+      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
       val = this.$functions.string_validation.capitalizeLetterToUnderline( val )
       val = this.$functions.string_validation.removeSpace(val).toLowerCase()
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+
+
       this.tableName = val
       this.classEdit.tableName = this.tableName
       this.diagrama[0].updateDiagram()

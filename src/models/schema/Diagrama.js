@@ -571,6 +571,20 @@ class Diagrama
     /** ############################################################################################################################ */
     /** ######## FIND FUNCTIONS  */
 
+    findPrimaryKeyInClass = (classKey) => {
+        if(!classKey)
+            return false;
+
+        let data = false;
+        this.findClassByKey(classKey).attributes.forEach((attr) => {
+            if(attr.primaryKey)
+                data = attr
+        })
+
+        return data;
+    }
+
+
     findAllRelationshipByClass = (classKey) => {
         let listRelationships = []
         this.diagram.model.linkDataArray.forEach( (value, index) => {

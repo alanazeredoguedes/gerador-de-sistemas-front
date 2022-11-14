@@ -252,24 +252,7 @@ export default {
       fieldsTypes: [
         // 'smallint',
         'integer',
-        // 'bigint',
-        // 'decimal',
-        // 'float',
-        // 'string',
-        // 'ascii_string',
-        // 'text',
-        // 'guid',
-        // 'binary',
-        // 'blob',
-        // 'boolean',
-        // 'date',
-        // 'datetime',
-        // 'datetimetz',
-        // 'time',
-        // 'array',
-        // 'simple_array',
-        // 'json',
-        // 'object',
+
       ],
     }
   },
@@ -279,7 +262,18 @@ export default {
       this.atributo.attributeName = this.attributeName
       this.diagrama[0].updateDiagram()
     },
-    fieldName(){},
+    fieldName(val){
+      val = this.$functions.string_validation.normalizeStringExceptUnderscore( val )
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val )
+      val = this.$functions.string_validation.removeSpace(val).toLowerCase()
+      val = this.$functions.string_validation.capitalizeLetterToUnderline( val ).toLowerCase()
+
+      this.fieldName = val
+      this.atributo.fieldName = val
+      this.atributo.attributeName = val
+
+      this.diagrama[0].updateDiagram();
+    },
     type(){},
     primaryKey(val){
       this.primaryKey = val
