@@ -92,7 +92,7 @@ export default {
           .catch((responseError) => {
             this.error.status = true
 
-            console.log(responseError)
+           //console.log(responseError)
 
             if (responseError.response.status === 406){
               this.error.message = responseError.response.data.message;

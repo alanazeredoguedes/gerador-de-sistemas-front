@@ -329,7 +329,7 @@ export default {
        //this.class1LabelFk
 
       let relation = new Relationship(fromClass.key, toClass.key,'one-to-one', foreignKey.key, this.class1LabelFk.obj.key)
-      console.log(relation)
+      //console.log(relation)
 
       this.diagrama[0].addRelationship(relation)
 

@@ -116,7 +116,7 @@ export default {
     this.getApplication(appId)
         .then( response => {
           //this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Aplicação')
-          console.log(this.application)
+         // console.log(this.application)
         })
         .catch( response => {
           this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Aplicação')

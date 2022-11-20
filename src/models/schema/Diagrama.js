@@ -492,7 +492,7 @@ class Diagrama
         if(!relationShip)
             return;
 
-        console.log(relationShip)
+        //console.log(relationShip)
 
         let typeAssociation = relationShip.typeAssociation
         let typeRelationship = relationShip.typeRelationship
