@@ -48,6 +48,22 @@
             </div>
 
 
+
+            <div class="d-flex flex-stack border rounded p-4 mb-5">
+              <div class="d-flex align-items-center me-2">
+                <i class="fa-solid fa-plus w-30px me-3" style="font-size: 25px"></i>
+                <div class="d-flex flex-stack">
+                  <div class="d-flex flex-column me-2">
+                    <a href="javascript:void(0)" class="fs-7 text-white text-hover-success fw-bold">Adicionar Classes de Media</a>
+                    <div class="text-white opacity-75">Conjunto de classes para gerenciamento de arquivos.</div>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:void(0)" @click="adicionarMedia" class="btn btn-sm btn-hover-rise text-white bg-white bg-opacity-10">Adicionar</a>
+            </div>
+
+
+
             <div class="d-flex flex-stack border rounded p-4 mb-5">
               <div class="d-flex align-items-center me-2">
                 <i class="fa-solid fa-floppy-disk w-30px me-3" style="font-size: 25px"></i>
@@ -62,7 +78,7 @@
             </div>
 
 
-            <div class="d-flex flex-stack border rounded p-4 mb-5">
+<!--            <div class="d-flex flex-stack border rounded p-4 mb-5">
               <div class="d-flex align-items-center me-2">
                 <i class="fa-solid fa-file-export w-30px me-3" style="font-size: 25px"></i>
                 <div class="d-flex flex-stack">
@@ -73,7 +89,7 @@
                 </div>
               </div>
               <a href="javascript:void(0)" @click="exportarDiagrama" class="btn btn-sm btn-hover-rise text-white bg-white bg-opacity-10">Exportar</a>
-            </div>
+            </div>-->
 
             <div class="d-flex flex-stack border rounded p-4 mb-5">
               <div class="d-flex align-items-center me-2">
@@ -105,6 +121,9 @@
 
 
 import {mapActions} from "vuex";
+import Class from "../../../models/schema/Class";
+import Attribute from "../../../models/schema/Attribute";
+import Relationship from "../../../models/schema/Relationship";
 
 function exportToJsonFile(jsonData) {
   let dataStr = JSON.stringify(jsonData);
@@ -228,6 +247,83 @@ export default {
       });
 
     },
+
+    adicionarMedia(){
+
+      let MediaFind = this.diagrama[0].findClassByName('Media')
+      let GaleriaFind = this.diagrama[0].findClassByName('Galeria')
+      let MediaGaleriaFind = this.diagrama[0].findClassByName('media_galeria')
+      if(MediaFind || GaleriaFind || MediaGaleriaFind ){
+        this.$functions.alerts.notification('error', "Classes já existentes", 'Não é possível adicionar no momento!')
+        return;
+      }
+
+
+      /** Adiciona Classe de Media */
+      let mediaAttribute1 = new Attribute('id','id','integer', true);
+      let mediaAttribute2 = new Attribute('name','name','string', false);
+      let mediaAttribute3 = new Attribute('description','description','text', false);
+      let mediaAttribute4 = new Attribute('enabled','enabled','int', false);
+
+      let media = new Class(
+          'Media', 'media', 'Classe reponsavel pelo gerenciamento de media',
+          [ mediaAttribute1, mediaAttribute2, mediaAttribute3, mediaAttribute4 ],
+          [],
+          '-693 -161'
+      )
+
+      media.systemModel = true;
+      this.diagrama[0].addClass(media)
+      /** ################################################  */
+
+
+      /** Adiciona Classe de Galeria */
+      let galeriaAttribute1 = new Attribute('id','id','integer', true);
+      let galeriaAttribute2 = new Attribute('name','name','string', false);
+      let galeriaAttribute3 = new Attribute('enabled','enabled','int', false);
+
+      let galeria = new Class(
+          'Galeria', 'galeria', 'Classe reponsavel pelo gerenciamento de galeria de medias',
+          [galeriaAttribute1, galeriaAttribute2, galeriaAttribute3 ], [],
+          '-614 -421'
+      )
+      galeria.systemModel = true;
+      this.diagrama[0].addClass(galeria)
+      /** ################################################  */
+
+
+      /** Adiciona Tabela associativa de atributos de chave estrangeira!*/
+      let fkMedia = new Attribute('media_id', 'media_id', 'integer',  false, true)
+      fkMedia.setIco()
+
+      let fkGaleria = new Attribute('galeria_id', 'galeria_id', 'integer',  false, true)
+      fkGaleria.setIco()
+
+      let mediaGaleria = new Class('media_galeria', 'media_galeria','', [fkMedia, fkGaleria], [],'-1004 -319' );
+      mediaGaleria.associativeModel = true
+      mediaGaleria.systemModel = true
+
+      this.diagrama[0].addClass(mediaGaleria);
+      /** ################################################  */
+
+      /** Adiciona Relacionamentos */
+
+      let relationMedia = new Relationship(media.key, mediaGaleria.key,'many-to-many', 'one-to-many', mediaAttribute1.key, fkMedia.key)
+      let relationGaleria = new Relationship(galeria.key, mediaGaleria.key,'many-to-many', 'one-to-many', galeriaAttribute1.key, fkGaleria.key )
+      this.diagrama[0].addRelationship(relationMedia)
+      this.diagrama[0].addRelationship(relationGaleria)
+
+
+
+
+
+
+
+
+
+
+    },
+
 
 
   },

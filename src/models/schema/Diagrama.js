@@ -606,6 +606,15 @@ class Diagrama
         return data;
     }
 
+    /** Localiza classe por Name */
+    findClassByName = (className)=>{
+        let classe = this.diagram.model.nodeDataArray.filter((value, index) => {
+            if(value.className === className)
+                return value
+        })
+        return classe[0];
+    }
+
     /** Localiza classe por key */
     findClassByKey = (key)=>{
         let classe = this.diagram.model.nodeDataArray.filter((value, index) => {

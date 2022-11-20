@@ -180,16 +180,16 @@ export default {
       }
 
       this.createDiagrama({name: this.nome, description: this.descricao, structure: '{"class":[],"relationships":[]}'})
-          .then((response)=>{
+          .then( (response) =>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama criado com successo!')
             this.$router.push({ name: 'diagramas_list' })
-            this.getDiagramas().catch( response => this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas') )
+            this.getDiagramas()
             this.resetModal()
             this.close()
           })
-          .catch((response)=>{
+          /*.catch((response)=>{
             this.$functions.alerts.notification('error', "Erro", 'Não foi possivel cadastrar o diagrama no momento!')
-          })
+          })*/
 
     },
     resetModal(){

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tab-app-info">
 
     <div class="card">
       <div class="card-header">
@@ -150,13 +150,10 @@
         </div>
 
         <div class="card-footer d-flex justify-content-end py-6 px-9">
-          <button type="submit" @click="gerarAplicacao" class="btn btn-primary" >Gerar Aplicação</button>
+          <a href="#" class="btn btn-sm btn-bg-light btn-active-color-primary me-3" @click="$refs.ModalCriarAplicacao.show();" >Editar</a>
+          <a href="#" class="btn btn-sm btn-danger me-3" @click="remove">Excluir</a>
 
-<!--          <div class="col" style="float: right;">
-            <a href="#" class="btn btn-sm btn-bg-light btn-active-color-primary me-3" @click="$refs.ModalCriarAplicacao.show();" >Editar</a>
-            <a href="#" class="btn btn-sm btn-primary me-3" >Exportar</a>
-            <a href="#" class="btn btn-sm btn-danger me-3" @click="remove">Excluir</a>
-          </div>-->
+
         </div>
 
       <div>
@@ -164,6 +161,10 @@
       </div>
 
     </div>
+
+    <CriarAplicacaoModal ref="ModalCriarAplicacao" :applicationEdit="application" />
+
+
 
   </div>
 </template>
@@ -174,8 +175,10 @@ import {URI_BASE_API} from "../../../configs/api";
 import {mapActions} from "vuex";
 import axios from "axios";
 import jQuery from "jquery";
+import CriarAplicacaoModal from "./modal/CriarAplicacaoModal.vue";
 
 export default {
+  components: {CriarAplicacaoModal},
   props: ['application'],
   name: 'TabInfoAplicacao',
   data() {
@@ -187,6 +190,9 @@ export default {
   methods:{
     ...mapActions([
       'generateApplication',
+      'getApplication',
+      'getApplications',
+      'removeApplication',
     ]),
     gerarAplicacao(){
 
@@ -210,11 +216,28 @@ export default {
                     this.$functions.alerts.notification('error', "Falha ao Gerar Aplicação", response.response.data.message)
                   })
 
-
           })
 
 
     },
+    remove() {
+      this.$functions.alerts.modalConfirm('Remover Aplicação', "Deseja realmente remover a Aplicação ?",
+          ()=>{
+            this.removeApplication(this.application.id)
+                .then( (response) => {
+                  //console.log(response)
+                  this.$functions.alerts.notification('success', "Successo", response.data.message)
+                  this.getApplications()
+                  this.$router.push({ name: 'app_list' })
+                })
+                .catch( (response) => {
+                  //console.log(response)
+                  this.$functions.alerts.notification('error', "Falha ao Remover", response.response.data.message)
+                })
+          })
+    },
+
+
   }
 }
 </script>

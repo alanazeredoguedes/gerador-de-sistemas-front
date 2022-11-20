@@ -153,12 +153,12 @@ export default {
     ]),
     updateListDiagramas(){
       this.getDiagramas()
-          .catch( (response)=>{
+          /*.catch( (response)=>{
             console.log(response)
             if(response.response.status !== 403)
               this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Diagramas')
 
-          })
+          })*/
     }
 
   }

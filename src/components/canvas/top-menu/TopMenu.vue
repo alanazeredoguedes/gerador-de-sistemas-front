@@ -169,11 +169,11 @@ export default {
           .catch((response)=>{
             this.$functions.alerts.notification('error', "Erro", 'Não foi possível salvar o diagrama no momento!')
           })
-          .finally(()=>{
-            this.close()
-          })
+          /*.finally(()=>{
 
+          })*/
 
+      //this.close()
     },
   }
 }

@@ -18,7 +18,9 @@
     </td>
 
     <td class="pe-0">
-      <span class="fw-bold text-gray-700" >{{ diagrama.description }}</span>
+      <router-link :to="{ name: 'diagrama', params: { id: diagrama.id } }" class="text-gray-700 text-hover-primary fs-5 fw-bold">
+        <span class="fw-bold text-gray-700" >{{ diagrama.description }}</span>
+      </router-link>
     </td>
 
 
@@ -44,9 +46,8 @@
         <div class="separator border-gray-200"></div>
         <div class="px-7 py-5">
           <div class="d-flex justify-content-end">
-<!--            <button type="reset" @click="exportar(); openActions(diagrama.id)" class="btn btn-sm btn-light btn-active-light-primary me-2" >Exportar</button>-->
+            <router-link :to="{ name: 'diagrama', params: { id: diagrama.id } }" class="btn btn-sm btn-light btn-active-light-dark me-2">Acessar</router-link>
             <button type="reset" @click="$refs.ModalEditarDiagrama.show(); openActions(diagrama.id)" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Editar</button>
-            <button type="reset" class="btn btn-sm btn-light btn-active-light-dark me-2" data-kt-menu-dismiss="true">Duplicar</button>
             <button type="reset" @click="remove" class="btn btn-sm btn-light btn-active-light-danger me-2" data-kt-menu-dismiss="true">Excluir</button>
           </div>
         </div>
