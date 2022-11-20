@@ -14,7 +14,7 @@
 
         <div class="stepper-nav py-5">
           <div class="stepper-item d-menu d-menu-1 current" data-kt-stepper-element="nav">
-            <h3 class="stepper-title">Tipo de Diagrama</h3>
+            <h3 class="stepper-title">Diagramas</h3>
           </div>
           <div class="stepper-item d-menu d-menu-2" data-kt-stepper-element="nav">
             <h3 class="stepper-title">Informações Gerais</h3>
@@ -25,55 +25,105 @@
         <div class="mx-auto mw-600px w-100 py-10"  id="kt_create_account_form">
 
 
-
-
           <div class="current d-tab-1 d-tab" data-kt-stepper-element="content">
 
             <div class="w-100">
               <div class="pb-10 pb-lg-15">
-                <h2 class="fw-bold d-flex align-items-center text-dark">Escolha o tipo de diagrama
+                <h2 class="fw-bold d-flex align-items-center text-dark">Iniciar com Diagrama!
                   <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Tipo de diagrama a ser implementado"></i>
                 </h2>
-                <div class="text-muted fw-semibold fs-6">Se precisar de mais informações, consulte a
-                  <a href="javascript:void(0)" class="link-primary fw-bold">Página de Ajuda</a>.
+                <div class="text-muted fw-semibold fs-6">
+                  Começe a modelar a partir de um template ou crie um diagrama do zero!
                 </div>
               </div>
 
-              <div class="fv-row">
-                <div class="row">
 
 
-                  <div class="col-lg-6">
-                    <input type="checkbox" class="btn-check" name="account_type" value="personal" checked="checked"/>
 
-                    <label class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center mb-10">
-                      <span class="svg-icon svg-icon-3x me-5">
-                        <i class="fa-solid fa-diagram-project" style="font-size: 40px"></i>
-                      </span>
-                      <span class="d-block fw-semibold text-start">
-                        <span class="text-dark fw-bold d-block fs-4 mb-2">Objeto Relacional</span>
-                        <span class="text-muted fw-semibold fs-6">Implemente um diagrama objeto relacional</span>
-                      </span>
-                    </label>
 
-                  </div>
 
-                  <div class="col-lg-6 disabled">
-                    <!--                          <input type="radio" class="btn-check" name="account_type" value="corporate"
-                                                     id="kt_create_account_form_account_type_corporate" />-->
-                    <label @click="diagramaDesativado" class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center">
-                            <span class="svg-icon svg-icon-3x me-5">
-                              <i class="fa-solid fa-diagram-project" style="font-size: 40px"></i>
-                            </span>
-                      <span class="d-block fw-semibold text-start">
-                              <span class="text-dark fw-bold d-block fs-4 mb-2">Estrutura de Dados</span>
-                              <span class="text-muted fw-semibold fs-6">Implemente diagramas de estrutura de dados</span>
-                            </span>
-                    </label>
-                  </div>
+              <!-- ##################################################################################### -->
+              <!-- ##################################################################################### -->
+              <div class="mb-8">
+
+                <div class="fs-6 fw-semibold mb-2" style="padding-bottom: 10px;">
+
+                  <label class="fs-6 fw-semibold mb-2">Diagramas: </label>
+                  <input type="text" v-model="diagramsSearch" class="form-control form-control-solid" placeholder="Pesquisar por diagramas..">
 
                 </div>
+
+                <div class="mh-300px scroll-y me-n7 pe-7">
+
+                  <div>
+                    <div class="" v-if="'Novo Diagrama' && 'Novo Diagrama'.toLowerCase().includes( diagramsSearch.toLowerCase() )">
+
+
+                      <label class="d-flex flex-stack mb-5 cursor-pointer">
+                            <span class="d-flex align-items-center me-2">
+															<span class="symbol symbol-50px me-6">
+																<span class="symbol-label bg-light-primary">
+																	<span class="svg-icon svg-icon-1 svg-icon-primary">
+                                    <i class="fa-solid fa-diagram-project" style="font-size: 25px; color: #009ef7;"></i>
+																	</span>
+																</span>
+															</span>
+															<span class="d-flex flex-column">
+																<span class="fw-bold fs-6" style="color: rgba(0,2,3,0.87);">Novo Diagrama</span>
+																<span class="fs-7 text-muted">Começar com um diagrama em branco.</span>
+															</span>
+														</span>
+                        <span class="form-check form-check-custom form-check-solid">
+                          <input class="form-check-input" v-model="diagrama.diagrama" type="radio" name="app_diagram" value="0">
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+
+                  <div v-for="(diagram, index) in diagramasTemplate">
+                    <div class="" v-if="diagram && diagram.name.toLowerCase().includes( diagramsSearch.toLowerCase() )">
+
+
+                      <label class="d-flex flex-stack mb-5 cursor-pointer">
+                            <span class="d-flex align-items-center me-2">
+															<span class="symbol symbol-50px me-6">
+																<span class="symbol-label bg-light-primary">
+																	<span class="svg-icon svg-icon-1 svg-icon-primary">
+                                    <i class="fa-solid fa-diagram-project" style="font-size: 25px; color: #009ef7;"></i>
+																	</span>
+																</span>
+															</span>
+															<span class="d-flex flex-column">
+																<span class="fw-bold fs-6" style="color: rgba(0,2,3,0.87);">{{ diagram.name }}</span>
+																<span class="fs-7 text-muted">{{ diagram.description }}</span>
+															</span>
+														</span>
+                        <span class="form-check form-check-custom form-check-solid">
+                          <input class="form-check-input" v-model="diagrama.diagrama" type="radio" name="app_diagram" :value="diagram.id">
+                        </span>
+                      </label>
+
+                    </div>
+
+                  </div>
+
+                  <div v-if="!existDiagramFilter" style="color: red">
+                    <div class="fs-7 fw-bold text-muted">Não foi possível localizar o diagrama por: {{ diagramsSearch }}</div>
+                  </div>
+                </div>
+
               </div>
+              <!-- ##################################################################################### -->
+              <!-- ##################################################################################### -->
+
+
+
+
+
+
+
+
 
 
               <button @click="changeTab(2)" type="button" class="btn btn-lg btn-primary " style="float: right" data-kt-stepper-action="next">
@@ -104,12 +154,12 @@
 
               <div class="mb-10 fv-row">
                 <label class="form-label mb-3">Nome do Diagrama <span style="color: red">*</span></label>
-                <input v-model="nome" type="text" class="form-control form-control-lg form-control-solid" />
+                <input v-model="this.diagrama.nome" type="text" class="form-control form-control-lg form-control-solid" />
               </div>
 
               <div class="mb-10 fv-row">
                 <label class="form-label mb-3">Descrição <span style="color: red">*</span></label>
-                <textarea v-model="descricao" type="text" class="form-control form-control-lg form-control-solid" />
+                <textarea v-model="this.diagrama.descricao" type="text" class="form-control form-control-lg form-control-solid" />
               </div>
 
               <div style=" margin-top: 40px;">
@@ -153,34 +203,54 @@
 import { mapActions, mapState } from 'vuex'
 import $ from 'jquery'
 import ModalFullScreen from "../../global/ModalFullScreen.vue";
+import store from "../../../store";
 
 export default {
   name: 'ModalCriarDiagrama',
   components: {ModalFullScreen},
   data() {
     return {
-      nome: '',
-      descricao: '',
+      diagrama: {
+        nome: '',
+        descricao: '',
+        diagrama: '0',
+      },
+      diagramsSearch: '',
+
     }
   },
   computed:{
     ...mapState({
+      diagramasTemplate: state => state.diagramaStore.items.diagramasTemplate
       //diagramas: state => state.diagramaStore.items.diagramas
-    })
+    }),
+    existDiagramFilter(){
+      let exist = 0
+      this.diagramasTemplate.forEach((diagram)=>{
+        if(diagram && diagram.name.toLowerCase().includes( this.diagramsSearch.toLowerCase() ))
+          exist += 1
+      })
+      return exist !== 0
+    }
   },
   methods: {
     ...mapActions([
-      'getDiagramas',
-      'createDiagrama'
+      'getDiagramasTemplate',
+      'createDiagrama',
+      'getDiagramas'
     ]),
     create(){
-      if(!this.nome || !this.descricao){
+      if(!this.diagrama.nome || !this.diagrama.descricao || !this.diagrama.diagrama){
         this.$functions.alerts.notification('error', 'Preencha os campos corretamente antes de continuar!')
         return
       }
 
-      this.createDiagrama({name: this.nome, description: this.descricao, structure: '{"class":[],"relationships":[]}'})
-          .then( (response) =>{
+      this.createDiagrama({
+        name: this.diagrama.nome,
+        description: this.diagrama.descricao,
+        diagram: this.diagrama.diagrama ,
+        structure: '{"class":[],"relationships":[]}'
+      }).then( (response) =>{
             this.$functions.alerts.notification('success', "Sucesso", 'Diagrama criado com successo!')
             this.$router.push({ name: 'diagramas_list' })
             this.getDiagramas()
@@ -193,8 +263,9 @@ export default {
 
     },
     resetModal(){
-      this.nome = ''
-      this.descricao = ''
+      this.diagrama.nome = ''
+      this.diagrama.descricao = ''
+      this.diagrama.diagrama = '0'
       this.changeTab(1)
     },
     changeTab(tab){
@@ -210,10 +281,12 @@ export default {
     show(){
       this.$refs.modal.show()
       this.resetModal()
+      store.dispatch("getDiagramasTemplate")
+      console.log()
+
     },
     close(){
       this.$refs.modal.close()
-      this.resetComponent()
     },
   }
 }

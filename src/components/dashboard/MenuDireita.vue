@@ -10,7 +10,7 @@
       <div class="d-flex flex-stack mb-5 mb-lg-8" id="kt_sidebar_header">
 
 
-        <h5 class="text-white" v-if="user" >Bem Vindo {{user.username}}  </h5>
+        <h5 class="text-white" v-if="user" >{{user.username}}  </h5>
 
         <div class="ms-1">
 

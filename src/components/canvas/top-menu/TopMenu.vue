@@ -8,8 +8,10 @@
 
         <div class="header-brand me-5" >
           <router-link :to="{ name: 'diagramas_list' }" @click="salvarDiagrama" style="font-size: 20px; text-decoration: none; color: white">
-            <img alt="Logo" src="@/assets/logo.svg" class="h-25px h-lg-30px" />
-            Gerador de Sistemas<!-- - {{ diagramaData.nome }}-->
+            <h1 style="color: white">
+              <i class="fa-solid fa-diagram-project" style="font-size: 30px; color: rgb(255,255,255);"></i>
+              Gerador de Sistemas
+            </h1>
           </router-link>
         </div>
 

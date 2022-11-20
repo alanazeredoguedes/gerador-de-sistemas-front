@@ -6,6 +6,10 @@ const mutations = {
         //console.log(diagrama)
         state.items.diagrama = diagrama
     },
+    SET_DIAGRAMAS_TEMPLATE(state, diagrama){
+        //console.log(diagrama)
+        state.items.diagramasTemplate = diagrama
+    },
 
 }
 

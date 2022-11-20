@@ -11,7 +11,8 @@
       </div>
 
       <router-link :to="{ name: 'homePage' }" class="text-center">
-        <img alt="Logo" src="@/assets/themes/10/media/logos/default-small.svg" class="h-70px" />
+<!--        <img alt="Logo" src="@/assets/themes/10/media/logos/default-small.svg" class="h-70px" />-->
+        <i class="fa-solid fa-diagram-project" style="font-size: 60px; color: rgb(255,255,255);"></i>
         <h1 style="color: white; margin-top: 10px;">Gerador de Sistemas</h1>
       </router-link>
 

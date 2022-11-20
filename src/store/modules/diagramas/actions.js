@@ -9,6 +9,11 @@ const actions = {
             .then( response => commit('SET_DIAGRAMAS', response.data) )
 
     },
+    getDiagramasTemplate({ commit }){
+        return axios.get(`${RESOURCE}/listTemplates`)
+            .then( response => commit('SET_DIAGRAMAS_TEMPLATE', response.data) )
+
+    },
     getDiagrama({ commit },id){
         return axios.get(`${RESOURCE}/${id}`)
             .then( response => commit('SET_DIAGRAMA', response.data) )

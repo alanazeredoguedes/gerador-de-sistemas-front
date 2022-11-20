@@ -103,7 +103,7 @@
                         <span class="symbol-label bg-light-primary">
                           <span class="svg-icon svg-icon-1 svg-icon-primary">
                             <div  class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" data-kt-initialized="1">
-                                <i class="fa-solid fa-envelope" style="font-size: 30px; color: #009ef7;"></i>
+                                <i class="fa-solid fa-user" style="font-size: 30px; color: #009ef7;"></i>
                             </div>
                           </span>
                         </span>
@@ -138,13 +138,15 @@
                         <span class="symbol-label bg-light-primary">
                           <span class="svg-icon svg-icon-1 svg-icon-primary">
                             <div  class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" data-kt-initialized="1">
-                                <i class="fa-solid fa-key" style="font-size: 30px; color: #009ef7;"></i>
+                              <a @click="showPassword">
+                              <i class="fa-solid fa-key" style="font-size: 30px; color: #009ef7;"></i>
+                                </a>
                             </div>
                           </span>
                         </span>
                       </span>
                       <span class="d-flex flex-column">
-                          <input type="text" class="form-control form-control-solid"
+                          <input type="password" class="input-password form-control form-control-solid"
                                  v-model="application.accessPassword"
                                  disabled
                           >
@@ -194,6 +196,14 @@ export default {
       'getApplication',
     ]),
 
+    showPassword(){
+      let input = $('.input-password ');
+      if(input.prop('type') === 'password'){
+        input.prop('type', 'text')
+      }else{
+        input.prop('type', 'password')
+      }
+    },
     gerarAplicacao(){
 
       this.$functions.alerts.modalConfirm('Gerar uma nova Aplicação', `Em alguns minutos sua aplicação estará
