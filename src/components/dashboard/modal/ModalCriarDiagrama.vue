@@ -56,8 +56,7 @@
                 <div class="mh-300px scroll-y me-n7 pe-7">
 
                   <div>
-                    <div class="" v-if="'Novo Diagrama' && 'Novo Diagrama'.toLowerCase().includes( diagramsSearch.toLowerCase() )">
-
+                    <div class="" v-if="'Diagrama Em Branco' && 'Diagrama Em Branco'.toLowerCase().includes( diagramsSearch.toLowerCase() )">
 
                       <label class="d-flex flex-stack mb-5 cursor-pointer">
                             <span class="d-flex align-items-center me-2">
@@ -69,7 +68,7 @@
 																</span>
 															</span>
 															<span class="d-flex flex-column">
-																<span class="fw-bold fs-6" style="color: rgba(0,2,3,0.87);">Novo Diagrama</span>
+																<span class="fw-bold fs-6" style="color: rgba(0,2,3,0.87);">Diagrama Em Branco</span>
 																<span class="fs-7 text-muted">Começar com um diagrama em branco.</span>
 															</span>
 														</span>
@@ -83,6 +82,7 @@
 
                   <div v-for="(diagram, index) in diagramasTemplate">
                     <div class="" v-if="diagram && diagram.name.toLowerCase().includes( diagramsSearch.toLowerCase() )">
+
 
 
                       <label class="d-flex flex-stack mb-5 cursor-pointer">

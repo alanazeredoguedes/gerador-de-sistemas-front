@@ -253,6 +253,7 @@ export default {
       let MediaFind = this.diagrama[0].findClassByName('Media')
       let GaleriaFind = this.diagrama[0].findClassByName('Galeria')
       let MediaGaleriaFind = this.diagrama[0].findClassByName('media_galeria')
+
       if(MediaFind || GaleriaFind || MediaGaleriaFind ){
         this.$functions.alerts.notification('error', "Classes já existentes", 'Não é possível adicionar no momento!')
         return;
@@ -271,8 +272,8 @@ export default {
           [],
           '-693 -161'
       )
-
       media.systemModel = true;
+      media.key = "1"
       this.diagrama[0].addClass(media)
       /** ################################################  */
 
@@ -288,6 +289,7 @@ export default {
           '-614 -421'
       )
       galeria.systemModel = true;
+      galeria.key = "2"
       this.diagrama[0].addClass(galeria)
       /** ################################################  */
 
@@ -302,7 +304,7 @@ export default {
       let mediaGaleria = new Class('media_galeria', 'media_galeria','', [fkMedia, fkGaleria], [],'-1004 -319' );
       mediaGaleria.associativeModel = true
       mediaGaleria.systemModel = true
-
+      mediaGaleria.key = "3"
       this.diagrama[0].addClass(mediaGaleria);
       /** ################################################  */
 
@@ -310,14 +312,10 @@ export default {
 
       let relationMedia = new Relationship(media.key, mediaGaleria.key,'many-to-many', 'one-to-many', mediaAttribute1.key, fkMedia.key)
       let relationGaleria = new Relationship(galeria.key, mediaGaleria.key,'many-to-many', 'one-to-many', galeriaAttribute1.key, fkGaleria.key )
+      relationMedia.key = "1";
+      relationGaleria.key = "2";
       this.diagrama[0].addRelationship(relationMedia)
       this.diagrama[0].addRelationship(relationGaleria)
-
-
-
-
-
-
 
 
 

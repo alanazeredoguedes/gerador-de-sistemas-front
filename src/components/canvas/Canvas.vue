@@ -123,7 +123,42 @@ export default {
     },
     eventRightClick(){
       return (e, obj) => {
-        console.log('Right Click Class')
+
+        let classs = obj.part.data
+
+        /** Se for uma Classe do sistema! */
+        if(obj.part.data.systemModel){
+
+
+          this.$functions.alerts.modalConfirm('Remover Classe',
+              `As classes de Media e Galeria e todos os <b>relacionamentos</b> e <b>chaves estrangeiras</b> vinculados serão removidos!`,
+              ()=>{
+                //this.diagrama[0].removeClass(this.classEdit)
+                this.diagrama[0].removeClassByKey("1")
+                this.diagrama[0].removeClassByKey("2")
+                this.diagrama[0].removeClassByKey("3")
+                this.diagrama[0].removeRelationshipByKey("1")
+                this.diagrama[0].removeRelationshipByKey("2")
+
+                this.$functions.alerts.notification('success','Sucesso',`<b>Classes</b> removidas com sucesso!`)
+              })
+
+
+          /** Se for uma Classe Criada pelo cliente! */
+        }else{
+
+          this.$functions.alerts.modalConfirm('Remover Classe',
+              `Os <b>relacionamentos</b> e <b>chaves estrangeiras</b> vinculados serão removidos!`,
+              ()=>{
+                //this.diagrama[0].removeClass(this.classEdit)
+                this.diagrama[0].removeClassByKey(classs.key)
+                this.$functions.alerts.notification('success','Sucesso',`<b>Classe</b> removida com sucesso!`)
+              })
+
+        }
+
+        //console.log(obj.part.data)
+
       }
     },
     eventMouseEnter(){

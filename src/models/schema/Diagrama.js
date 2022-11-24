@@ -442,7 +442,9 @@ class Diagrama
         let classs = this.findClassByKey(classKey)
         let attribute = this.findAttributeBy(attributeKey)
 
-        this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
+        if( attribute && classs )
+            this.diagram.model.removeArrayItem(classs.attributes, this.findIndexAttribute(classs, attribute));
+
         this.updateDiagram()
     }
 
@@ -453,16 +455,42 @@ class Diagrama
         this.updateDiagram()
     }
 
+    removeRelationshipByKey = (key)=>{
+
+        this.diagram.model.linkDataArray.forEach( (value) => {
+            if(value.key === key)
+                this.diagram.model.removeLinkData(value)
+        })
+
+        this.updateDiagram()
+    }
 
     /** Remove Classe Ou Tabela */
     removeClassByKey = (classKey)=>{
         let classs = this.findClassByKey(classKey)
+
+        /**
+         * Ajustar depois, quando remover a classe media, tem que remover as chaves
+         * estrangeiras nas tabelas opostas tbm ...
+         */
+        if( classKey === "1" || classKey === "2" || classKey === "3") {
+            let listRelationships = this.findAllRelationshipByClass(classKey)
+            listRelationships.forEach( (relationship) => {
+                if(relationship.attributeOwningSide){
+                    //console.log(relationship)
+                    this.removeAttributeByKey(relationship.attributeOwningSide, relationship.key)
+                    this.removeAttributeByKey(relationship.attributeOwningSide, relationship.key)
+                    this.removeForeingKey(relationship.attributeOwningSide, relationship.key)
+                }
+            })
+        }
 
         let listAttributesFk = this.findAllFkAttributes(classKey)
 
         listAttributesFk.forEach( (attribute) => {
             this.removeForeingKey(attribute.key, classKey)
         })
+
 
         this.removeClassByKeyWithoutValidation(classKey)
 

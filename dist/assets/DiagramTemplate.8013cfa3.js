@@ -1,1 +1,0 @@
-import{_ as o,r as t,o as n,c as a,d as s}from"./index.4bf8b33f.js";import"https://kit.fontawesome.com/e44281f0a2.js";const r={components:{},mounted(){$("body").removeClass("page-bg"),$("body").css("background-image","none")}};function c(_,p,m,d,i,l){const e=t("RouterView");return n(),a("div",null,[s(e)])}const f=o(r,[["render",c]]);export{f as default};
