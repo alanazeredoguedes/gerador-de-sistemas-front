@@ -199,9 +199,10 @@ export default {
       this.$functions.alerts.modalConfirm('Gerar uma nova Aplicação', `Em alguns minutos sua aplicação estará
        disponível e voce recebera os acessos para utilização`, ()=>{
 
-              this.generateApplication(this.application.id)
-                  .then( (response) => {
+        this.$functions.alerts.notification('info', "Aguarde", "Cadastrando Informações!")
 
+        this.generateApplication(this.application.id)
+                  .then( (response) => {
 
                     if(response.data.status){
                       this.$functions.alerts.modalAlert('success', "Sucesso", response.data.message)
@@ -210,7 +211,6 @@ export default {
                       this.$functions.alerts.notification('error', "Falha ao Gerar Aplicação", response.data.message)
                     }
 
-
                   })
                   .catch( (response) => {
                     this.$functions.alerts.notification('error', "Falha ao Gerar Aplicação", response.response.data.message)
@@ -218,11 +218,12 @@ export default {
 
           })
 
-
     },
     remove() {
       this.$functions.alerts.modalConfirm('Remover Aplicação', "Deseja realmente remover a Aplicação ?",
           ()=>{
+            this.$functions.alerts.notification('info', "Aguarde", "Cadastrando Informações!")
+
             this.removeApplication(this.application.id)
                 .then( (response) => {
                   //console.log(response)

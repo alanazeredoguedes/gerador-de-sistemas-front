@@ -169,10 +169,10 @@
 
 
 
-
+<!--
       <div class="card-footer d-flex justify-content-end py-6">
         <button type="submit" @click="gerarAplicacao" class="btn btn-primary" >Gerar Aplicação</button>
-      </div>
+      </div>-->
     </div>
 
   </div>

@@ -245,6 +245,9 @@ export default {
         return
       }
 
+      this.$functions.alerts.notification('info', "Aguarde!", 'Cadastrando Informações!')
+      this.close()
+
       this.createDiagrama({
         name: this.diagrama.nome,
         description: this.diagrama.descricao,
@@ -255,7 +258,6 @@ export default {
             this.$router.push({ name: 'diagramas_list' })
             this.getDiagramas()
             this.resetModal()
-            this.close()
           })
           /*.catch((response)=>{
             this.$functions.alerts.notification('error', "Erro", 'Não foi possivel cadastrar o diagrama no momento!')

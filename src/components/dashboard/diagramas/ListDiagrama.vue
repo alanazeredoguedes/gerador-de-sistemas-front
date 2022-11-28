@@ -84,8 +84,12 @@ export default {
       //alert('Exportar');
     },
     remove() {
+
+
       this.$functions.alerts.modalConfirm('Remover Diagrama', "Deseja realmente remover o diagrama ?",
           ()=>{
+            this.$functions.alerts.notification('info', "Aguarde!", 'Excluindo Diagrama!')
+
             this.removeDiagrama(this.diagrama.id)
                 .then( (response) => {
                   this.$functions.alerts.notification('success', "Successo", 'Succeso ao remover Diagrama!')

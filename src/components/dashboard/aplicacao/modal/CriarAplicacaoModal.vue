@@ -384,6 +384,10 @@ export default {
       this.application.framework = ''
     },
     salvar(){
+      if(!this.application.name){
+        this.$functions.alerts.notification('error', 'Defina um nome para a aplicação!')
+        return
+      }
 
       if(!this.application.programmingLanguage){
         this.$functions.alerts.notification('error', 'Escolha uma linguagem de programação antes de continuar!')
@@ -396,6 +400,7 @@ export default {
       }
 
       if(this.applicationEdit){
+        this.$functions.alerts.notification('info', "Aguarde!", 'Atualizando Informações!')
         this.updateApplication(this.application)
             .then((response)=>{
               this.$functions.alerts.notification('success', "Sucesso", 'Aplicação atualizada com sucesso!')
@@ -408,6 +413,7 @@ export default {
             })
       }else{
 
+        this.$functions.alerts.notification('info', "Aguarde!", 'Cadastrando Informações!')
         this.createApplication(this.application)
             .then((response)=>{
               this.$functions.alerts.notification('success', "Sucesso", 'Aplicação criada com sucesso!')
@@ -421,7 +427,6 @@ export default {
             })
 
       }
-
 
 
     },

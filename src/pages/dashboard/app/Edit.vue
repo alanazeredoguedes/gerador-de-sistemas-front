@@ -3,9 +3,9 @@
   <div class="card mb-6 mb-xl-9">
     <div class="card-body pt-9 pb-0">
       <div class="d-flex flex-wrap flex-sm-nowrap mb-6">
-        <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
-<!--          <img class="mw-50px mw-lg-75px" src="@/assets/themes/10/media/logos/default-small.svg" alt="image">-->
-        </div>
+<!--        <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+&lt;!&ndash;          <img class="mw-50px mw-lg-75px" src="@/assets/themes/10/media/logos/default-small.svg" alt="image">&ndash;&gt;
+        </div>-->
         <div class="flex-grow-1">
 
           <div class="row d-flex justify-content-between align-items-start flex-wrap mb-2">
@@ -60,15 +60,24 @@
 
         </div>
 
-
       </div>
+
+
+      <div class="card-footer d-flex justify-content-end py-6" >
+         <a @click="gerarAplicacao" type="button" class="btn btn-success" style="margin-right: 20px;">Gerar Aplicação</a>
+         <a @click="atualizarAplicacao" type="button" class="btn btn-primary" >
+           <div  class="spinner-grow text-light" role="status" style="--bs-spinner-width: 1rem; --bs-spinner-height: 1rem;"></div>
+           Atualizar
+         </a>
+      </div>
+
 
       <div class="separator"></div>
 
       <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
         <li class="nav-item">
           <a class="nav-link btn-tab-info text-active-primary py-5 me-6 active" @click="changeTab(1)" href="javascript:void(0)">Informações da Aplicação</a>
-          <a class="nav-link btn-tab-export text-active-primary py-5 me-6 " @click="changeTab(2)" href="javascript:void(0)">Gerar Aplicação</a>
+          <a class="nav-link btn-tab-export text-active-primary py-5 me-6 " @click="changeTab(2)" href="javascript:void(0)">Acessos</a>
         </li>
 
       </ul>
@@ -111,24 +120,14 @@ export default {
   },
   mounted() {
     /** ‘ID’ do diagrama Atual */
-    let appId = this.$route.params.id
-
-    this.getApplication(appId)
-        .then( response => {
-          //this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Aplicação')
-         // console.log(this.application)
-        })
-        .catch( response => {
-          this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Aplicação')
-          this.$router.push({ name: 'app_list' })
-
-        })
+    this.atualizarAplicacao()
   },
   methods: {
     ...mapActions([
       'getApplication',
       'getApplications',
       'removeApplication',
+      'generateApplication',
     ]),
     changeTab(goTab){
       let tabInfo = $('.tab-app-info')
@@ -155,6 +154,51 @@ export default {
       }
 
     },
+    atualizarAplicacao(){
+      let appId = this.$route.params.id
+
+      this.$functions.alerts.notification('info', "Aguarde", 'Consultando Informações!')
+
+      this.getApplication(appId)
+          .then( response => {
+            this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Aplicação')
+            // console.log(this.application)
+          })
+          .catch( response => {
+            this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Aplicação')
+            this.$router.push({ name: 'app_list' })
+
+          })
+    },
+    gerarAplicacao(){
+
+      this.$functions.alerts.modalConfirm('Gerar uma nova Aplicação', `Em alguns minutos sua aplicação estará
+       disponível e voce recebera os acessos para utilização`, ()=>{
+
+        this.generateApplication(this.application.id)
+            .then( (response) => {
+
+
+              if(response.data.status){
+                this.$functions.alerts.modalAlert('success', "Sucesso", response.data.message)
+
+              }else{
+                this.$functions.alerts.notification('error', "Falha ao Gerar Aplicação", response.data.message)
+              }
+
+
+            })
+            .catch( (response) => {
+              this.$functions.alerts.notification('error', "Falha ao Gerar Aplicação", response.response.data.message)
+            })
+
+      })
+
+    },
+
+
+
+
   }
 
 }

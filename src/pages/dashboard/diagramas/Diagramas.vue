@@ -152,7 +152,21 @@ export default {
         'getDiagramas',
     ]),
     updateListDiagramas(){
+
+      this.$functions.alerts.notification('info', "Aguarde!", 'Consultando Informações!')
+
       this.getDiagramas()
+          .then( response => {
+            this.$functions.alerts.notification('success', "Sucesso", 'Sucesso ao carregar Diagramas')
+            // console.log(this.application)
+          })
+          .catch( response => {
+            this.$functions.alerts.notification('error', "Erro", 'Falha ao carregar Aplicação')
+            this.$router.push({ name: 'app_list' })
+
+          })
+
+      //this.getDiagramas()
           /*.catch( (response)=>{
             console.log(response)
             if(response.response.status !== 403)
